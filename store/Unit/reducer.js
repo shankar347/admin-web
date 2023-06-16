@@ -1,0 +1,37 @@
+import { actionTypes } from './action';
+
+export const initState = {
+    allUnit: [],
+    activeTotalCount: 0,
+    activeCount: 0,
+    inactiveUnit: [],
+    inactiveTotalCount: 0,
+    inactiveCount: 0,
+};
+
+function reducer(state = initState, action) {
+    switch (action.type) {
+        case actionTypes.GET_ALL_UNIT_SUCCESS:
+            return {
+                ...state,
+                ...{
+                    allUnit: action.payload && action.payload.data ? action.payload.data : [],
+                    activeTotalCount: action.payload && action.payload.totalCount ? action.payload.totalCount : 0,
+                    activeCount: action.payload && action.payload.count ? action.payload.count : 0,
+                },
+            };
+        case actionTypes.GET_INACTIVE_UNIT_SUCCESS:
+            return {
+                ...state,
+                ...{
+                    inactiveUnit: action.payload && action.payload.data ? action.payload.data : [],
+                    inactiveTotalCount: action.payload && action.payload.totalCount ? action.payload.totalCount : 0,
+                    inactiveCount: action.payload && action.payload.count ? action.payload.count : 0,
+                },
+            };
+        default:
+            return state;
+    }
+}
+
+export default reducer;

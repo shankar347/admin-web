@@ -1,0 +1,20 @@
+import { all } from 'redux-saga/effects';
+
+import AuthSaga from './auth/saga';
+import AdminMenuSaga from './adminMenu/saga';
+import UnitSaga from './Unit/saga'
+import RoomSaga from './Room/saga';
+import StageSaga from './Stage/saga';
+import operatorSaga from './operator/saga';
+
+
+export default function* rootSaga() {
+    yield all([
+        AuthSaga(),
+        RoomSaga(),
+        UnitSaga(),
+        AdminMenuSaga(),
+        StageSaga(),
+        operatorSaga(),
+    ]);
+}

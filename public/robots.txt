@@ -1,0 +1,7 @@
+# robots.txt 
+User-agent: *
+Disallow: 
+Disallow: /cgi-bin/
+Sitemap: http://www.questioncloud.in/sitemap.xml
+
+

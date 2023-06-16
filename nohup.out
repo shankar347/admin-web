@@ -1,0 +1,2 @@
+[149515:149515:0618/220047.084488:ERROR:sandbox_linux.cc(374)] InitializeSandbox() called with multiple threads in process gpu-process.
+[150264:150264:0618/220103.250467:ERROR:sandbox_linux.cc(374)] InitializeSandbox() called with multiple threads in process gpu-process.
