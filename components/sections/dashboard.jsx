@@ -61,7 +61,7 @@ const Dashboard = () => {
                     return (
                         <div className="col-md-2" key={index}>
                             <div className={`row-${index + 1}-stage-card d-flex justify-content-between`}>
-                                <div >
+                                <div onChange={featuresOnChange} value={stage.stage_id}>
 
                                     <h3>{stage.stage_name}</h3>
                                 </div>
