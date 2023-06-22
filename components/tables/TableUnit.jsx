@@ -9,13 +9,10 @@ const TableHomeCategory = ({ category, editModalOnClick,mainPositionOnChange,pos
       dataIndex: 'sno',
     },
     {
-      title: 'Unit',
+      title: 'Phase',
       dataIndex: 'title',
     },
-    {
-      title: 'UnitCode',
-      dataIndex: 'code',
-    },
+    
     {
       title: 'Position',
       dataIndex: 'position',

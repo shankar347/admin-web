@@ -9,7 +9,7 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       dataIndex: 'sno',
     },
     {
-      title: 'Country Name',
+      title: 'Production',
       dataIndex: 'title',
     },
    

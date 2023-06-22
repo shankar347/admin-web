@@ -50,6 +50,8 @@ const Home = (props) => {
     const [search, setSearch] = useState('');
     const [isActive, setActive] = useState(false);
     const [result, setResult] = useState('');
+    const [minDays,setMinDays]= useState('');
+    const [maxDays,setMaxDays]= useState('');
     const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
 
     useEffect(() => {
@@ -120,15 +122,14 @@ const Home = (props) => {
 
     const editModalOnClick = async (data) => {
 
-
-
         setLoader(true);
         setName(data.stage_name);
         setCode(data.stage_code);
+        setMinDays(data.min_days)
+        setMaxDays(data.max_days)
         setSlug(data.stage_slug)
         setPosition(data.stage_pos)
         setSelectedCatId(data.stage_id);
-        setUnitId(data.unit_id)
         setStartDate(data.start_date)
         setEndDate(data.end_date)
         setLoader(false);
@@ -154,7 +155,7 @@ const Home = (props) => {
         if (name) {
             setLoader(true);
             let saveObj = {
-                "unit_id": unitId,
+                
                 "stage_name": name,
                 "stage_slug": slug,
                 "stage_code": code,
@@ -277,12 +278,7 @@ const Home = (props) => {
       
     };
 
-    const unitOnChange = async (id) => {
-        let errorObj = { ...errors };
-        setUnitId(id);
-        errorObj['unitId'] = '';
-        setErrors(errorObj);
-    }
+   
 
     const onSelectAll = (value) => {
         let array = [];
@@ -470,34 +466,6 @@ const Home = (props) => {
                 >
                     <Spin spinning={loader} tip={'Loading...'}>
                         <div className='row'>
-                        <div className="col-md-6">
-                                <div className="form-group">
-                                    <label> Unit <span style={{ color: 'red' }}>*</span></label>
-                                    <Select
-                                        onChange={unitOnChange}
-                                        placeholder="Select UnitId"
-                                        className="ps-ant-dropdown"
-                                        style={{ width: '100%' }}
-                                        value={unitId ? unitId : null}
-                                        showSearch={true}
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        <Option value="">--Unit--</Option>
-                                        {unitArray.filter(c => c.unit_id !== 100 && c.unit_id !== 0)
-                                            .map(m => {
-
-                                                return (
-                                                    <Option value={m.unit_id}>{`${m.unit_name} - ${m.unit_code}`}</Option>
-                                                )
-                                            })}
-                                    </Select>
-                                    {errors['UnitId'] &&
-                                        <span style={{ color: 'red' }}>{errors['UnitId']}</span>
-                                    }
-                                </div>
-                            </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage <span style={{ color: 'red' }}>*</span></label>
@@ -533,6 +501,40 @@ const Home = (props) => {
                                 </div>
                                 </div>
                                 <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Minimum Days<span style={{ color: 'red' }}>*</span></label>
+                                    <div className="form-group">
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={minDays}
+                                            placeholder=""
+                                            onChange={onChangeHandler.bind(null, setMinDays)}
+                                        />
+                                        {errors['code'] &&
+                                            <span style={{ color: 'red' }}>{errors['code']}</span>
+                                        }
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Maximum Date<span style={{ color: 'red' }}>*</span></label>
+                                    <div className="form-group">
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={maxDays}
+                                            placeholder=""
+                                            onChange={onChangeHandler.bind(null, setMaxDays)}
+                                        />
+                                        {errors['code'] &&
+                                            <span style={{ color: 'red' }}>{errors['code']}</span>
+                                        }
+                                    </div>
+                                </div>
+                                </div>
+                                {/* <div className="col-md-6">
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Position <span style={{ color: 'red' }}>*</span></label>
@@ -548,7 +550,7 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                         </div>
                     </Spin>

@@ -15,19 +15,26 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
 
 
     {
-      title: 'Date',
-      dataIndex: 'Date',
+      title: 'StartDate',
+      dataIndex: 'StartDate',
       align: 'center'
     },
-
+    {
+      title: 'EndDate',
+      dataIndex: 'EndDate',
+      align: 'center'
+    },
+    
   ];
 
   let data = category.map((a, index) => {
+
     let obj = {
-      key: a.history_id,
+      key: a.product_id,
       sno: index + 1,
-      title: a.history_name,
-      Date: a.end_date
+      title: a.product_name ,
+      StartDate: a.start_date,
+      EndDate:a.end_date
     }
     return (obj);
   });

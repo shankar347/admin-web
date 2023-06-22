@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllUnit } from '../../store/Unit/action';
 import { getAllStage } from '../../store/Stage/action';
 import { getAllRoom } from '../../store/Room/action';
 import RoomRepository from '../../repositories/RoomRepository';
 import ProductRepository from '../../repositories/ProductRepository';
 import TableDetails from '../../components/tables/TableDetails';
+import { Modal, Spin } from 'antd';
 
 
 const Dashboard = () => {
@@ -12,40 +14,45 @@ const Dashboard = () => {
 
     const [isActive, setActive] = useState(false);
     const [selectedPhase, setSelectedPhase] = useState(0);
-
+    const [loader, setLoader] = useState(false);
     const { allStage } = useSelector(({ Stage }) => Stage);
     const { allRoom } = useSelector(({ Room }) => Room);
+    const { allUnit } = useSelector(({ Unit }) => Unit);
     const [selectedRoom, setSelectedRoom] = useState([]);
     const [materialData, setMaterialData] = useState([]);
     const [selectedRoomId, setSelectedRoomId] = useState([]);
     const [colorId, setColorId] = useState(0)
-
+    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         let ctr = {};
         ctr.start = 0
         ctr.limit = 6
 
         dispatch(getAllStage(ctr));
+        dispatch(getAllUnit(ctr));
         handleRefresh()
     }, []);
     useEffect(() => {
-    }, [allStage, allRoom]);
+    }, [allStage, allRoom, allUnit]);
 
     const toggleClass = (id) => {
         setActive(!isActive);
+        setShowModal(true)
         setSelectedRoomId([id])
     };
 
     let colors = [
-        { "border-color": "#dc3545", "color": "#dc3545" },
-        { "border-color": "#1e7e34", "color": "#1e7e34" },
-        { "border-color": "#0062cc", "color": "#0062cc" },
-        { "border-color": "#ffc107", "color": "#ffc107" },
-        { "border-color": "#f35a00", "color": "#f35a00" },
-        { "border-color": "#343a40", "color": "#343a40" }
+        { "border-color": "#dc3545", "color": "#dc3545", "width": "125px" },
+        { "border-color": "#1e7e34", "color": "#1e7e34", "width": "125px" },
+        { "border-color": "#0062cc", "color": "#0062cc", "width": "125px" },
+        { "border-color": "#ffc107", "color": "#ffc107", "width": "125px" },
+        { "border-color": "#f35a00", "color": "#f35a00", "width": "125px" },
+        { "border-color": "#343a40", "color": "#343a40", "width": "125px" }
     ]
 
-   
+    const closeModalOnClick = () => {
+        setShowModal(false);
+    }
     const handleRefresh = async () => {
         let MaterialData = []
 
@@ -58,8 +65,8 @@ const Dashboard = () => {
         }
         setMaterialData(MaterialData)
     }
-   
-    const featuresOnChange = async (value,id) => {
+
+    const featuresOnChange = async (value, id) => {
         async function asyncForEach(array, callback) {
             for (let index = 0; index < array.length; index++) {
                 await callback(array[index], index, array);
@@ -69,7 +76,7 @@ const Dashboard = () => {
         let ctr = {};
         ctr.start = 0
         ctr.limit = 10000
-        ctr.stageId = value
+        ctr.unitId = value
         const room = await RoomRepository.getRoom(ctr);
         if (room && room?.data?.rows?.length) {
             roomData = room.data.rows
@@ -77,18 +84,19 @@ const Dashboard = () => {
         setColorId(id)
         setSelectedRoom(roomData)
         setSelectedPhase(value);
-      
+
     }
 
     return (
         <div className="content content-width mt-3 px-4 pt-5 pb-2 border-0 home" id={"auth.logintype" === 'I' ? 'style-3' : 'style-2'}>
             <div className="row">
-                {allStage.map((stage, index) => {
+                {allUnit.map((u, index) => {
+                    console.log(u, "kjchbiofcib")
                     return (
                         <div className="col-md-2" key={index}>
                             <div className={`row-${index + 1}-stage-card d-flex justify-content-between`}>
-                                <div onClick={() => featuresOnChange(stage.stage_id,index )} value={selectedPhase}>
-                                    <h3>{stage.stage_name}</h3>
+                                <div onClick={() => featuresOnChange(u.unit_id, index)} value={selectedPhase}>
+                                    <h3>{u.unit_name}</h3>
                                 </div>
                             </div>
                         </div>
@@ -122,9 +130,21 @@ const Dashboard = () => {
 
                     if (cat) {
                         return (
-                            <TableDetails
-                                category={mainCat}
-                            />
+
+                            <Modal
+                                visible={showModal}
+                                onCancel={closeModalOnClick}
+                                title={""}
+                                width={800}
+                                maskClosable={false}
+                            >
+                                <Spin spinning={loader} tip={'Loading...'}>
+                                    <TableDetails
+                                        category={mainCat}
+                                    />
+                                </Spin>
+
+                            </Modal>
                         )
                     }
                 })
