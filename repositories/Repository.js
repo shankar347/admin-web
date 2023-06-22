@@ -4,7 +4,7 @@ export const baseurl = "https://britishagro.com/api/";
 //export const baseurl = "https://admin.jobslink.in/api/api/v1";
 
 
-
+export const file = "http://localhost:4567/api/v1/user";
 export const apiUrl = baseurl;
 export const fileUpload = file;
 let customHeaders = {
