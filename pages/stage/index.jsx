@@ -31,15 +31,15 @@ const Home = (props) => {
     const [loader, setLoader] = useState(false);
 
 
-
-    const [image, setImage] = useState('');
+    const [position, setPosition] = useState('');
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
-    const [status, setStatus] = useState('');
-    const [footStatus, setFootStatus] = useState('');
+    const [slug, setSlug] = useState('');
+    const [StartDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
-
+    const [unitId, setUnitId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSizeTotal, setPageSizeTotal] = useState(10);
     const [tab, setTab] = useState('active');
@@ -48,7 +48,7 @@ const Home = (props) => {
     const [search, setSearch] = useState('');
     const [isActive, setActive] = useState(false);
     const [result, setResult] = useState('');
-
+    const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -63,12 +63,12 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-        ctr.type='Country'
+
         dispatch(getAllStage(ctr));
         dispatch(getInactiveStage(ctr));
 
     }, []);
-  
+
     useEffect(() => {
         setLoader(false);
     }, [allStage, inactiveStage]);
@@ -83,22 +83,52 @@ const Home = (props) => {
         setLoader(true);
         setName('');
         setCode('');
-        setImage('');
+
         setSelectedCatId('');
         setLoader(false);
         setShowModal(true);
     }
 
+    const positionOnChange = (position) => {
+        const re = /^[0-9\b]+$/; //rules
+        if (position === "" || re.test(position)) {
+            let errorObj = { ...errors };
+            errorObj['position'] = '';
+            setPosition(position);
+            setErrors(errorObj);
+        }
+    }
+
+    const mainPositionOnChange = (id, position) => {
+        let array = [...posotionChangeCategorys];
+        const re = /^[0-9\b]+$/; //rules
+        if (position === "" || re.test(position)) {
+            let index = array.findIndex(a => a.room_id === id);
+            if (index >= 0) {
+                array[index]['position'] = position;
+            } else {
+                array.push({
+                    room_id: id,
+                    position: position
+                });
+            }
+            setPosotionChangeCategorys(array);
+        }
+    }
+
     const editModalOnClick = async (data) => {
 
-        let imageURL = data.loc_image;
+
+
         setLoader(true);
-        setName(data.loc_name);
-        setCode(data.loc_code);
-        setStatus(data.loc_status);
-        setFootStatus(data.foot_status)
-        setImage(imageURL)
-        setSelectedCatId(data._id);
+        setName(data.stage_name);
+        setCode(data.stage_code);
+        setSlug(data.stage_slug)
+        setPosition(data.stage_pos)
+        setSelectedCatId(data.stage_id);
+        setUnitId(data.unit_id)
+        setStartDate(data.start_date)
+        setEndDate(data.end_date)
         setLoader(false);
         setShowModal(true);
     }
@@ -106,18 +136,13 @@ const Home = (props) => {
     const closeModalOnClick = () => {
         setName('');
         setCode('');
-        setImage('');
+
         setSelectedCatId('');
         setErrors({});
         setShowModal(false);
     }
 
 
-    const addImage = () => {
-        valueRef.current.click();
-    }
-
-   
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
@@ -127,13 +152,14 @@ const Home = (props) => {
         if (name) {
             setLoader(true);
             let saveObj = {
-                loc_name: name,
-                pid: null,
-                loc_code: code,
-                loc_image: image ? image : null,
-                loc_type: "Country",
+                "unit_id": unitId,
+                "stage_name": name,
+                "stage_slug": slug,
+                "stage_code": code,
+                "start_date": StartDate,
+                "end_date": endDate,
+                "stage_pos": position
             };
-
             try {
                 if (selectedCatId) {
                     let result = await StageRepository.editLocation(selectedCatId, saveObj);
@@ -143,19 +169,19 @@ const Home = (props) => {
                 }
                 if (result && result.status === 200) {
                     notification.success({
-                        message: 'Country Updated Successfully.',
+                        message: 'Stage Updated Successfully.',
                         placement: 'top'
                     });
                 } else {
                     notification.success({
-                        message: 'Country Added Successfully.',
+                        message: 'Stage Added Successfully.',
                         placement: 'top'
                     });
                 }
-                let ctr = {}//chaptId: query.chapter_id };
+                let ctr = {}
                 ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
                 ctr.limit = pageSizeTotal;
-                ctr.type='Country'
+
                 if (search) {
                     ctr.search = search;
                 }
@@ -165,13 +191,13 @@ const Home = (props) => {
                 closeModalOnClick();
             } catch (e) {
                 notification.error({
-                    message: 'Country Updated Failed.',
+                    message: 'Stage Updated Failed.',
                     placement: 'top'
                 });
             }
         } else {
             let errorObj = { ...errors };
-            if (!name) errorObj['name'] = "Please Enter CountryName";
+            if (!name) errorObj['name'] = "Please Enter StageName";
             if (!code) errorObj['code'] = "Please Enter code";
 
             setErrors(errorObj);
@@ -184,7 +210,7 @@ const Home = (props) => {
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        ctr.type='Country'
+
         if (tab === "active") {
             dispatch(getAllStage(ctr));
         } else {
@@ -199,7 +225,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSize;
-        ctr.type='Country'
+
         if (search) ctr.search = search;
 
         if (tab === "active") {
@@ -223,7 +249,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = 0;
         ctr.limit = 10;
-        ctr.type='Country'
+
         if (tab === "active") {
             dispatch(getAllStage(ctr));
         } else if (tab === "inactive") {
@@ -283,7 +309,7 @@ const Home = (props) => {
                 obj['status'] = 'Y';
                 await StageRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Stage Updated Successfully.',
                     placement: 'top'
                 });
             }
@@ -291,7 +317,7 @@ const Home = (props) => {
                 obj['status'] = 'N';
                 await StageRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Stage Updated Successfully.',
                     placement: 'top'
                 });
             }
@@ -299,7 +325,7 @@ const Home = (props) => {
                 obj['status'] = 'D';
                 await StageRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Deleted Successfully.',
+                    message: 'Stage Deleted Successfully.',
                     placement: 'top'
                 });
             }
@@ -307,7 +333,7 @@ const Home = (props) => {
             let ctr = {};
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;
-            ctr.type='Country'
+
             if (search) {
                 ctr.search = search;
             }
@@ -332,13 +358,13 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Location'} />
+                        <Sidebar page={'Stage'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
                     </div>
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-                        <h3 className={'page_header'}>Country</h3>
+                        <h3 className={'page_header'}>Stage</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
                             <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
                             </TabPane>
@@ -392,6 +418,8 @@ const Home = (props) => {
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
                                 selectAll={selectAll}
+                                mainPositionOnChange={mainPositionOnChange}
+                                posotionChangeCategorys={posotionChangeCategorys}
                                 selectedCatIds={selectedCatIds}
                                 currentPage={currentPage}
                                 pageSizeTotal={pageSizeTotal}
@@ -414,7 +442,7 @@ const Home = (props) => {
                 <Modal
                     visible={showModal}
                     onCancel={closeModalOnClick}
-                    title={selectedCatId ? "Edit Country" : "Add Country"}
+                    title={selectedCatId ? "Edit Stage" : "Add Stage"}
                     width={800}
                     onOk={saveOnClick}
                     okText={selectedCatId ? "Update" : "Save"}
@@ -424,7 +452,7 @@ const Home = (props) => {
                         <div className='row'>
                             <div className="col-md-8">
                                 <div className="form-group">
-                                    <label>Country <span style={{ color: 'red' }}>*</span></label>
+                                    <label>Stage <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
                                         <input
                                             className="form-control"
@@ -439,7 +467,7 @@ const Home = (props) => {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>Country Code <span style={{ color: 'red' }}>*</span></label>
+                                    <label>Stage Code <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
                                         <input
                                             className="form-control"
@@ -453,8 +481,23 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label>Position <span style={{ color: 'red' }}>*</span></label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={position}
+                                            placeholder=""
+                                            onChange={(e) => positionOnChange(e.target.value)}
+                                        />
+                                        {errors['position'] &&
+                                            <span style={{ color: 'red' }}>{errors['position']}</span>
+                                        }
+                                    </div>
+                                </div>
                             </div>
-                           
+
                         </div>
                     </Spin>
                 </Modal>

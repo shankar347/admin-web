@@ -63,11 +63,12 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-        ctr.type = user.type;
+        ctr.type = user.userType;
         dispatch(getAllOperator(ctr));
         dispatch(getInactiveOperator(ctr));
         (async () => {
             let adminMenu = await AdminMenuRepository.adminMenu();
+            console.log(adminMenu.data.data,"hdfighdfughidfhgiuh")
             if (adminMenu && adminMenu.data.data.length > 0) {
                 setAdminmenuItems(adminMenu.data.data);
             }
@@ -230,7 +231,7 @@ const Home = (props) => {
                     ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
                     ctr.limit = pageSizeTotal;;
                     ctr.search = search;
-                    ctr.type = user.type;
+                    ctr.type = user.userType;
                     dispatch(getAllOperator(ctr));
                     dispatch(getInactiveOperator(ctr));
                     closeModalOnClick();
@@ -284,7 +285,7 @@ const Home = (props) => {
                     ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
                     ctr.limit = pageSizeTotal;;
                     ctr.search = search;
-                    ctr.type = user.type;
+                    ctr.type = user.userType;
                     dispatch(getAllOperator(ctr));
                     dispatch(getInactiveOperator(ctr));
                     closeModalOnClick();
@@ -319,7 +320,7 @@ const Home = (props) => {
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        ctr.type = user.type;
+        ctr.type = user.userType;
         if (tab === 'active') {
             dispatch(getAllOperator(ctr));
         } else {
@@ -334,7 +335,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSizeTotal;;
-        ctr.type = user.type;
+        ctr.type = user.userType;
         if (search) {
             ctr.search = search;
         }
@@ -352,7 +353,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-        ctr.type = user.type;
+        ctr.type = user.userType;
         if (tab === "active") {
             dispatch(getAllOperator(ctr));
         } else if (tab === "inactive") {
@@ -438,7 +439,7 @@ const Home = (props) => {
             let ctr = {};
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;;
-            ctr.type = user.type;
+            ctr.type = user.userType;
             if (search) {
                 ctr.search = search;
             }
@@ -599,8 +600,9 @@ const Home = (props) => {
                                 </div>
                                 <div className="form-group">
                                     <Radio.Group onChange={typeOnChange} value={optype}>
-                                        {user && (user.type === "SA" || user.type === "A") && <Radio value={"A"}>Admin</Radio>}
-                                        {user && (user.type === "SA" || user.type === "A") && <Radio value={"O"}> Executive</Radio>}
+                                        {console.log(user,"cjnbkxcfkbzdf")}
+                                        {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"A"}>Admin</Radio>}
+                                        {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"O"}> Executive</Radio>}
                                     </Radio.Group>
                                     {errors['type'] &&
                                         <span style={{ color: 'red' }}>{errors['type']}</span>
@@ -612,59 +614,16 @@ const Home = (props) => {
                                         <Checkbox.Group style={{ width: '100%' }} onChange={featuresOnChange} value={selectedmenu}>
                                             <Row>
                                                 {adminmenuitems
-
-                                                    .filter(m => m.group_id == null)
                                                     .map((m, index) => {
+                                                        console.log(m,"fghxfghxdfgdf")
                                                         return (
                                                             <Col span={8} key={index} style={{ padding: 5 }}>
-                                                                <Checkbox value={m._id}>{m.menu_title}</Checkbox>
+                                                                <Checkbox value={m.menu_id}>{m.menu_title}</Checkbox>
                                                             </Col>
                                                         )
                                                     })}
                                             </Row>
                                         </Checkbox.Group>
-                                        {selectedmenu && selectedmenu.length > 0 &&
-                                            selectedmenu.map(c => {
-                                                let cat = adminmenuitems.find(e => c === e._id);
-
-                                                let mainCat = adminmenuitems.filter(e => c === e.group_id);
-
-
-                                                if (cat) {
-                                                    return (
-                                                        <div key={c}>
-                                                            <label>{`${cat.menu_title}`}</label>
-                                                            <div className="row no-gutters">
-                                                                {mainCat.map(mc => {
-                                                                    return (
-                                                                        <div className="col-lg-3" key={mc._id} style={{ padding: 10 }}>
-                                                                            <div className="row no-gutters">
-                                                                                <div className="col-lg-2">
-                                                                                    <Checkbox
-                                                                                        checked={selectedSubmenu.indexOf(mc._id) >= 0}
-                                                                                        onChange={() => manuOnChange(mc._id)}
-                                                                                        value={mc._id}
-                                                                                    />
-                                                                                </div>
-                                                                                <div className="col-lg-10">
-                                                                                    <span>{mc.menu_title}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                    )
-
-
-                                                }
-                                            })
-                                        }
-
-
-
-
                                     </div>
                                 }
                                 {errors['features'] &&

@@ -4,7 +4,7 @@ import Head from 'next/head';
 const StyleSheets = () => (
     <Head>
         
-        <title>Unnati-Udhyogam-Admin</title>
+        <title>Britishagro Admin</title>
         <link rel="shortcut icon" href="/img/favicon.png" />
         <link rel="icon" href="/img/favicon.png" sizes="32x32" />
         <link rel="icon" href="/img/favicon.png" sizes="192x192" />

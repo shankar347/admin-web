@@ -15,7 +15,7 @@ function reducer(state = initState, action) {
             return {
                 ...state,
                 ...{
-                    allUnit: action.payload && action.payload.data ? action.payload.data : [],
+                    allUnit: action.payload && action.payload.rows ? action.payload.rows : [],
                     activeTotalCount: action.payload && action.payload.totalCount ? action.payload.totalCount : 0,
                     activeCount: action.payload && action.payload.count ? action.payload.count : 0,
                 },
@@ -24,7 +24,7 @@ function reducer(state = initState, action) {
             return {
                 ...state,
                 ...{
-                    inactiveUnit: action.payload && action.payload.data ? action.payload.data : [],
+                    inactiveUnit: action.payload && action.payload.rows ? action.payload.rows : [],
                     inactiveTotalCount: action.payload && action.payload.totalCount ? action.payload.totalCount : 0,
                     inactiveCount: action.payload && action.payload.count ? action.payload.count : 0,
                 },

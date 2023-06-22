@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStage } from '../../store/Stage/action';
+import { getAllRoom } from '../../store/Room/action';
+import RoomRepository from '../../repositories/RoomRepository';
+import ProductRepository from '../../repositories/ProductRepository';
+import TableDetails from '../../components/tables/TableDetails';
+
+
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const [activeState, setactiveState] = useState({});
-    const [stateName, setStateName] = useState('');
-    const [statesList, setStatesList] = useState([]);
-    const [isActive, setActive] = useState(false);
-    const [selectedPhase, setSelectedPhase] = useState([]);
-    
-    const [selectedSubmenu, setSelectedSubmenu] = useState([]);
-    const { allStage } = useSelector(({ Stage }) => Stage);
 
-    const stateOnClick = async (data, name) => {
-        setStateName(name)
-        setactiveState({ data, name });
-    };
+    const [isActive, setActive] = useState(false);
+    const [selectedPhase, setSelectedPhase] = useState(0);
+
+    const { allStage } = useSelector(({ Stage }) => Stage);
+    const { allRoom } = useSelector(({ Room }) => Room);
+    const [selectedRoom, setSelectedRoom] = useState([]);
+    const [materialData, setMaterialData] = useState([]);
+    const [selectedRoomId, setSelectedRoomId] = useState([]);
+    const [colorId, setColorId] = useState(0)
 
     useEffect(() => {
         let ctr = {};
@@ -26,43 +29,65 @@ const Dashboard = () => {
         handleRefresh()
     }, []);
     useEffect(() => {
-    }, [allStage]);
-    const toggleClass = () => {
+    }, [allStage, allRoom]);
+
+    const toggleClass = (id) => {
         setActive(!isActive);
+        setSelectedRoomId([id])
     };
 
+    let colors = [
+        { "border-color": "#dc3545", "color": "#dc3545" },
+        { "border-color": "#1e7e34", "color": "#1e7e34" },
+        { "border-color": "#0062cc", "color": "#0062cc" },
+        { "border-color": "#ffc107", "color": "#ffc107" },
+        { "border-color": "#f35a00", "color": "#f35a00" },
+        { "border-color": "#343a40", "color": "#343a40" }
+    ]
+
+   
     const handleRefresh = async () => {
+        let MaterialData = []
 
-
-        // let ctr = {};
-        // ctr.start = 0;
-        // ctr.limit = 1000;
-        // ctr.type = 'State'
-
-        // const data = await AdminRepository.mapdata(ctr);
-        // setStatesList(data.data.data)
-
+        let ctr = {};
+        ctr.start = 0
+        ctr.limit = 10000
+        const room = await ProductRepository.getProduct(ctr);
+        if (room && room?.data?.rows?.length) {
+            MaterialData = room.data.rows
+        }
+        setMaterialData(MaterialData)
     }
-
-    const featuresOnChange = async (value) => {
-        console.log(value,"gchjnxfghnfd")
-        let errorObj = { ...errors };
+   
+    const featuresOnChange = async (value,id) => {
+        async function asyncForEach(array, callback) {
+            for (let index = 0; index < array.length; index++) {
+                await callback(array[index], index, array);
+            }
+        }
+        let roomData = []
+        let ctr = {};
+        ctr.start = 0
+        ctr.limit = 10000
+        ctr.stageId = value
+        const room = await RoomRepository.getRoom(ctr);
+        if (room && room?.data?.rows?.length) {
+            roomData = room.data.rows
+        }
+        setColorId(id)
+        setSelectedRoom(roomData)
         setSelectedPhase(value);
-        errorObj['features'] = '';
-        setErrors(errorObj);
+      
     }
 
     return (
-
-
         <div className="content content-width mt-3 px-4 pt-5 pb-2 border-0 home" id={"auth.logintype" === 'I' ? 'style-3' : 'style-2'}>
             <div className="row">
                 {allStage.map((stage, index) => {
                     return (
                         <div className="col-md-2" key={index}>
                             <div className={`row-${index + 1}-stage-card d-flex justify-content-between`}>
-                                <div onChange={featuresOnChange} value={stage.stage_id}>
-
+                                <div onClick={() => featuresOnChange(stage.stage_id,index )} value={selectedPhase}>
                                     <h3>{stage.stage_name}</h3>
                                 </div>
                             </div>
@@ -70,129 +95,41 @@ const Dashboard = () => {
                     )
                 })}
             </div>
-            <div className="row mt-5">
-                <div className="col-md-3 mb-5" key={"index"}>
-                    <h2 className="text-center">Phase 1</h2>
-                    <div className="row">
-                        <div className="col-md-2 col-4 mb-3">
-                            <a href="#" className="btn btn-danger" onclick={featuresOnChange}
-                                data-toggle="modal" data-target="#exampleModalroom-1"><i
-                                    className="fas fa-home"></i> 1</a>
-                        </div>
 
-                    </div>
-
-
-                    {/* <div class="modal fade" id="exampleModalroom-1" tabindex="-1"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+            {selectedPhase ? <div className="row mt-5">
+                {selectedRoom.map((c, index) => {
+                    return (
+                        <div className='row phase ' key={index}>
+                            <div className="collapse  show" >
+                                <div class="card-body">
+                                    <div class="  text-center">
+                                        <div class="col-md-4 ">
+                                            <button className={`btn btn-danger`} style={colors[colorId]} onClick={() => toggleClass(c.room_id)}><i
+                                                className="fas fa-home"></i> {c.room_name}</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <h5 class="modal-title" id="exampleModalLabel">Room 1</h5>
-                                    <table class="table table-bordered mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Phase</th>
-                                                <th scope="col">Bags</th>
-                                                <th scope="col">Stage</th>
-                                                <th scope="col">Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>1</td>
-                                                <td>SR 1</td>
-                                                <td>8/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>2</td>
-                                                <td>SR 3</td>
-                                                <td>9/4/20</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>3</td>
-                                                <td>SR 5</td>
-                                                <td>11/4/20</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
                             </div>
                         </div>
-                    </div> */}
-                </div>
+                    )
+                })}
+            </div> : <></>
+            }
+            {isActive &&
+                selectedRoomId.map(c => {
+                    let cat = materialData.find(e => c === e.room_id);
+                    let mainCat = materialData.filter(e => c === e.room_id);
 
-            </div>
+                    if (cat) {
+                        return (
+                            <TableDetails
+                                category={mainCat}
+                            />
+                        )
+                    }
+                })
+            }
+
         </div>
     )
 }

@@ -47,6 +47,7 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
+        console.log(props.page,"gbdfhguhdfughdfh")
         let e = itemsRef.current[props.page];
         if (e) {
             e.scrollIntoView();
@@ -67,11 +68,7 @@ const Sidebar = (props) => {
     }, [userMenu]);
 
 
-    let menuArray = [
-        { menu_title: 'Resume Score', name: 'Resume Score', menu_icon: "fas fa-file-user", menu_link: '/resume', _id: 22 },
-        { menu_title: 'Push Notification', name: 'Push Notification', menu_icon: "fad fa-comments", menu_link: '/push_notify', _id: 22 },
-        { menu_title: 'festivals', name: 'Festivals', menu_icon: "fas fa-holly-berry", menu_link: '/festivals',_id: 22 },
-    ]
+  
 
     const showMenu = (id) => {
         if (id == showDropdown) {

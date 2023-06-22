@@ -2,20 +2,23 @@ import React from 'react';
 import { Checkbox, Table } from 'antd';
 import Link from 'next/link';
 
-const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
+const TableHomeCategory = ({ category, editModalOnClick,mainPositionOnChange,posotionChangeCategorys, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
   let columns = [
     {
       title: 'S No',
       dataIndex: 'sno',
     },
     {
-      title: 'Country Name',
+      title: 'Unit',
       dataIndex: 'title',
     },
-
     {
-      title: 'State',
-      dataIndex: 'state',
+      title: 'UnitCode',
+      dataIndex: 'code',
+    },
+    {
+      title: 'Position',
+      dataIndex: 'position',
       align: 'center'
     },
     {
@@ -23,11 +26,7 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       dataIndex: 'edit',
       align: 'center'
     },
-    {
-      title: 'Footer Status',
-      dataIndex: 'footerStatus',
-      align: 'center'
-    },
+  
     {
       title: <Checkbox checked={selectAll} onClick={(e) => onSelectAll(e.target.checked)}></Checkbox>,
       dataIndex: 'check'
@@ -35,26 +34,26 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-      
+    let position = posotionChangeCategorys.filter(p => p.catId === a.unit_id);
     let obj = {
-      key: a._id,
+      key: a.unit_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
-      title: a.loc_name,
+      title: a.unit_name,
+      code:a.unit_code,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
-      footerStatus: a.foot_status === "Y" ? "Yes" : "No",
-      state: (
-        <div className='d-flex justify-content-center align-items-center'
-          style={{ backgroundColor: '#f15927', width: 60, height: 35, color: '#fff', border: 'none', borderRadius: 5, padding: 5, textAlign: 'center' }}
-        >
-          <Link href={`/location/state/?id=${a._id}&name=${a.loc_name}`}>
-            <a style={{ color: '#fff', padding: '10px 25px' }}>{a.subCatCount ? a.subCatCount : 0}</a>
-          </Link>
-        </div>
+      position: (
+        <input
+          type="text"
+          onChange={event => mainPositionOnChange(a.unrst_jid, event.target.value)}
+          style={{ width: '50px', textAlign: 'center', padding: '0px', height: 'calc(0.5em + 1rem + 2px)' }}
+          value={position && position.length > 0 ? position[0].position : a.unit_pos}
+          className="form-control form-control-lg"
+        />
       ),
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a._id)}
-          checked={selectedCatIds.indexOf(a._id) >= 0}
+          onClick={() => onSelectOne(a.unit_id)}
+          checked={selectedCatIds.indexOf(a.unit_id) >= 0}
         />
       )
     }

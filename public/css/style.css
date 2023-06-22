@@ -2223,3 +2223,147 @@ footer p {
     width: 45%;
   }
 }
+
+
+@media (max-width: 1200px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}
+
+/* Laptop Responsive Design */
+@media (max-width: 1170px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}
+
+/* Small Laptop Responsive Design */
+@media (max-width: 1030px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}
+
+/* Tablet Responsive Design */
+@media (max-width: 991px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 767px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}
+
+/* Small Mobile Responsive Design */
+@media (max-width: 576px) {
+  .sidebar {
+    max-width: 100%
+  }
+
+  .sidebar .nav-link {
+    padding: 8px 12px;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -45%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 45%;
+    margin-left: -6px;
+  }
+
+  .sidebar-offcanvas {
+    width: 45%;
+  }
+}

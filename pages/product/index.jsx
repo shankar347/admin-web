@@ -4,28 +4,30 @@ import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'ant
 
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
-import TableRoom from '../../components/tables/TableRoom';
+import TableProduct from '../../components/tables/TableProduct';
 
-import { getAllRoom, getInactiveRoom } from '../../store/Room/action';
-import LocationRepository from '../../repositories/RoomRepository';
+import { getAllProduct, getInactiveProduct } from '../../store/Product/action';
+import ProductRepository from '../../repositories/ProductRepository';
+
 import UnitRepository from '../../repositories/UnitRepository';
 import StageRepository from '../../repositories/StageRepository';
+import RoomRepository from '../../repositories/RoomRepository';
 
 const Home = (props) => {
 
     const { TabPane } = Tabs;
     const { Option } = Select;
     const dispatch = useDispatch();
-    const valueRef = React.createRef();
     const { auth } = useSelector(({ auth }) => auth);
     const {
-        allRoom,
+        allProduct,
         activeTotalCount,
         activeCount,
-        inactiveRoom,
+        inactiveProduct,
         inactiveTotalCount,
         inactiveCount,
-    } = useSelector(({ Room }) => Room);
+
+    } = useSelector(({ product }) => product);
 
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -36,14 +38,14 @@ const Home = (props) => {
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
+   
+    const [status, setStatus] = useState('');
+    const [roomId, setRoomId] = useState('');
     const [stageId, setStageId] = useState('');
     const [unitId, setUnitId] = useState('');
-    const [status, setStatus] = useState('');
-    const [roomNo, setRoomNo] = useState('');
-    const [position, setPosition] = useState('');
+
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSizeTotal, setPageSizeTotal] = useState(10);
     const [tab, setTab] = useState('active');
@@ -52,10 +54,10 @@ const Home = (props) => {
     const [search, setSearch] = useState('');
     const [isActive, setActive] = useState(false);
     const [result, setResult] = useState('');
-    const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
     const [unitArray, setUnitArray] = useState([]);
     const [stageArray, setStageArray] = useState([]);
-
+    const [roomArray, setRoomArray] = useState([]);
+    
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
         let localAuth = local && local.auth ? JSON.parse(local.auth) : {};
@@ -69,15 +71,14 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-       
-        dispatch(getAllRoom(ctr));
-        dispatch(getInactiveRoom(ctr));
+        dispatch(getAllProduct(ctr));
+        dispatch(getInactiveProduct(ctr));
         getCategory()
     }, []);
 
     useEffect(() => {
         setLoader(false);
-    }, [allRoom, inactiveRoom]);
+    }, [allProduct, inactiveProduct]);
 
     const toggleClass = () => {
         setActive(!isActive);
@@ -88,8 +89,11 @@ const Home = (props) => {
     const addModalOnClick = async () => {
         setLoader(true);
         setName('');
-          setPosition(activeTotalCount + 1);
-        setPosition(activeTotalCount + 1);
+        setSlug('')
+        setCode('');
+        setUnitId('')
+        setStageId('')
+        setRoomId('')
         setSelectedCatId('');
         setLoader(false);
         setShowModal(true);
@@ -97,51 +101,16 @@ const Home = (props) => {
 
     const editModalOnClick = async (data) => {
         setLoader(true);
-        setName(data.room_name);
-        setSlug(data.room_slug)
-        setRoomNo(data.room_no)
+        setName(data.product_name);
+        setSlug(data.product_slug)
+        setCode(data.product_code);
+        setStatus(data.product_status);
+        setSelectedCatId(data.product_id);
         setUnitId(data.unit_id)
         setStageId(data.stage_id)
-        setSelectedCatId(data.room_id);
-        setPosition(data.room_pos );
+        setRoomId(data.room_id)
         setLoader(false);
         setShowModal(true);
-    }
-
-    const closeModalOnClick = () => {
-        setName('');
-       
-      
-        setSelectedCatId('');
-        setErrors({});
-        setShowModal(false);
-    }
-
-    const positionOnChange = (position) => {
-        const re = /^[0-9\b]+$/; //rules
-        if (position === "" || re.test(position)) {
-            let errorObj = { ...errors };
-            errorObj['position'] = '';
-            setPosition(position);
-            setErrors(errorObj);
-        }
-    }
-
-    const mainPositionOnChange = (id, position) => {
-        let array = [...posotionChangeCategorys];
-        const re = /^[0-9\b]+$/; //rules
-        if (position === "" || re.test(position)) {
-            let index = array.findIndex(a => a.room_id === id);
-            if (index >= 0) {
-                array[index]['position'] = position;
-            } else {
-                array.push({
-                    room_id: id,
-                    position: position
-                });
-            }
-            setPosotionChangeCategorys(array);
-        }
     }
 
     const nameOnChange = (name) => {
@@ -162,6 +131,61 @@ const Home = (props) => {
         setErrors(errorObj);
     }
 
+    const closeModalOnClick = () => {
+        setName('');
+        setSlug('')
+        setCode('');
+        setUnitId('')
+        setStageId('')
+        setRoomId('')
+        setSelectedCatId('');
+        setErrors({});
+        setShowModal(false);
+    }
+
+    const unitOnChange = async (id) => {
+        let ctr = {};
+        ctr._start = 0;
+        ctr._limit = 100000;
+        ctr.unitId = id
+        let errorObj = { ...errors };
+        let Stage = await StageRepository.getStage(ctr);
+        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
+            setStageArray(Stage.data.rows);
+        }else{
+            setStageArray([]);
+        }
+        setUnitId(id);
+        setStageId('')
+        setRoomId('')
+        errorObj[''] = '';
+        setErrors(errorObj);
+    }
+
+    const stageonOnChange = async (id) => {
+        let ctr = {};
+        ctr._start = 0;
+        ctr._limit = 100000;
+        ctr.stageId = id
+        let errorObj = { ...errors };
+
+        let Room = await RoomRepository.getRoom(ctr);
+        if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
+            setRoomArray(Room.data.rows);
+        }
+        setRoomId('')
+        setStageId(id);
+        errorObj['StageId'] = '';
+        setErrors(errorObj);
+    }
+
+    const roomOnChange = async (id) => {
+        let errorObj = { ...errors };
+        setRoomId(id);
+        errorObj['roomId'] = '';
+        setErrors(errorObj);
+    }
+
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
@@ -171,54 +195,52 @@ const Home = (props) => {
         if (name) {
             setLoader(true);
             let saveObj = {
-                "room_name": name,
-                "room_slug": slug,
-                "room_pos": position,
+                "product_name":name,
+                "product_slug":slug,
+                "product_code":code,
                 "unit_id": unitId,
                 "stage_id": stageId,
-                "room_no": roomNo
-
-            };
-
+                "room_id": roomId
+              }
             try {
                 if (selectedCatId) {
-                    let result = await LocationRepository.editRoom(selectedCatId, saveObj);
+                    let result = await ProductRepository.editProduct(selectedCatId, saveObj);
                     setResult(result)
                 } else {
-                    await LocationRepository.saveRoom(saveObj);
+                    await ProductRepository.saveProduct(saveObj);
                 }
                 if (result && result.status === 200) {
                     notification.success({
-                        message: 'Room Updated Successfully.',
+                        message: 'Product Updated Successfully.',
                         placement: 'top'
                     });
                 } else {
                     notification.success({
-                        message: 'Room Added Successfully.',
+                        message: 'Product Added Successfully.',
                         placement: 'top'
                     });
                 }
-                let ctr = {}//chaptId: query.chapter_id };
+                let ctr = {}
                 ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
                 ctr.limit = pageSizeTotal;
-                
+              
                 if (search) {
                     ctr.search = search;
                 }
                 setLoader(false);
-                dispatch(getAllRoom(ctr));
-                dispatch(getInactiveRoom(ctr));
+                dispatch(getAllProduct(ctr));
+                dispatch(getInactiveProduct(ctr));
                 closeModalOnClick();
             } catch (e) {
                 notification.error({
-                    message: 'Room Updated Failed.',
+                    message: 'Product Updated Failed.',
                     placement: 'top'
                 });
             }
         } else {
             let errorObj = { ...errors };
-            if (!name) errorObj['name'] = "Please Enter RoomName";
-            if (!roomNo) errorObj['code'] = "Please Enter code";
+            if (!name) errorObj['name'] = "Please Enter ProductName";
+            if (!code) errorObj['code'] = "Please Enter code";
 
             setErrors(errorObj);
         }
@@ -239,7 +261,10 @@ const Home = (props) => {
             setStageArray(Stage.data.rows);
         }
       
-      
+        let Room = await RoomRepository.getRoom(ctr);
+        if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
+            setRoomArray(Room.data.rows);
+        }
     };
 
     const searchOnChange = (search) => {
@@ -248,10 +273,11 @@ const Home = (props) => {
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
+        
         if (tab === "active") {
-            dispatch(getAllRoom(ctr));
+            dispatch(getAllProduct(ctr));
         } else {
-            dispatch(getInactiveRoom(ctr));
+            dispatch(getInactiveProduct(ctr));
         }
         setSearch(search);
         setCurrentPage(1);
@@ -262,12 +288,13 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSize;
+        
         if (search) ctr.search = search;
 
         if (tab === "active") {
-            dispatch(getAllRoom(ctr));
+            dispatch(getAllProduct(ctr));
         } else {
-            dispatch(getInactiveRoom(ctr));
+            dispatch(getInactiveProduct(ctr));
         }
         setCurrentPage(page);
         setPageSizeTotal(pageSize);
@@ -285,10 +312,11 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = 0;
         ctr.limit = 10;
+    
         if (tab === "active") {
-            dispatch(getAllRoom(ctr));
+            dispatch(getAllProduct(ctr));
         } else if (tab === "inactive") {
-            dispatch(getInactiveRoom(ctr));
+            dispatch(getInactiveProduct(ctr));
         }
         setCurrentPage(1);
         setPageSizeTotal(10);
@@ -303,9 +331,9 @@ const Home = (props) => {
         let array = [];
         if (value) {
             if (tab === 'active') {
-                array = allRoom.map(h => h._id);
+                array = allProduct.map(h => h.product_id);
             } else {
-                array = inactiveRoom.map(h => h._id);
+                array = inactiveProduct.map(h => h.product_id);
             }
         }
         setSelectedCatIds(array);
@@ -314,7 +342,7 @@ const Home = (props) => {
 
     const onSelectOne = (id) => {
         let array = [...selectedCatIds];
-        let array1 = tab === 'active' ? [...allRoom] : [...inactiveRoom];
+        let array1 = tab === 'active' ? [...allProduct] : [...inactiveProduct];
         let index = array.indexOf(id);
         if (index >= 0) {
             array.splice(index, 1);
@@ -333,32 +361,6 @@ const Home = (props) => {
         setAction(action);
     }
 
-    const unitOnChange = async (id) => {
-        let ctr = {};
-        ctr._start = 0;
-        ctr._limit = 100000;
-        ctr.unitId = id
-        let errorObj = { ...errors };
-        let Stage = await StageRepository.getStage(ctr);
-        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
-            setStageArray(Stage.data.rows);
-        }else{
-            setStageArray([]);
-        }
-        setUnitId(id);
-        setStageId('')
-        errorObj[''] = '';
-        setErrors(errorObj);
-    }
-
-    const stageonOnChange = async (id) => {
-        let errorObj = { ...errors };
-        setStageId(id);
-        errorObj['stageId'] = '';
-        setErrors(errorObj);
-    }
-
-
     const goOnClick = async () => {
         let selectedHomeCatIdsArr = [...selectedCatIds];
         let obj = {
@@ -368,33 +370,25 @@ const Home = (props) => {
             setLoader(true);
             if (action === "active") {
                 obj['status'] = 'Y';
-                await LocationRepository.updateStatus(obj);
+                await ProductRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Product Updated Successfully.',
                     placement: 'top'
                 });
             }
             if (action === "inactive") {
                 obj['status'] = 'N';
-                await LocationRepository.updateStatus(obj);
+                await ProductRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Product Updated Successfully.',
                     placement: 'top'
                 });
             }
             if (action === "delete") {
                 obj['status'] = 'D';
-                await LocationRepository.updateStatus(obj);
+                await ProductRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Deleted Successfully.',
-                    placement: 'top'
-                });
-            } if (action === "position") {
-                let array = [...posotionChangeCategorys];
-                array = array.filter(a => selectedHomeCatIdsArr.indexOf(a.unrst_jid) >= 0);
-                await LocationRepository.changePosition({ positionArray: array });
-                notification.success({
-                    message: 'Int job Updated Successfully.',
+                    message: 'Product Deleted Successfully.',
                     placement: 'top'
                 });
             }
@@ -402,11 +396,12 @@ const Home = (props) => {
             let ctr = {};
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;
+           
             if (search) {
                 ctr.search = search;
             }
-            dispatch(getAllRoom(ctr));
-            dispatch(getInactiveRoom(ctr));
+            dispatch(getAllProduct(ctr));
+            dispatch(getInactiveProduct(ctr));
         } else {
             if (!action) {
                 Modal.error({
@@ -414,7 +409,7 @@ const Home = (props) => {
                 });
             } else if (!selectedHomeCatIdsArr.length) {
                 Modal.error({
-                    title: 'Please Select One Location'
+                    title: 'Please Select One Product'
                 });
             }
         }
@@ -426,13 +421,13 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Room'} />
+                        <Sidebar page={'Product'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
                     </div>
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-                        <h3 className={'page_header'}>Room</h3>
+                        <h3 className={'page_header'}>Product</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
                             <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
                             </TabPane>
@@ -451,7 +446,6 @@ const Home = (props) => {
                                     >
                                         {tab === 'active' && <Option value="inactive">Inactive</Option>}
                                         {tab === 'inactive' && <Option value="active">Active</Option>}
-                                        {tab === 'active' && <Option value="position">Position</Option>}
                                         <Option value="delete">Delete</Option>
                                     </Select>
                                     <button onClick={goOnClick} style={{ backgroundColor: '#7063D8', width: '17%', height: 38, color: '#fff', border: 'none', marginLeft: 7 }}>
@@ -481,14 +475,13 @@ const Home = (props) => {
                             </div>
                         </div>
                         <div className='px-2'>
-                            <TableRoom
-                                category={tab === "active" ? allRoom : inactiveRoom}
+                            <TableProduct
+                                category={tab === "active" ? allProduct : inactiveProduct}
                                 editModalOnClick={editModalOnClick}
+                              
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
                                 selectAll={selectAll}
-                                mainPositionOnChange={mainPositionOnChange}
-                                posotionChangeCategorys={posotionChangeCategorys}
                                 selectedCatIds={selectedCatIds}
                                 currentPage={currentPage}
                                 pageSizeTotal={pageSizeTotal}
@@ -511,17 +504,18 @@ const Home = (props) => {
                 <Modal
                     visible={showModal}
                     onCancel={closeModalOnClick}
-                    title={selectedCatId ? "Edit Room" : "Add Room"}
+                    title={selectedCatId ? "Edit Product" : "Add Product"}
                     width={800}
                     onOk={saveOnClick}
                     okText={selectedCatId ? "Update" : "Save"}
                     maskClosable={false}
                 >
                     <Spin spinning={loader} tip={'Loading...'}>
-                        <div className='row'>
+                      
+                         <div className='row'>
 
 
-                            <div className="col-md-6">
+                         <div className="col-md-6">
                                 <div className="form-group">
                                     <label> Unit <span style={{ color: 'red' }}>*</span></label>
                                     <Select
@@ -568,7 +562,7 @@ const Home = (props) => {
                                             .map(m => {
 
                                                 return (
-                                                    <Option value={m.stage_id}>{m.stage_name}</Option>
+                                                    <Option value={m.stage_id}>{m.stage_name   }</Option>
                                                 )
                                             })}
                                     </Select>
@@ -577,9 +571,35 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-                           
-
                             <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Room<span style={{ color: 'red' }}>*</span></label>
+                                    <Select
+                                        onChange={roomOnChange}
+                                        placeholder="Select Room"
+                                        className="ps-ant-dropdown"
+                                        style={{ width: '100%' }}
+                                        value={roomId ? roomId : null}
+                                        showSearch={true}
+                                        filterOption={(input, option) =>
+                                            option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        <Option value="">--Room--</Option>
+                                        {roomArray.filter(c => c.room_id !== 0)
+                                            .map(m => {
+                                                return (
+                                                    <Option value={m.room_id }>{m.room_name}</Option>
+                                                )
+                                            })}
+                                    </Select>
+                                    {errors['roomId'] &&
+                                        <span style={{ color: 'red' }}>{errors['roomId']}</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">   
                                 <div className="form-group">
                                     <label>Title <span style={{ color: 'red' }}>*</span></label>
                                     <input
@@ -593,8 +613,8 @@ const Home = (props) => {
                                         <span style={{ color: 'red' }}>{errors['name']}</span>
                                     }
                                 </div>
-                            </div>
-                            <div className="col-md-6">
+                                </div>
+                                <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Slug <span style={{ color: 'red' }}>*</span></label>
                                     <input
@@ -608,41 +628,26 @@ const Home = (props) => {
                                         <span style={{ color: 'red' }}>{errors['slug']}</span>
                                     }
                                 </div>
-                            </div>
-                           
-                            <div className="col-md-6">
+                                </div>
+                                <div className="col-md-6">
                                 <div className="form-group">
-                                    <label> Room No <span style={{ color: 'red' }}>*</span></label>
+                                    <label> Code <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
                                         <input
                                             className="form-control"
                                             type="text"
-                                            value={roomNo}
+                                            value={code}
                                             placeholder=""
-                                            onChange={onChangeHandler.bind(null, setRoomNo)}
+                                            onChange={onChangeHandler.bind(null, setCode)}
                                         />
                                         {errors['code'] &&
                                             <span style={{ color: 'red' }}>{errors['code']}</span>
                                         }
                                     </div>
                                 </div>
-                            </div>
-                            
-                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Position <span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={position}
-                                        placeholder=""
-                                        onChange={(e) => positionOnChange(e.target.value)}
-                                    />
-                                    {errors['position'] &&
-                                        <span style={{ color: 'red' }}>{errors['position']}</span>
-                                    }
                                 </div>
-                            </div>
+                            
+                            
                         </div>
                     </Spin>
                 </Modal>

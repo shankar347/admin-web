@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox, Table } from 'antd';
 import Link from 'next/link';
-
+import Moment from "moment";
 const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
   let columns = [
     {
@@ -12,8 +12,15 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       title: 'Country Name',
       dataIndex: 'title',
     },
-
    
+    {
+      title: 'Start Date',
+      dataIndex: 'start',
+    },
+    {
+      title: 'End Date',
+      dataIndex: 'end',
+    },
     {
       title: 'Edit',
       dataIndex: 'edit',
@@ -27,17 +34,18 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-      console.log(a,"fhgiudfhguihdsifh")
     let obj = {
-      key: a._id,
+      key: a.product_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
-      title: a.room_name,
+      title: a.product_name,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
-     
+      start: Moment(a.start_date).format("DD-MM-YYYY"),
+      end:  Moment(a.end_date).format("DD-MM-YYYY"),
+    
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a._id)}
-          checked={selectedCatIds.indexOf(a._id) >= 0}
+          onClick={() => onSelectOne(a.product_id)}
+          checked={selectedCatIds.indexOf(a.product_id) >= 0}
         />
       )
     }

@@ -66,14 +66,6 @@ const Header = () => {
                     </a>
                 </div>
                 <div className="d-flex">
-                    <div className="theme-btn-div">
-                        <button onClick={() => changeTheme('light')} className={`theme-btn ${theme == 'light' ? 'theme-btn-active' : ''}`}><i className="fas fa-sun"></i></button>
-                        <button onClick={() => changeTheme('dark')} className={`theme-btn ${theme == 'dark' ? 'theme-btn-active' : ''}`}><i className="fas fa-moon-stars"></i></button>
-                    </div>
-                    <h4 className="user-name m-0">
-                        <i className="fas fa-user pr-2" style={{ color: '#fff', fontSize: '18px' }} ></i>
-                        {auth && auth.name ? auth.name : ''}
-                    </h4>
                     <ul className="nav__menu m-0 d-flex justify-content-between align-items-center">
                         <li className="nav__menu-item" style={{ cursor: 'pointer' }}>
                             <i className="fas fa-sign-out-alt" style={{ color: '#fff', fontSize: '25px' }} onClick={logoutOne}></i>
