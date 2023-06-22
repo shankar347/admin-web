@@ -5,10 +5,11 @@ import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'ant
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 import TableStage from '../../components/tables/TableStage';
+import UnitRepository from '../../repositories/UnitRepository';
 
 import { getAllStage, getInactiveStage } from '../../store/Stage/action';
 import StageRepository from '../../repositories/StageRepository';
-
+import Moment from "moment"
 
 const Home = (props) => {
 
@@ -35,10 +36,11 @@ const Home = (props) => {
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
-    const [StartDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [StartDate, setStartDate] = useState(Moment().format('YYYY-MM-DD'));
+    const [endDate, setEndDate] =  useState(Moment().format('YYYY-MM-DD'));
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
+    const [unitArray, setUnitArray] = useState([]);
     const [unitId, setUnitId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSizeTotal, setPageSizeTotal] = useState(10);
@@ -66,7 +68,7 @@ const Home = (props) => {
 
         dispatch(getAllStage(ctr));
         dispatch(getInactiveStage(ctr));
-
+        getCategory()
     }, []);
 
     useEffect(() => {
@@ -162,10 +164,10 @@ const Home = (props) => {
             };
             try {
                 if (selectedCatId) {
-                    let result = await StageRepository.editLocation(selectedCatId, saveObj);
+                    let result = await StageRepository.editStage(selectedCatId, saveObj);
                     setResult(result)
                 } else {
-                    await StageRepository.saveLocation(saveObj);
+                    await StageRepository.saveStage(saveObj);
                 }
                 if (result && result.status === 200) {
                     notification.success({
@@ -263,14 +265,32 @@ const Home = (props) => {
         setSearch('');
         setTab(tab);
     }
+    const getCategory = async () => {
+        let ctr = {};
+        ctr._start = 0;
+        ctr._limit = 100000;
+       
+        let Unit = await UnitRepository.getUnit(ctr);
+        if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
+            setUnitArray(Unit.data.rows)
+        }
+      
+    };
+
+    const unitOnChange = async (id) => {
+        let errorObj = { ...errors };
+        setUnitId(id);
+        errorObj['unitId'] = '';
+        setErrors(errorObj);
+    }
 
     const onSelectAll = (value) => {
         let array = [];
         if (value) {
             if (tab === 'active') {
-                array = allStage.map(h => h._id);
+                array = allStage.map(h => h.stage_id);
             } else {
-                array = inactiveStage.map(h => h._id);
+                array = inactiveStage.map(h => h.stage_id);
             }
         }
         setSelectedCatIds(array);
@@ -450,7 +470,35 @@ const Home = (props) => {
                 >
                     <Spin spinning={loader} tip={'Loading...'}>
                         <div className='row'>
-                            <div className="col-md-8">
+                        <div className="col-md-6">
+                                <div className="form-group">
+                                    <label> Unit <span style={{ color: 'red' }}>*</span></label>
+                                    <Select
+                                        onChange={unitOnChange}
+                                        placeholder="Select UnitId"
+                                        className="ps-ant-dropdown"
+                                        style={{ width: '100%' }}
+                                        value={unitId ? unitId : null}
+                                        showSearch={true}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        <Option value="">--Unit--</Option>
+                                        {unitArray.filter(c => c.unit_id !== 100 && c.unit_id !== 0)
+                                            .map(m => {
+
+                                                return (
+                                                    <Option value={m.unit_id}>{`${m.unit_name} - ${m.unit_code}`}</Option>
+                                                )
+                                            })}
+                                    </Select>
+                                    {errors['UnitId'] &&
+                                        <span style={{ color: 'red' }}>{errors['UnitId']}</span>
+                                    }
+                                </div>
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -466,6 +514,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
+                                </div>
+                                <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage Code <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -481,6 +531,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
+                                </div>
+                                <div className="col-md-6">
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Position <span style={{ color: 'red' }}>*</span></label>
