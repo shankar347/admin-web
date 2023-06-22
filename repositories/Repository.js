@@ -1,6 +1,6 @@
 import axios from 'axios';
 // export const baseurl = "https://medadmin.questioncloud.in/api";
-export const baseurl = "https://britishagro.com/api/";
+export const baseurl = "https://britishagro.com/api";
 //export const baseurl = "https://admin.jobslink.in/api/api/v1";
 
 
