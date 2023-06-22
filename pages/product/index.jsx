@@ -12,7 +12,7 @@ import ProductRepository from '../../repositories/ProductRepository';
 import UnitRepository from '../../repositories/UnitRepository';
 import StageRepository from '../../repositories/StageRepository';
 import RoomRepository from '../../repositories/RoomRepository';
-
+import Moment from "moment"
 const Home = (props) => {
 
     const { TabPane } = Tabs;
@@ -38,7 +38,7 @@ const Home = (props) => {
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
-   
+
     const [status, setStatus] = useState('');
     const [roomId, setRoomId] = useState('');
     const [stageId, setStageId] = useState('');
@@ -57,7 +57,7 @@ const Home = (props) => {
     const [unitArray, setUnitArray] = useState([]);
     const [stageArray, setStageArray] = useState([]);
     const [roomArray, setRoomArray] = useState([]);
-    
+    const [startDate, setstartDate] = useState(Moment().format('YYYY-MM-DD'))
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
         let localAuth = local && local.auth ? JSON.parse(local.auth) : {};
@@ -144,36 +144,19 @@ const Home = (props) => {
     }
 
     const unitOnChange = async (id) => {
+        let errorObj = { ...errors };
         let ctr = {};
         ctr._start = 0;
         ctr._limit = 100000;
         ctr.unitId = id
-        let errorObj = { ...errors };
-        let Stage = await StageRepository.getStage(ctr);
-        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
-            setStageArray(Stage.data.rows);
-        }else{
-            setStageArray([]);
-        }
         setUnitId(id);
-        setStageId('')
         setRoomId('')
         errorObj[''] = '';
         setErrors(errorObj);
     }
 
     const stageonOnChange = async (id) => {
-        let ctr = {};
-        ctr._start = 0;
-        ctr._limit = 100000;
-        ctr.stageId = id
         let errorObj = { ...errors };
-
-        let Room = await RoomRepository.getRoom(ctr);
-        if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
-            setRoomArray(Room.data.rows);
-        }
-        setRoomId('')
         setStageId(id);
         errorObj['StageId'] = '';
         setErrors(errorObj);
@@ -192,16 +175,19 @@ const Home = (props) => {
 
     const saveData = async (selectedCatId) => {
 
-        if (name) {
+        if (unitId) {
             setLoader(true);
             let saveObj = {
-                "product_name":name,
-                "product_slug":slug,
-                "product_code":code,
+                "product_name": name ? name : '-',
+                "product_slug": slug ? slug : '-',
+                "product_code": code ? code : '-',
                 "unit_id": unitId,
                 "stage_id": stageId,
-                "room_id": roomId
-              }
+                "room_id": roomId,
+                "start_date": startDate,
+                "end_date": Moment(startDate, "DD-MM-YYYY").add(46, 'days')
+
+            }
             try {
                 if (selectedCatId) {
                     let result = await ProductRepository.editProduct(selectedCatId, saveObj);
@@ -223,7 +209,7 @@ const Home = (props) => {
                 let ctr = {}
                 ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
                 ctr.limit = pageSizeTotal;
-              
+
                 if (search) {
                     ctr.search = search;
                 }
@@ -250,17 +236,17 @@ const Home = (props) => {
         let ctr = {};
         ctr._start = 0;
         ctr._limit = 100000;
-       
+
         let Unit = await UnitRepository.getUnit(ctr);
         if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
             setUnitArray(Unit.data.rows)
         }
-      
+
         let Stage = await StageRepository.getStage(ctr);
         if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
             setStageArray(Stage.data.rows);
         }
-      
+
         let Room = await RoomRepository.getRoom(ctr);
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
             setRoomArray(Room.data.rows);
@@ -273,7 +259,7 @@ const Home = (props) => {
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        
+
         if (tab === "active") {
             dispatch(getAllProduct(ctr));
         } else {
@@ -288,7 +274,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSize;
-        
+
         if (search) ctr.search = search;
 
         if (tab === "active") {
@@ -312,7 +298,7 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = 0;
         ctr.limit = 10;
-    
+
         if (tab === "active") {
             dispatch(getAllProduct(ctr));
         } else if (tab === "inactive") {
@@ -396,7 +382,7 @@ const Home = (props) => {
             let ctr = {};
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;
-           
+
             if (search) {
                 ctr.search = search;
             }
@@ -421,13 +407,13 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Product'} />
+                        <Sidebar page={'Production'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
                     </div>
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-                        <h3 className={'page_header'}>Product</h3>
+                        <h3 className={'page_header'}>Production</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
                             <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
                             </TabPane>
@@ -478,7 +464,7 @@ const Home = (props) => {
                             <TableProduct
                                 category={tab === "active" ? allProduct : inactiveProduct}
                                 editModalOnClick={editModalOnClick}
-                              
+
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
                                 selectAll={selectAll}
@@ -511,16 +497,14 @@ const Home = (props) => {
                     maskClosable={false}
                 >
                     <Spin spinning={loader} tip={'Loading...'}>
-                      
-                         <div className='row'>
 
-
-                         <div className="col-md-6">
+                        <div className='row'>
+                            <div className="col-md-6">
                                 <div className="form-group">
-                                    <label> Unit <span style={{ color: 'red' }}>*</span></label>
+                                    <label> Phase <span style={{ color: 'red' }}>*</span></label>
                                     <Select
                                         onChange={unitOnChange}
-                                        placeholder="Select UnitId"
+                                        placeholder="Select Phase"
                                         className="ps-ant-dropdown"
                                         style={{ width: '100%' }}
                                         value={unitId ? unitId : null}
@@ -545,6 +529,65 @@ const Home = (props) => {
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
+                                    <label>Room<span style={{ color: 'red' }}>*</span></label>
+                                    <Select
+                                        onChange={roomOnChange}
+                                        placeholder="Select Room"
+                                        className="ps-ant-dropdown"
+                                        style={{ width: '100%' }}
+                                        value={roomId ? roomId : null}
+                                        showSearch={true}
+                                        filterOption={(input, option) =>
+                                            option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        <Option value="">--Room--</Option>
+                                        {roomArray.filter(c => c.room_id !== 0)
+                                            .map(m => {
+                                                return (
+                                                    <Option value={m.room_id}>{m.room_name}</Option>
+                                                )
+                                            })}
+                                    </Select>
+                                    {errors['roomId'] &&
+                                        <span style={{ color: 'red' }}>{errors['roomId']}</span>
+                                    }
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Product Title <span style={{ color: 'red' }}>*</span></label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        value={name}
+                                        placeholder=""
+                                        onChange={(e) => nameOnChange(e.target.value)}
+                                    />
+                                    {errors['name'] &&
+                                        <span style={{ color: 'red' }}>{errors['name']}</span>
+                                    }
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label> Date </label>
+                                    <div className="form-group">
+                                        <input
+                                            className="form-control"
+                                            type="Date"
+                                            value={startDate}
+                                            placeholder=""
+                                            onChange={onChangeHandler.bind(null, setstartDate)}
+                                        />
+                                        {errors['startDate'] &&
+                                            <span style={{ color: 'red' }}>{errors['startDate']}</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
                                     <label>Stage<span style={{ color: 'red' }}>*</span></label>
                                     <Select
                                         onChange={stageonOnChange}
@@ -562,92 +605,16 @@ const Home = (props) => {
                                             .map(m => {
 
                                                 return (
-                                                    <Option value={m.stage_id}>{m.stage_name   }</Option>
+                                                    <Option value={m.stage_id}>{m.stage_name}</Option>
                                                 )
                                             })}
                                     </Select>
                                     {errors['stateId'] &&
                                         <span style={{ color: 'red' }}>{errors['stateId']}</span>
                                     }
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Room<span style={{ color: 'red' }}>*</span></label>
-                                    <Select
-                                        onChange={roomOnChange}
-                                        placeholder="Select Room"
-                                        className="ps-ant-dropdown"
-                                        style={{ width: '100%' }}
-                                        value={roomId ? roomId : null}
-                                        showSearch={true}
-                                        filterOption={(input, option) =>
-                                            option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        <Option value="">--Room--</Option>
-                                        {roomArray.filter(c => c.room_id !== 0)
-                                            .map(m => {
-                                                return (
-                                                    <Option value={m.room_id }>{m.room_name}</Option>
-                                                )
-                                            })}
-                                    </Select>
-                                    {errors['roomId'] &&
-                                        <span style={{ color: 'red' }}>{errors['roomId']}</span>
-                                    }
-                                </div>
-                            </div>
 
-                            <div className="col-md-6">   
-                                <div className="form-group">
-                                    <label>Title <span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={name}
-                                        placeholder=""
-                                        onChange={(e) => nameOnChange(e.target.value)}
-                                    />
-                                    {errors['name'] &&
-                                        <span style={{ color: 'red' }}>{errors['name']}</span>
-                                    }
                                 </div>
-                                </div>
-                                <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Slug <span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={slug}
-                                        placeholder=""
-                                        onChange={(e) => slugOnChange(e.target.value)}
-                                    />
-                                    {errors['slug'] &&
-                                        <span style={{ color: 'red' }}>{errors['slug']}</span>
-                                    }
-                                </div>
-                                </div>
-                                <div className="col-md-6">
-                                <div className="form-group">
-                                    <label> Code <span style={{ color: 'red' }}>*</span></label>
-                                    <div className="form-group">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={code}
-                                            placeholder=""
-                                            onChange={onChangeHandler.bind(null, setCode)}
-                                        />
-                                        {errors['code'] &&
-                                            <span style={{ color: 'red' }}>{errors['code']}</span>
-                                        }
-                                    </div>
-                                </div>
-                                </div>
-                            
-                            
+                            </div>
                         </div>
                     </Spin>
                 </Modal>

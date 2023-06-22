@@ -93,7 +93,7 @@ const SignIn = (props) => {
         <div className="loginscreen">
               <div className="login-card">
                 <div className="text-center login-logo">
-                  <img src={"/img/logo_12.PNG"} alt="Nursing" className="text-center" title="Nursing" />
+                  <img src={"/img/logo_12.png"} alt="BA" className="text-center" title="BA" />
                 </div>
                 <div className='form-div'>
                   <h2 className='text-center pb-4'>Login</h2>

@@ -523,7 +523,7 @@ const Home = (props) => {
 
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label> Unit <span style={{ color: 'red' }}>*</span></label>
+                                    <label> Phase <span style={{ color: 'red' }}>*</span></label>
                                     <Select
                                         onChange={unitOnChange}
                                         placeholder="Select UnitId"
@@ -549,39 +549,10 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Stage<span style={{ color: 'red' }}>*</span></label>
-                                    <Select
-                                        onChange={stageonOnChange}
-                                        placeholder="Select Stage"
-                                        className="ps-ant-dropdown"
-                                        style={{ width: '100%' }}
-                                        value={stageId ? stageId : null}
-                                        showSearch={true}
-                                        filterOption={(input, option) =>
-                                            option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        <Option value="">--Stage--</Option>
-                                        {stageArray.filter(s => s.stage_id !== 0)
-                                            .map(m => {
-
-                                                return (
-                                                    <Option value={m.stage_id}>{m.stage_name}</Option>
-                                                )
-                                            })}
-                                    </Select>
-                                    {errors['stateId'] &&
-                                        <span style={{ color: 'red' }}>{errors['stateId']}</span>
-                                    }
-                                </div>
-                            </div>
-                           
 
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Title <span style={{ color: 'red' }}>*</span></label>
+                                    <label>Room Name <span style={{ color: 'red' }}>*</span></label>
                                     <input
                                         className="form-control"
                                         type="text"
@@ -594,25 +565,11 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Slug <span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={slug}
-                                        placeholder=""
-                                        onChange={(e) => slugOnChange(e.target.value)}
-                                    />
-                                    {errors['slug'] &&
-                                        <span style={{ color: 'red' }}>{errors['slug']}</span>
-                                    }
-                                </div>
-                            </div>
+                          
                            
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label> Room No <span style={{ color: 'red' }}>*</span></label>
+                                    <label> Room No </label>
                                     <div className="form-group">
                                         <input
                                             className="form-control"
@@ -628,7 +585,7 @@ const Home = (props) => {
                                 </div>
                             </div>
                             
-                             <div className="col-md-6">
+                             {/* <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Position <span style={{ color: 'red' }}>*</span></label>
                                     <input
@@ -642,7 +599,7 @@ const Home = (props) => {
                                         <span style={{ color: 'red' }}>{errors['position']}</span>
                                     }
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </Spin>
                 </Modal>

@@ -57,7 +57,7 @@ const Header = () => {
         <div>
             <div className='header-nav d-flex justify-content-between align-items-center'>
                 <div className="logo">
-                    <a href="/">
+                    <a href="/home">
                         <div className="text-center">
                                         <img src={"/img/logo_12.png"}
                                             style={{ height: '50px' }}

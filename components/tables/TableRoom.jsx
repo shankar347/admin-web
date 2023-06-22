@@ -8,18 +8,24 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       title: 'S No',
       dataIndex: 'sno',
     },
+
     {
-      title: 'Country Name',
+      title: 'Phase Name',
+      dataIndex: 'main',
+    },
+
+    {
+      title: 'Room Name',
       dataIndex: 'title',
     },
 
-   
+
     {
       title: 'Edit',
       dataIndex: 'edit',
       align: 'center'
     },
-   
+
     {
       title: <Checkbox checked={selectAll} onClick={(e) => onSelectAll(e.target.checked)}></Checkbox>,
       dataIndex: 'check'
@@ -27,13 +33,14 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-      console.log(a,"fhgiudfhguihdsifh")
+    console.log(a, "fhgiudfhguihdsifh")
     let obj = {
       key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.room_name,
+      main: a.unit_name,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
-     
+
       check: (
         <Checkbox
           onClick={() => onSelectOne(a._id)}
