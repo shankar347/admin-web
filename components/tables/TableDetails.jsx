@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox, Table } from 'antd';
 import Link from 'next/link';
-
+import Moment from "moment"
 const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
   let columns = [
     {
@@ -33,8 +33,8 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       key: a.product_id,
       sno: index + 1,
       title: a.product_name ,
-      StartDate: a.start_date,
-      EndDate:a.end_date
+      StartDate: Moment(a.start_date).format('DD-MM-YYYY'),
+      EndDate:Moment(a.end_date).format('DD-MM-YYYY'),
     }
     return (obj);
   });
