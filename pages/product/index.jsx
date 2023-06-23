@@ -57,7 +57,15 @@ const Home = (props) => {
     const [unitArray, setUnitArray] = useState([]);
     const [stageArray, setStageArray] = useState([]);
     const [roomArray, setRoomArray] = useState([]);
-    const [startDate, setstartDate] = useState(Moment().format('YYYY-MM-DD'))
+    const [flow, setFlow] = useState({});
+    const [spawnRun, setSpawnRun] = useState({});
+    const [caseRun, setCaseRun] = useState({});
+    const [venting, setVenting] = useState({});
+    const [pinning, setPinning] = useState({});
+    const [harvest, setHarvest] = useState({});
+    const [startDate, setstartDate] = useState(Moment("DD-MM-YYYY").format('DD-MM-YYYY'))
+    const [endDate, setEndDate] = useState(Moment("DD-MM-YYYY").format('DD-MM-YYYY'))
+
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
         let localAuth = local && local.auth ? JSON.parse(local.auth) : {};
@@ -123,14 +131,6 @@ const Home = (props) => {
         setErrors(errorObj);
     }
 
-    const slugOnChange = (slug) => {
-        let errorObj = { ...errors };
-        slug = (slug).replace(/ /g, "-").toLowerCase();
-        errorObj['slug'] = '';
-        setSlug(slug);
-        setErrors(errorObj);
-    }
-
     const closeModalOnClick = () => {
         setName('');
         setSlug('')
@@ -146,9 +146,13 @@ const Home = (props) => {
     const unitOnChange = async (id) => {
         let errorObj = { ...errors };
         let ctr = {};
-        ctr._start = 0;
-        ctr._limit = 100000;
+        ctr.offset = 0;
+        ctr.limit = 100000;
         ctr.unitId = id
+        let Room = await RoomRepository.getRoom(ctr);
+        if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
+            setRoomArray(Room.data.rows);
+        }
         setUnitId(id);
         setRoomId('')
         errorObj[''] = '';
@@ -156,6 +160,407 @@ const Home = (props) => {
     }
 
     const stageonOnChange = async (id) => {
+        setLoader(true)
+        let ctr = {};
+        ctr._start = 0;
+        ctr._limit = 100000;
+        ctr.stageId = id
+        let Stage = await StageRepository.getStage(ctr);
+        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
+            if (Stage.data.rows[0].stage_name) {
+                let pos = Stage.data.rows[0].stage_pos
+                let date = Moment(startDate).format('DD-MM-YYYY')
+                if (pos == 1) {
+
+                    let flow_1 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: id,
+                        SR0: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                        SR1: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                        SR2: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                        SR3: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                        SR4: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                        SR5: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                        SR6: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                        SR7: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                        SR8: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                        SR9: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                        SR10: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                        SR11: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                        SR12: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                        SR13: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                        SR14: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_2 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        CR0: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                        CR1: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                        CR2: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                        CR3: Moment(date, "DD-MM-YYYY").add(19, 'days').format('YYYY-MM-DD'),
+                        CR4: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
+                        CR5: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
+                        CR6: Moment(date, "DD-MM-YYYY").add(22, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_3 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        V1: Moment(date, "DD-MM-YYYY").add(23, 'days').format('YYYY-MM-DD'),
+                        V2: Moment(date, "DD-MM-YYYY").add(24, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_4 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        P1: Moment(date, "DD-MM-YYYY").add(25, 'days').format('YYYY-MM-DD'),
+                        P2: Moment(date, "DD-MM-YYYY").add(26, 'days').format('YYYY-MM-DD'),
+                        P3: Moment(date, "DD-MM-YYYY").add(27, 'days').format('YYYY-MM-DD'),
+                        P4: Moment(date, "DD-MM-YYYY").add(28, 'days').format('YYYY-MM-DD'),
+                        P5: Moment(date, "DD-MM-YYYY").add(29, 'days').format('YYYY-MM-DD'),
+                        P6: Moment(date, "DD-MM-YYYY").add(30, 'days').format('YYYY-MM-DD'),
+                        P7: Moment(date, "DD-MM-YYYY").add(31, 'days').format('YYYY-MM-DD'),
+                        P8: Moment(date, "DD-MM-YYYY").add(32, 'days').format('YYYY-MM-DD'),
+                        P9: Moment(date, "DD-MM-YYYY").add(33, 'days').format('YYYY-MM-DD'),
+                        P10: Moment(date, "DD-MM-YYYY").add(34, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_5 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        H1: Moment(date, "DD-MM-YYYY").add(35, 'days').format('YYYY-MM-DD'),
+                        H2: Moment(date, "DD-MM-YYYY").add(36, 'days').format('YYYY-MM-DD'),
+                        H3: Moment(date, "DD-MM-YYYY").add(37, 'days').format('YYYY-MM-DD'),
+                        H4: Moment(date, "DD-MM-YYYY").add(38, 'days').format('YYYY-MM-DD'),
+                        H5: Moment(date, "DD-MM-YYYY").add(39, 'days').format('YYYY-MM-DD'),
+                        H6: Moment(date, "DD-MM-YYYY").add(40, 'days').format('YYYY-MM-DD'),
+                        H7: Moment(date, "DD-MM-YYYY").add(41, 'days').format('YYYY-MM-DD'),
+                        H8: Moment(date, "DD-MM-YYYY").add(42, 'days').format('YYYY-MM-DD'),
+                        H9: Moment(date, "DD-MM-YYYY").add(43, 'days').format('YYYY-MM-DD'),
+                        H10: Moment(date, "DD-MM-YYYY").add(44, 'days').format('YYYY-MM-DD'),
+                        H11: Moment(date, "DD-MM-YYYY").add(45, 'days').format('YYYY-MM-DD'),
+                        H12: Moment(date, "DD-MM-YYYY").add(46, 'days').format('YYYY-MM-DD'),
+                    }
+                    setSpawnRun(flow_1)
+                    setCaseRun(flow_2)
+                    setVenting(flow_3)
+                    setPinning(flow_4)
+                    setHarvest(flow_5)
+
+                } else if (pos == 2) {
+                    let flow_1 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: id,
+                        SR0: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
+                        SR1: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
+                        SR2: Moment(date, "DD-MM-YYYY").add(-13, 'days').format('YYYY-MM-DD'),
+                        SR3: Moment(date, "DD-MM-YYYY").add(-12, 'days').format('YYYY-MM-DD'),
+                        SR4: Moment(date, "DD-MM-YYYY").add(-11, 'days').format('YYYY-MM-DD'),
+                        SR5: Moment(date, "DD-MM-YYYY").add(-10, 'days').format('YYYY-MM-DD'),
+                        SR6: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
+                        SR7: Moment(date, "DD-MM-YYYY").add(-8, 'days').format('YYYY-MM-DD'),
+                        SR8: Moment(date, "DD-MM-YYYY").add(-7, 'days').format('YYYY-MM-DD'),
+                        SR9: Moment(date, "DD-MM-YYYY").add(-6, 'days').format('YYYY-MM-DD'),
+                        SR10: Moment(date, "DD-MM-YYYY").add(-5, 'days').format('YYYY-MM-DD'),
+                        SR11: Moment(date, "DD-MM-YYYY").add(-4, 'days').format('YYYY-MM-DD'),
+                        SR12: Moment(date, "DD-MM-YYYY").add(-3, 'days').format('YYYY-MM-DD'),
+                        SR13: Moment(date, "DD-MM-YYYY").add(-2, 'days').format('YYYY-MM-DD'),
+                        SR14: Moment(date, "DD-MM-YYYY").add(-1, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_2 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        CR0: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                        CR1: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                        CR2: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                        CR3: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                        CR4: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                        CR5: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                        CR6: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_3 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        V1: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                        V2: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_4 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        P1: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                        P2: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                        P3: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                        P4: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                        P5: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                        P6: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                        P7: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                        P8: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                        P9: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                        P10: Moment(date, "DD-MM-YYYY").add(19, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_5 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        H1: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
+                        H2: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
+                        H3: Moment(date, "DD-MM-YYYY").add(22, 'days').format('YYYY-MM-DD'),
+                        H4: Moment(date, "DD-MM-YYYY").add(23, 'days').format('YYYY-MM-DD'),
+                        H5: Moment(date, "DD-MM-YYYY").add(24, 'days').format('YYYY-MM-DD'),
+                        H6: Moment(date, "DD-MM-YYYY").add(25, 'days').format('YYYY-MM-DD'),
+                        H7: Moment(date, "DD-MM-YYYY").add(26, 'days').format('YYYY-MM-DD'),
+                        H8: Moment(date, "DD-MM-YYYY").add(27, 'days').format('YYYY-MM-DD'),
+                        H9: Moment(date, "DD-MM-YYYY").add(28, 'days').format('YYYY-MM-DD'),
+                        H10: Moment(date, "DD-MM-YYYY").add(29, 'days').format('YYYY-MM-DD'),
+                        H11: Moment(date, "DD-MM-YYYY").add(30, 'days').format('YYYY-MM-DD'),
+                        H12: Moment(date, "DD-MM-YYYY").add(31, 'days').format('YYYY-MM-DD'),
+                    }
+                    setSpawnRun(flow_1)
+                    setCaseRun(flow_2)
+                    setVenting(flow_3)
+                    setPinning(flow_4)
+                    setHarvest(flow_5)
+                } else if (pos == 3) {
+                    let flow_1 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: id,
+                        SR0: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
+                        SR1: Moment(date, "DD-MM-YYYY").add(-21, 'days').format('YYYY-MM-DD'),
+                        SR2: Moment(date, "DD-MM-YYYY").add(-20, 'days').format('YYYY-MM-DD'),
+                        SR3: Moment(date, "DD-MM-YYYY").add(-19, 'days').format('YYYY-MM-DD'),
+                        SR4: Moment(date, "DD-MM-YYYY").add(-18, 'days').format('YYYY-MM-DD'),
+                        SR5: Moment(date, "DD-MM-YYYY").add(-17, 'days').format('YYYY-MM-DD'),
+                        SR6: Moment(date, "DD-MM-YYYY").add(-16, 'days').format('YYYY-MM-DD'),
+                        SR7: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
+                        SR8: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
+                        SR9: Moment(date, "DD-MM-YYYY").add(-13, 'days').format('YYYY-MM-DD'),
+                        SR10: Moment(date, "DD-MM-YYYY").add(-12, 'days').format('YYYY-MM-DD'),
+                        SR11: Moment(date, "DD-MM-YYYY").add(-11, 'days').format('YYYY-MM-DD'),
+                        SR12: Moment(date, "DD-MM-YYYY").add(-10, 'days').format('YYYY-MM-DD'),
+                        SR13: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
+                        SR14: Moment(date, "DD-MM-YYYY").add(-8, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_2 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        CR0: Moment(date, "DD-MM-YYYY").add(-7, 'days').format('YYYY-MM-DD'),
+                        CR1: Moment(date, "DD-MM-YYYY").add(-6, 'days').format('YYYY-MM-DD'),
+                        CR2: Moment(date, "DD-MM-YYYY").add(-5, 'days').format('YYYY-MM-DD'),
+                        CR3: Moment(date, "DD-MM-YYYY").add(-4, 'days').format('YYYY-MM-DD'),
+                        CR4: Moment(date, "DD-MM-YYYY").add(-3, 'days').format('YYYY-MM-DD'),
+                        CR5: Moment(date, "DD-MM-YYYY").add(-2, 'days').format('YYYY-MM-DD'),
+                        CR6: Moment(date, "DD-MM-YYYY").add(-1, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_3 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        V1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                        V2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_4 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        P1: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                        P2: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                        P3: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                        P4: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                        P5: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                        P6: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                        P7: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                        P8: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                        P9: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                        P10: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_5 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        H1: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                        H2: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                        H3: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                        H4: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                        H5: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                        H6: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                        H7: Moment(date, "DD-MM-YYYY").add(19, 'days').format('YYYY-MM-DD'),
+                        H8: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
+                        H9: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
+                        H10: Moment(date, "DD-MM-YYYY").add(22, 'days').format('YYYY-MM-DD'),
+                        H11: Moment(date, "DD-MM-YYYY").add(23, 'days').format('YYYY-MM-DD'),
+                        H12: Moment(date, "DD-MM-YYYY").add(24, 'days').format('YYYY-MM-DD'),
+                    }
+                    setSpawnRun(flow_1)
+                    setCaseRun(flow_2)
+                    setVenting(flow_3)
+                    setPinning(flow_4)
+                    setHarvest(flow_5)
+                } else if (pos == 4) {
+                    let flow_1 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: id,
+                        SR0: Moment(date, "DD-MM-YYYY").add(-24, 'days').format('YYYY-MM-DD'),
+                        SR1: Moment(date, "DD-MM-YYYY").add(-23, 'days').format('YYYY-MM-DD'),
+                        SR2: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
+                        SR3: Moment(date, "DD-MM-YYYY").add(-21, 'days').format('YYYY-MM-DD'),
+                        SR4: Moment(date, "DD-MM-YYYY").add(-20, 'days').format('YYYY-MM-DD'),
+                        SR5: Moment(date, "DD-MM-YYYY").add(-19, 'days').format('YYYY-MM-DD'),
+                        SR6: Moment(date, "DD-MM-YYYY").add(-18, 'days').format('YYYY-MM-DD'),
+                        SR7: Moment(date, "DD-MM-YYYY").add(-17, 'days').format('YYYY-MM-DD'),
+                        SR8: Moment(date, "DD-MM-YYYY").add(-16, 'days').format('YYYY-MM-DD'),
+                        SR9: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
+                        SR10: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
+                        SR11: Moment(date, "DD-MM-YYYY").add(-13, 'days').format('YYYY-MM-DD'),
+                        SR12: Moment(date, "DD-MM-YYYY").add(-12, 'days').format('YYYY-MM-DD'),
+                        SR13: Moment(date, "DD-MM-YYYY").add(-11, 'days').format('YYYY-MM-DD'),
+                        SR14: Moment(date, "DD-MM-YYYY").add(-10, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_2 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        CR0: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
+                        CR1: Moment(date, "DD-MM-YYYY").add(-8, 'days').format('YYYY-MM-DD'),
+                        CR2: Moment(date, "DD-MM-YYYY").add(-7, 'days').format('YYYY-MM-DD'),
+                        CR3: Moment(date, "DD-MM-YYYY").add(-6, 'days').format('YYYY-MM-DD'),
+                        CR4: Moment(date, "DD-MM-YYYY").add(-5, 'days').format('YYYY-MM-DD'),
+                        CR5: Moment(date, "DD-MM-YYYY").add(-4, 'days').format('YYYY-MM-DD'),
+                        CR6: Moment(date, "DD-MM-YYYY").add(-3, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_3 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        V1: Moment(date, "DD-MM-YYYY").add(-2, 'days').format('YYYY-MM-DD'),
+                        V2: Moment(date, "DD-MM-YYYY").add(-1, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_4 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        P1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                        P2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                        P3: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                        P4: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                        P5: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                        P6: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                        P7: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                        P8: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                        P9: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                        P10: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_5 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        H1: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                        H2: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                        H3: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                        H4: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                        H5: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                        H6: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                        H7: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                        H8: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                        H9: Moment(date, "DD-MM-YYYY").add(19, 'days').format('YYYY-MM-DD'),
+                        H10: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
+                        H11: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
+                        H12: Moment(date, "DD-MM-YYYY").add(22, 'days').format('YYYY-MM-DD'),
+                    }
+                    setSpawnRun(flow_1)
+                    setCaseRun(flow_2)
+                    setVenting(flow_3)
+                    setPinning(flow_4)
+                    setHarvest(flow_5)
+                } else if (pos == 5) {
+                    let flow_1 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: id,
+                        SR0: Moment(date, "DD-MM-YYYY").add(-34, 'days').format('YYYY-MM-DD'),
+                        SR1: Moment(date, "DD-MM-YYYY").add(-33, 'days').format('YYYY-MM-DD'),
+                        SR2: Moment(date, "DD-MM-YYYY").add(-32, 'days').format('YYYY-MM-DD'),
+                        SR3: Moment(date, "DD-MM-YYYY").add(-31, 'days').format('YYYY-MM-DD'),
+                        SR4: Moment(date, "DD-MM-YYYY").add(-30, 'days').format('YYYY-MM-DD'),
+                        SR5: Moment(date, "DD-MM-YYYY").add(-29, 'days').format('YYYY-MM-DD'),
+                        SR6: Moment(date, "DD-MM-YYYY").add(-28, 'days').format('YYYY-MM-DD'),
+                        SR7: Moment(date, "DD-MM-YYYY").add(-27, 'days').format('YYYY-MM-DD'),
+                        SR8: Moment(date, "DD-MM-YYYY").add(-26, 'days').format('YYYY-MM-DD'),
+                        SR9: Moment(date, "DD-MM-YYYY").add(-25, 'days').format('YYYY-MM-DD'),
+                        SR10: Moment(date, "DD-MM-YYYY").add(-24, 'days').format('YYYY-MM-DD'),
+                        SR11: Moment(date, "DD-MM-YYYY").add(-23, 'days').format('YYYY-MM-DD'),
+                        SR12: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
+                        SR13: Moment(date, "DD-MM-YYYY").add(-21, 'days').format('YYYY-MM-DD'),
+                        SR14: Moment(date, "DD-MM-YYYY").add(-20, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_2 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        CR0: Moment(date, "DD-MM-YYYY").add(-19, 'days').format('YYYY-MM-DD'),
+                        CR1: Moment(date, "DD-MM-YYYY").add(-18, 'days').format('YYYY-MM-DD'),
+                        CR2: Moment(date, "DD-MM-YYYY").add(-17, 'days').format('YYYY-MM-DD'),
+                        CR3: Moment(date, "DD-MM-YYYY").add(-16, 'days').format('YYYY-MM-DD'),
+                        CR4: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
+                        CR5: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
+                        CR6: Moment(date, "DD-MM-YYYY").add(-13, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_3 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        V1: Moment(date, "DD-MM-YYYY").add(-12, 'days').format('YYYY-MM-DD'),
+                        V2: Moment(date, "DD-MM-YYYY").add(-11, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_4 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        P1: Moment(date, "DD-MM-YYYY").add(-10, 'days').format('YYYY-MM-DD'),
+                        P2: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
+                        P3: Moment(date, "DD-MM-YYYY").add(-8, 'days').format('YYYY-MM-DD'),
+                        P4: Moment(date, "DD-MM-YYYY").add(-7, 'days').format('YYYY-MM-DD'),
+                        P5: Moment(date, "DD-MM-YYYY").add(-6, 'days').format('YYYY-MM-DD'),
+                        P6: Moment(date, "DD-MM-YYYY").add(-5, 'days').format('YYYY-MM-DD'),
+                        P7: Moment(date, "DD-MM-YYYY").add(-4, 'days').format('YYYY-MM-DD'),
+                        P8: Moment(date, "DD-MM-YYYY").add(-3, 'days').format('YYYY-MM-DD'),
+                        P9: Moment(date, "DD-MM-YYYY").add(-2, 'days').format('YYYY-MM-DD'),
+                        P10: Moment(date, "DD-MM-YYYY").add(-1, 'days').format('YYYY-MM-DD'),
+                    }
+                    let flow_5 = {
+                        unit_id: unitId,
+                        stage_id: stageId,
+                        room_id: roomId,
+                        H1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                        H2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                        H3: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                        H4: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                        H5: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                        H6: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                        H7: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                        H8: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                        H9: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                        H10: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                        H11: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                        H12: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                    }
+                    setSpawnRun(flow_1)
+                    setCaseRun(flow_2)
+                    setVenting(flow_3)
+                    setPinning(flow_4)
+                    setHarvest(flow_5)
+                }
+            }
+        }
+        setLoader(false)
         let errorObj = { ...errors };
         setStageId(id);
         errorObj['StageId'] = '';
@@ -172,10 +577,10 @@ const Home = (props) => {
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
-
+   
     const saveData = async (selectedCatId) => {
 
-        if (unitId) {
+        if (unitId && spawnRun && caseRun && venting && pinning && harvest) {
             setLoader(true);
             let saveObj = {
                 "product_name": name ? name : '-',
@@ -185,7 +590,12 @@ const Home = (props) => {
                 "stage_id": stageId,
                 "room_id": roomId,
                 "start_date": startDate,
-                "end_date": Moment(startDate, "DD-MM-YYYY").add(46, 'days')
+                "spawnRun": spawnRun,
+                "caseRun": caseRun,
+                "venting": venting,
+                "pinning": pinning,
+                "harvest": harvest,
+                "end_date": Moment(endDate,"DD-MM-YYYY").format("YYYY-MM-DD")
 
             }
             try {
@@ -290,6 +700,8 @@ const Home = (props) => {
         let errorObj = { ...errors }
         errorObj[event.target.name] = ''
         setIdentifierState(event.target.value);
+        let data = Moment(event.target.value).format('DD-MM-YYYY')
+        setEndDate(Moment(data, "DD-MM-YYYY").add(46, 'days').format("DD-MM-YYYY"))
         setErrors(errorObj);
     };
 
