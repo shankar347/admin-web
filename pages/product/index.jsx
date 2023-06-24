@@ -109,6 +109,13 @@ const Home = (props) => {
 
     const editModalOnClick = async (data) => {
         setLoader(true);
+        let ctr = {};
+        ctr.offset = 0;
+        ctr.limit = 100000;
+        let Room = await RoomRepository.getRoom(ctr);
+        if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
+            setRoomArray(Room.data.rows);
+        }
         setName(data.product_name);
         setSlug(data.product_slug)
         setCode(data.product_code);
