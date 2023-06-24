@@ -27,7 +27,7 @@ const Dashboard = () => {
     useEffect(() => {
         let ctr = {};
         ctr.start = 0
-        ctr.limit = 6
+        ctr.limit = 10
 
         dispatch(getAllStage(ctr));
         dispatch(getAllUnit(ctr));
@@ -57,7 +57,8 @@ const Dashboard = () => {
         "#0062cc",
         "#ffc107",
         "#f35a00",
-        "#343a40"
+        "#343a40",
+        "#340e81",
     ]
 
     const closeModalOnClick = () => {
@@ -161,21 +162,21 @@ const Dashboard = () => {
                                 <tbody>
 
                                     <tr>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR0).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.SR0).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR1).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.SR1).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR2).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.SR2).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR3).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR3).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR4).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR4).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR5).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR5).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR6).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR6).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR7).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR7).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR8).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR8).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR9).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR9).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR10).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR10).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR11).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR11).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR12).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR12).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR13).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR13).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR14).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.SR14).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR0).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}} >{` ${Moment(c.SR0).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR1).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.SR1).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR2).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.SR2).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR3).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR3).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR4).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR4).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR5).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR5).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR6).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR6).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR7).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR7).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR8).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR8).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR9).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR9).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR10).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR10).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR11).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR11).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR12).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR12).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR13).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR13).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR14).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.SR14).format('DD-MM-YYYY')}`}</td>
 
                                     </tr>
                                 </tbody>
@@ -197,13 +198,13 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody key={index}>
                                     <tr>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR0).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.CR0).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR1).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.CR1).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR2).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.CR2).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR3).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.CR3).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR4).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.CR4).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR5).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.CR5).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR6).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.CR6).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR0).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.CR0).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR1).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.CR1).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR2).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.CR2).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR3).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.CR3).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR4).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.CR4).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR5).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.CR5).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.CR6).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.CR6).format('DD-MM-YYYY')}`}</td>
                                     </tr>
                                 </tbody>
                             </>)
@@ -220,8 +221,8 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody key={index}>
                                     <tr>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.V1).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.V1).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.V2).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.V2).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.V1).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.V1).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.V2).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.V2).format('DD-MM-YYYY')}`}</td>
                                     </tr>
                                 </tbody>
                             </>)
@@ -245,21 +246,21 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody key={index}>
                                     <tr>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P1).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.P1).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P2).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.P2).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P3).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.P3).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P4).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P4).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P5).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P5).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P6).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P6).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P7).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P7).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P8).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P8).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P9).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P9).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P10).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.P10).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P1).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.P1).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P2).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.P2).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P3).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.P3).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P4).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P4).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P5).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P5).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P6).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P6).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P7).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P7).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P8).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P8).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P9).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P9).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.P10).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.P10).format('DD-MM-YYYY')}`}</td>
                                     </tr>
                                 </tbody>
                             </>)
                     })}
-                        {stageArray && stageArray?.harvest.map((c, index) => {
+                    {stageArray && stageArray?.harvest.map((c, index) => {
                         return (
                             <>
                                 <thead key={index}>
@@ -280,18 +281,18 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody key={index}>
                                     <tr>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H1).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.H1).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H2).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.H2).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H3).format('DD-MM-YYYY') ? 'acivecol' : null}>{` ${Moment(c.H3).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H4).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H4).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H5).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H5).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H6).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H6).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H7).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H7).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H8).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H8).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H9).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H9).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H10).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H10).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H11).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H11).format('DD-MM-YYYY')}`}</td>
-                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H12).format('DD-MM-YYYY') ? 'acivecol' : null}>{`${Moment(c.H12).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H1).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.H1).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H2).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.H2).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H3).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{` ${Moment(c.H3).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H4).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H4).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H5).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H5).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H6).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H6).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H7).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H7).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H8).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H8).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H9).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H9).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H10).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H10).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H11).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H11).format('DD-MM-YYYY')}`}</td>
+                                        <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.H12).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1}}>{`${Moment(c.H12).format('DD-MM-YYYY')}`}</td>
                                     </tr>
                                 </tbody>
                             </>)

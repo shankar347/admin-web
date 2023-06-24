@@ -1350,6 +1350,38 @@ label {
   box-shadow: 2px 2px 10px 2px rgb(0 0 0 / 14%);
 }
 
+
+.row-7-stage-card {
+  position: relative;
+  background-color: #340e81;
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 4px 4px 11px 1px rgba(0, 0, 0, 0.15);
+}
+
+.row-7-stage-card p {
+  font-size: 18px;
+  margin-bottom: 10px !important;
+}
+
+.row-7-stage-card h3 {
+  font-family: 'Sen-Bold';
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 0px !important;
+}
+
+.row-7-stage-card .card-icon {
+  position: absolute;
+  top: -20px;
+  right: 15px;
+  border-radius: 12px;
+  padding: 6px 16px;
+  font-size: 24px;
+  color: #fff;
+  background-color: var(--jl-primary);
+  box-shadow: 2px 2px 10px 2px rgb(0 0 0 / 14%);
+}
 .row-2-card {
   position: relative;
   background-color: var(--jl-gray);
