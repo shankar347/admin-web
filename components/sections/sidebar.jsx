@@ -47,7 +47,7 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        console.log(props.page,"gbdfhguhdfughdfh")
+       
         let e = itemsRef.current[props.page];
         if (e) {
             e.scrollIntoView();
@@ -82,7 +82,7 @@ const Sidebar = (props) => {
         <div>
             <div className="side-menu text-center" id={"style-2"}>
                 <ul className='text-left'>
-                    <li className={props.page === "home" ? "active" : ''} ref={el => itemsRef.current['home'] = el} >
+                    <li className={props.page === "home" ? "menu-active" : ''} ref={el => itemsRef.current['home'] = el} >
                         <Link href="/home">
                             <a>
                                 <span className='menu-icon'><i className="fas fa-home"></i></span>
@@ -93,8 +93,9 @@ const Sidebar = (props) => {
                     {menuGroups && menuGroups.length > 0 &&
                         menuGroups.map(mg => {
                             let href = mg.menu_link;
+                            // || (showDropdown == mg.id)
                             return (
-                                <li className={(props.page === mg.menu_title) || (showDropdown == mg._id) && "menu-active"} key={mg._id} ref={el => itemsRef.current[mg.name] = el} onClick={() => showMenu(mg._id)}>
+                                <li className={props.page === mg.menu_title ? "menu-active" : ''} key={mg._id} ref={el => itemsRef.current[mg.name] = el} onClick={() => showMenu(mg._id)}>
                                     <Link href={menuItems && menuItems.length > 0 && menuItems.find(mi => mi.group_id == mg._id) ? '' : href}>
                                         <a className='d-flex justify-content-between align-items-center'>
                                             <span>
