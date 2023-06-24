@@ -252,7 +252,7 @@ const Home = (props) => {
         <HeaderDashboard />
         <div className="dashboard-container mt-5 pt-2">
           <div id="sidebar" className={isActive ? 'slide-show' : null}>
-            <Sidebar active={isActive} page={'Change Password'} />
+            <Sidebar active={isActive} page={'changepassword'} />
             <div className="slide-toggle" onClick={toggleClass}>
               <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
             </div>
