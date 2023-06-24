@@ -35,7 +35,7 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   let data = category.map((a, index) => {
     console.log(a, "fhgiudfhguihdsifh")
     let obj = {
-      key: a._id,
+      key: a.room_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.room_name,
       main: a.unit_name,
@@ -43,8 +43,8 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
 
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a._id)}
-          checked={selectedCatIds.indexOf(a._id) >= 0}
+          onClick={() => onSelectOne(a.room_id)}
+          checked={selectedCatIds.indexOf(a.room_id) >= 0}
         />
       )
     }

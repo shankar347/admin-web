@@ -552,7 +552,7 @@ const Home = (props) => {
 
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Room Name <span style={{ color: 'red' }}>*</span></label>
+                                    <label>Room No <span style={{ color: 'red' }}>*</span></label>
                                     <input
                                         className="form-control"
                                         type="text"
@@ -565,41 +565,6 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-                          
-                           
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label> Room No </label>
-                                    <div className="form-group">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={roomNo}
-                                            placeholder=""
-                                            onChange={onChangeHandler.bind(null, setRoomNo)}
-                                        />
-                                        {errors['code'] &&
-                                            <span style={{ color: 'red' }}>{errors['code']}</span>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            
-                             {/* <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Position <span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={position}
-                                        placeholder=""
-                                        onChange={(e) => positionOnChange(e.target.value)}
-                                    />
-                                    {errors['position'] &&
-                                        <span style={{ color: 'red' }}>{errors['position']}</span>
-                                    }
-                                </div>
-                            </div> */}
                         </div>
                     </Spin>
                 </Modal>

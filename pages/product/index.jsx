@@ -152,6 +152,8 @@ const Home = (props) => {
         let Room = await RoomRepository.getRoom(ctr);
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
             setRoomArray(Room.data.rows);
+        }else{
+            setRoomArray([]);
         }
         setUnitId(id);
         setRoomId('')
@@ -175,7 +177,7 @@ const Home = (props) => {
                     let flow_1 = {
                         unit_id: unitId,
                         stage_id: stageId,
-                        room_id: id,
+                        room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
                         SR2: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
@@ -253,7 +255,7 @@ const Home = (props) => {
                     let flow_1 = {
                         unit_id: unitId,
                         stage_id: stageId,
-                        room_id: id,
+                        room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
                         SR2: Moment(date, "DD-MM-YYYY").add(-13, 'days').format('YYYY-MM-DD'),
@@ -330,7 +332,7 @@ const Home = (props) => {
                     let flow_1 = {
                         unit_id: unitId,
                         stage_id: stageId,
-                        room_id: id,
+                        room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-21, 'days').format('YYYY-MM-DD'),
                         SR2: Moment(date, "DD-MM-YYYY").add(-20, 'days').format('YYYY-MM-DD'),
@@ -407,7 +409,7 @@ const Home = (props) => {
                     let flow_1 = {
                         unit_id: unitId,
                         stage_id: stageId,
-                        room_id: id,
+                        room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-24, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-23, 'days').format('YYYY-MM-DD'),
                         SR2: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
@@ -484,7 +486,7 @@ const Home = (props) => {
                     let flow_1 = {
                         unit_id: unitId,
                         stage_id: stageId,
-                        room_id: id,
+                        room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-34, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-33, 'days').format('YYYY-MM-DD'),
                         SR2: Moment(date, "DD-MM-YYYY").add(-32, 'days').format('YYYY-MM-DD'),
