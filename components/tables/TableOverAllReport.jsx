@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
-
-const TableOverAllReport = ({ reports }) => {
+import Moment from "moment"
+const TableOverAllReport = ({ reports,startDate,endDate }) => {
   const columns = [
     {
       title: 'S.No',
@@ -10,39 +10,42 @@ const TableOverAllReport = ({ reports }) => {
       sorter: (a, b) => a.no - b.no
     },
     {
-      title: 'Main Category',
-      dataIndex: 'maincategory',
+        title: 'Harvest',
+      dataIndex: 'harvest',
     },
     {
-      title: 'Sub Category',
-      dataIndex: 'subcategory',
+      title: 'Room',
+      dataIndex: 'room',
     },
     {
-      title: 'Sub Category Code',
-      dataIndex: 'subcategorycode',
-    },
-    {
-      title: 'Total Questions Uploaded',
-      dataIndex: 'uploaded',
-    },
-    {
-      title: 'Total Questions Waiting',
-      dataIndex: 'waiting',
-    },
-    {
-      title: 'Total Questions Active',
-      dataIndex: 'active',
-    },
-    {
-      title: 'Total Questions Inactive',
-      dataIndex: 'inactive',
-    },
+        title: 'Total Room',
+        dataIndex: 'count',
+      },
   ];
 
   let data = reports.map((a, index) => {
-    let obj = { ...a };
-    obj.key = index;
-    obj.no = (index + 1);
+
+    console.log(a,"dfghdhdfshgidsh")
+
+    let obj = {
+        
+        key: index,
+        no: (index + 1),
+        harvest: Moment(startDate).format('DD-MM-YYYY')==Moment(a.H1).format('DD-MM-YYYY')?`H1`:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H2).format('DD-MM-YYYY')?`H2 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H3).format('DD-MM-YYYY')?`H3 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H4).format('DD-MM-YYYY')?`H4 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H5).format('DD-MM-YYYY')?`H5 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H6).format('DD-MM-YYYY')?`H6 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H7).format('DD-MM-YYYY')?`H7 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H8).format('DD-MM-YYYY')?`H8`:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H9).format('DD-MM-YYYY')?`H9 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H10).format('DD-MM-YYYY')?`H10 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H11).format('DD-MM-YYYY')?`H11 `:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.H12).format('DD-MM-YYYY')?`H12 `:'',
+        room: a.room_name,
+        count:2
+      }
     return (obj);
   });
   

@@ -178,7 +178,8 @@ const Home = (props) => {
         if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
             if (Stage.data.rows[0].stage_name) {
                 let pos = Stage.data.rows[0].stage_pos
-                let date = Moment(startDate).format('DD-MM-YYYY')
+                let date = Moment(startDate).add(-1, 'days').format('DD-MM-YYYY')
+                
                 if (pos == 1) {
 
                     let flow_1 = {

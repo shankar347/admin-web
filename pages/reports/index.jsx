@@ -7,7 +7,11 @@ import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 
 import TableOverAllReport from '../../components/tables/TableOverAllReport';
+import TablePinningReport from '../../components/tables/TablePinningReport';
+import TableVentingReport from '../../components/tables/TableVentingReport';
 import TableHarvestReport from '../../components/tables/TableHarvestReport';
+import TableCaseRunReport from '../../components/tables/TableCaseRunReport';
+import TableSpawnRunReport from '../../components/tables/TableSpawnRunReport';
 
 import { getCurrentUser } from '../../helper/auth';
 import ReportRespository from '../../repositories/ReportRespository';
@@ -54,7 +58,7 @@ const Home = (props) => {
         let user = getCurrentUser();
         setUser(user);
         getetUnit();
-     
+
     }, []);
 
     const getetUnit = async () => {
@@ -62,14 +66,14 @@ const Home = (props) => {
         setUnitsArray(res.Student && res.Student.length ? res.Student : []);
     };
 
-  
+
 
     const clearOnClick = () => {
         setOverAll('');
         setSelectedUnit('');
         setOverAllData([]);
         setLiveClassPackageData([])
-      
+
     };
 
     const changeTab = (tab) => {
@@ -77,12 +81,12 @@ const Home = (props) => {
         setSelectedUnit('');
         setOverAllData([]);
         setLiveClassPackageData([])
-        
+
         setTab(tab);
     }
 
     const overAllOnChange = (value) => {
-        console.log(value,"cvzhxvzdfh")
+        console.log(value, "cvzhxvzdfh")
         setOverAllData([]);
         setOverAll(value);
     }
@@ -120,87 +124,124 @@ const Home = (props) => {
         setLoader(true);
         let obj = {
             period: 'all',
-            startdate: selectedStartDate,
-            enddate: selectedEndDate
+            startDate: selectedStartDate,
+            endDate: selectedEndDate
         };
-        if (overall === 'overall') {
-            let res = await ReportRespository.getOverall(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'maincat') {
-            let res = await ReportRespository.getMaincat(obj);
+        if (overall === 'harvest') {
+            obj.stage = 5
+            let res = await ReportRespository.getreports(obj);
+            console.log(res.data, "ghnghxfghxfg")
             if (res && res.data && res.data.length > 0) {
                 setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
-        if (overall === 'test') {
-            let res = await ReportRespository.getTestcat(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
+        if (overall === 'pinning') {
+            let res = await ReportRespository.getPinning(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
-        if (overall === 'overallmain') {
-            let res = await ReportRespository.getOverallmain(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
+        if (overall === 'venting') {
+            let res = await ReportRespository.getVenting(obj);
+
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
+        if (overall === 'caseRun') {
+            let res = await ReportRespository.getCaseRun(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
+            } else {
+                setOverAllData([]);
+            }
+        };
+        if (overall === 'spawnRun') {
+            obj.stage = 1
+            let res = await ReportRespository.getreports(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
+            } else {
+                setOverAllData([]);
+            }
+        };
+
         setLoader(false);
     }
 
-
+    const harvestSearchOnChange = async () => {
+        let obj = {
+            stage: 5,
+            period: 'all',
+            startDate: selectedStartDate,
+        };
+        let res = await ReportRespository.getreports(obj);
+        if (res && res.data && res.data.length > 0) {
+            setOverAllData(res.data);
+        } else {
+            setOverAllData([]);
+        }
+    }
 
     const searchOnChange = async () => {
         setLoader(true);
         let obj = {
             period: 'all',
-            startdate: selectedStartDate,
-            enddate: selectedEndDate,
+            startDate: selectedStartDate,
+            endDate: selectedEndDate,
             search: search
         };
 
-        if (overall === 'overall') {
-            let res = await ReportRespository.getOverall(obj);
+        if (overall === 'harvest') {
+            obj.stage = 5
+            let res = await ReportRespository.getreports(obj);
             if (res && res.qdata && res.qdata.length > 0) {
                 setOverAllData(res.qdata);
             } else {
                 setOverAllData([]);
             }
         };
-        if (overall === 'maincat') {
-            let res = await ReportRespository.getMaincat(obj);
+        if (overall === 'pinning') {
+            let res = await ReportRespository.getPinning(obj);
             if (res && res.data && res.data.length > 0) {
                 setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
-        if (overall === 'test') {
-            let res = await ReportRespository.getTestcat(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
+        if (overall === 'venting') {
+            let res = await ReportRespository.getVenting(obj);
+            if (res && res.data && res.data.length > 0) {
+                console.log(res.data, "dfgdfgsdsf")
+                setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
-        if (overall === 'overallmain') {
-            let res = await ReportRespository.getOverallmain(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
+        if (overall === 'caseRun') {
+            let res = await ReportRespository.getCaseRun(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
         };
+        if (overall === 'spawnRun') {
+            obj.stage = 1
+            let res = await ReportRespository.getreports(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
+            } else {
+                setOverAllData([]);
+            }
+        };
+
         setLoader(false);
         //  setSearch(search);
     }
@@ -213,29 +254,37 @@ const Home = (props) => {
         setLoader(true);
         let obj = {
             period: 'all',
-            startdate: selectedStartDate,
-            enddate: selectedEndDate
+            startDate: selectedStartDate,
+            endDate: selectedEndDate
         };
-        if (overall === 'overall') {
-            let res = await ReportRespository.getOverallPDF(obj);
+        if (overall === 'harvest') {
+            obj.stage = 5
+            let res = await ReportRespository.getreports(obj);
             fileDownload(res, 'Overall report.pdf');
         };
-        if (overall === 'maincat') {
+        if (overall === 'pinning') {
             let activerespdf = await ReportRespository.getMaincatPDF(obj);
             fileDownload(activerespdf, 'Main Category report.pdf');
         };
-        if (overall === 'test') {
-            let activerespdf = await ReportRespository.getTestcatPDF(obj);
+        if (overall === 'venting') {
+            let activerespdf = await ReportRespository.getVenting(obj);
             fileDownload(activerespdf, 'Test Category report.pdf');
         };
-        if (overall === 'overallmain') {
-            let activerespdf = await ReportRespository.getOverallmainPDF(obj);
+        if (overall === 'caseRun') {
+            obj.stage = 1
+            let res = await ReportRespository.getreports(obj);
             fileDownload(activerespdf, 'Overall Main Category report.pdf');
         };
+        if (overall === 'spawnRun') {
+            obj.stage = 1
+            let res = await ReportRespository.getreports(obj);
+            fileDownload(activerespdf, 'Overall Main Category report.pdf');
+        };
+
         setLoader(false);
     }
 
-   
+
 
     const searchLiveClassPackageReports = async () => {
         if (selectedStartDate && selectedEndDate) {
@@ -266,30 +315,7 @@ const Home = (props) => {
     }
 
 
-    const downloadPackageReports = async () => {
-        if (selectedStartDate && selectedEndDate) {
-            setLoader(true);
-            let data = {
-                startDate: selectedStartDate,
-                endDate: selectedEndDate,
-                isExcel: true
-            };
-            if (selectedunit) data['studentId'] = selectedunit;
-            const result = await ReportRespository.downloadPackageReport(data);
-            fileDownload(result, 'Package Report.xls');
-            setLoader(false);
-        } else {
-            if (!selectedStartDate) {
-                Modal.error({
-                    title: "Please Select From Date"
-                });
-            } else if (!selectedEndDate) {
-                Modal.error({
-                    title: "Please Select End Date"
-                });
-            }
-        }
-    }
+
 
     const downloadLiveClassPackageReports = async () => {
         if (selectedStartDate && selectedEndDate) {
@@ -335,79 +361,7 @@ const Home = (props) => {
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
                         <h3 className={'page_header'}>Reports</h3>
                         <Tabs accessKey={tab} onChange={changeTab}>
-                           
-                         
-                            {user.logintype && user.logintype === "G" &&
-                                <TabPane tab={<p className="active-blue">live Class Report</p>} key="liveclass" style={{ background: ' #f7f7f7 !important' }}>
-                                    <div className="row" style={{ padding: 10, textAlign: 'center', justifyContent: 'center' }}>
-                                        <div className="col-lg-4">
-                                            <div className="form-group">
-                                                <Select
-                                                    onChange={unitsOnChange}
-                                                    placeholder="Students"
-                                                    className="ps-ant-dropdown"
-                                                    style={{ width: '100%' }}
-                                                    value={selectedunit ? selectedunit : null}
-                                                    showSearch={true}
-                                                    filterOption={(input, option) =>
-                                                        option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                    }
-                                                >
-                                                    {unitsArray.map(s => {
-                                                        return (
-                                                            <Option value={s.stud_id} key={s.stud_id}>{s.stud_fname}</Option>
-                                                        )
-                                                    })}
-                                                </Select>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-4">
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                value={selectedStartDate}
-                                                placeholder=""
-                                                onChange={(e) => handleStartDateChange(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="col-lg-4">
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                value={selectedEndDate}
-                                                placeholder=""
-                                                onChange={(e) => handleEndDateChange(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div style={{ textAlign: 'center' }}>
-                                        <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                            <i className="fas fa-setting" /> Clear
-                                        </button>
-                                        <button onClick={searchLiveClassPackageReports} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                            <i className="fas fa-search" /> Search
-                                        </button>
-                                        <button onClick={downloadLiveClassPackageReports} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                            <i className="fas fa-file-pdf" /> Download
-                                        </button>
-
-                                        <div className="form-group mb-0 ml-4">
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Search"
-                                                value={search}
-                                                onChange={(e) => searchLiveClassPackageOnChange(e.target.value)}
-                                            />
-                                        </div>
-
-                                    </div>
-                                    <div style={{ marginTop: 15 }}>
-                                        <TableHarvestReport liveClassPackageData={liveClassPackageData} />
-                                    </div>
-                                </TabPane>
-                            }
-                            <TabPane tab={<p className="active-green" style={{ color: '#8a1ccf' }}>Overall Report</p>} key="all" style={{ background: ' #f7f7f7 !important' }}>
+                            <TabPane tab={<p className="active-green" style={{ color: '#8a1ccf' }}>Room Wise Report</p>} key="harvest" style={{ background: ' #f7f7f7 !important' }}>
                                 <div className="row" style={{ padding: 10 }}>
                                     <div className="col-lg-4">
                                         <div className="form-group">
@@ -419,10 +373,12 @@ const Home = (props) => {
                                                 value={overall ? overall : null}
                                                 defaultValue={overall ? overall : null}
                                             >
-                                                <Option value="overall">All Q Bank Category</Option>
-                                                <Option value="maincat">Q Bank Main Category</Option>
-                                                <Option value="test">All Exam Category</Option>
-                                                <Option value="overallmain">Exam Main Category</Option>
+
+                                                <Option value="harvest">Harvest</Option>
+                                                <Option value="pinning">Pinning</Option>
+                                                <Option value="venting">Venting</Option>
+                                                <Option value="caseRun">CaseRun</Option>
+                                                <Option value="spawnRun">SpawnRun</Option>
                                             </Select>
                                         </div>
                                     </div>
@@ -436,27 +392,21 @@ const Home = (props) => {
                                         />
                                     </div>
                                     <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={searchOverAll} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                    <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                        <i className="fas fa-setting" /> Clear
-                                    </button>
-                                    <button onClick={searchOverAll} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                        <i className="fas fa-search" /> Search
-                                    </button>
-                                    <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                        <i className="fas fa-file-pdf" /> PDF Download
-                                    </button>
 
-                                </div>
 
                                 <div style={{ marginTop: 15 }}>
                                     {overall &&
@@ -475,12 +425,99 @@ const Home = (props) => {
                                             </div>
                                         </div>
                                     }
-                                    {overall === 'overall' &&
+                                    {overall === 'harvest' &&
                                         <div>
-                                            <TableOverAllReport reports={overAllData} />
+                                            <TableHarvestReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
                                         </div>
                                     }
-                                  
+
+                                    {overall === 'pinning' &&
+                                        <div>
+                                            <TablePinningReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
+                                        </div>
+                                    }
+
+                                    {overall === 'venting' &&
+                                        <div>
+                                            <TableVentingReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
+                                        </div>
+                                    }
+
+                                    {overall === 'caseRun' &&
+                                        <div>
+                                            <TableCaseRunReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
+                                        </div>
+
+                                    }
+                                    {overall === 'spawnRun' &&
+                                        <div>
+                                            <TableSpawnRunReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
+                                        </div>
+
+                                    }
+
+                                </div>
+                            </TabPane>
+                            <TabPane tab={<p className="active-green" style={{ color: '#3d1ecd' }}>Harvest</p>} key="all" style={{ background: ' #f7f7f7 !important' }}>
+                                <div className="row" style={{ padding: 10 }}>
+
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedStartDate}
+                                            placeholder=""
+                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div style={{ marginTop: 15 }}>
+                                    {overall &&
+                                        <div className="d-flex justify-content-end mr-2 mb-2">
+                                            <div className="form-group mb-0 ml-4 d-flex">
+                                                
+                                                <Button onClick={harvestSearchOnChange} style={{ height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <i className="fas fa-search" style={{ fontSize: '16px', color: 'red' }}></i>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    }
+                                    
+                                        <div>
+                                            <TableOverAllReport reports={overAllData}
+                                                startDate={selectedStartDate}
+                                                endDate={selectedEndDate} />
+                                        </div>
+                                    
+
+
+
                                 </div>
                             </TabPane>
                         </Tabs>

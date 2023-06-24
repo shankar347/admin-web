@@ -43,7 +43,7 @@ const Dashboard = () => {
         let ctr = {};
         ctr.start = 0
         ctr.limit = 10000
-        ctr.unitId = id
+        ctr.roomId = id
         const Product = await ProductRepository.getProduct(ctr);
         if (Product && Product?.data) {
             console.log(Product.data, "dgdfhgsdxdz")
@@ -123,7 +123,7 @@ const Dashboard = () => {
                                 <div class="card-body">
                                     <div class="  text-center">
                                         <div class="col-md-4 ">
-                                            <button className={`btn btn-danger`} style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} onClick={() => toggleClass(c.unit_id)}><i
+                                            <button className={`btn btn-danger`} style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} onClick={() => toggleClass(c.room_id)}><i
                                                 className="fas fa-home"></i> {c.room_name}</button>
                                         </div>
                                     </div>
@@ -302,7 +302,7 @@ const Dashboard = () => {
             }
 
 
-            {isActive &&
+            {/* {isActive &&
                 selectedRoomId.map(c => {
                     let cat = materialData.find(e => c === e.room_id);
                     let mainCat = materialData.filter(e => c === e.room_id);
@@ -328,7 +328,7 @@ const Dashboard = () => {
                         )
                     }
                 })
-            }
+            } */}
 
         </div>
     )

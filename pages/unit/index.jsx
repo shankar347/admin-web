@@ -367,7 +367,7 @@ console.log(data,"jhdbgjkdfghd")
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Unit'} />
+                        <Sidebar page={'Phase'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
