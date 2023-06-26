@@ -180,8 +180,10 @@ const Home = (props) => {
             stage: 5,
             period: 'all',
             startDate: selectedStartDate,
+            stage:5
         };
-        let res = await ReportRespository.getreports(obj);
+        let res = await ReportRespository.getRoomreports(obj);
+        console.log(res,"kjhcbkxhcvbh")
         if (res && res.data && res.data.length > 0) {
             setOverAllData(res.data);
         } else {
