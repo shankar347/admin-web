@@ -109,7 +109,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                   <td>{c.h12.length}</td>
                 </tr>
               </tbody>
-              <h2 style={{textAlign:'right'}}>Total: {c.totalCount}</h2>
+              <h2 style={{textAlign:'right'}}>Total: {c.totalCount}</h2>     
             </>)
         })}
 
