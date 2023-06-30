@@ -8,7 +8,7 @@ import TableProduct from '../../components/tables/TableProduct';
 import SpawnRun from '../../components/sections/spawnRun';
 import CaseRunPage from '../../components/sections/caseRun';
 import Venting from '../../components/sections/venting'
-import Pinning from '../../components/sections/Pinning'
+import Pinning from '../../components/sections/pinning'
 import Harvest from '../../components/sections/harvest'
 import { getAllProduct, getInactiveProduct } from '../../store/Product/action';
 import ProductRepository from '../../repositories/ProductRepository';
