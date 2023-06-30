@@ -131,9 +131,9 @@ const TableOverAllSRReport = ({ reports}) => {
               </tbody>
               <tbody key={index}>
                 <tr>
-                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"> SpawnRun Stage 12 Days</th>
-                  <td></td>
-                  <td>Total Rooms: {c.totalCount}</td>
+                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"> </th>
+                  <td>Total Rooms:</td>
+                  <td> {c.totalCount}</td>
                 </tr>
               </tbody>
              

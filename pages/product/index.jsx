@@ -5,7 +5,11 @@ import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'ant
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 import TableProduct from '../../components/tables/TableProduct';
-
+import SpawnRun from '../../components/sections/spawnRun';
+import CaseRunPage from '../../components/sections/caseRun';
+import Venting from '../../components/sections/venting'
+import Pinning from '../../components/sections/Pinning'
+import Harvest from '../../components/sections/harvest'
 import { getAllProduct, getInactiveProduct } from '../../store/Product/action';
 import ProductRepository from '../../repositories/ProductRepository';
 
@@ -57,7 +61,7 @@ const Home = (props) => {
     const [unitArray, setUnitArray] = useState([]);
     const [stageArray, setStageArray] = useState([]);
     const [roomArray, setRoomArray] = useState([]);
-    const [flow, setFlow] = useState({});
+    const [productflowArray, setProductflowArray] = useState([]);
     const [spawnRun, setSpawnRun] = useState({});
     const [caseRun, setCaseRun] = useState({});
     const [venting, setVenting] = useState({});
@@ -111,10 +115,14 @@ const Home = (props) => {
         setLoader(true);
         let ctr = {};
         ctr.offset = 0;
-        ctr.limit = 100000;
+        ctr.limit = 100;
         let Room = await RoomRepository.getRoom(ctr);
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
             setRoomArray(Room.data.rows);
+        }
+        let productflow = await ProductRepository.getProduct({ productId: data.product_id });
+        if (productflow && productflow.data && productflow.data && productflow.data.rows.length > 0) {
+            setProductflowArray(productflow.data);
         }
         setName(data.product_name);
         setSlug(data.product_slug)
@@ -124,10 +132,12 @@ const Home = (props) => {
         setUnitId(data.unit_id)
         setStageId(data.stage_id)
         setRoomId(data.room_id)
+        setEndDate(Moment(data.end_date).format('YYYY-MM-DD'))
+        setstartDate(Moment(data.start_date).format('YYYY-MM-DD'))
         setLoader(false);
         setShowModal(true);
     }
-
+    console.log(productflowArray, "setProductflowArray")
     const nameOnChange = (name) => {
         let errorObj = { ...errors };
         let slug = (name).replace(/ /g, "-").toLowerCase();
@@ -154,12 +164,12 @@ const Home = (props) => {
         let errorObj = { ...errors };
         let ctr = {};
         ctr.offset = 0;
-        ctr.limit = 100000;
+        ctr.limit = 100;
         ctr.unitId = id
         let Room = await RoomRepository.getRoom(ctr);
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
             setRoomArray(Room.data.rows);
-        }else{
+        } else {
             setRoomArray([]);
         }
         setUnitId(id);
@@ -172,19 +182,18 @@ const Home = (props) => {
         setLoader(true)
         let ctr = {};
         ctr._start = 0;
-        ctr._limit = 100000;
+        ctr._limit = 100;
         ctr.stageId = id
         let Stage = await StageRepository.getStage(ctr);
         if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
             if (Stage.data.rows[0].stage_name) {
                 let pos = Stage.data.rows[0].stage_pos
                 let date = Moment(startDate).add(-1, 'days').format('DD-MM-YYYY')
-                
-                if (pos == 1) {
 
+                if (pos == 1) {
                     let flow_1 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 1,
                         room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
@@ -204,7 +213,7 @@ const Home = (props) => {
                     }
                     let flow_2 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 2,
                         room_id: roomId,
                         CR0: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
                         CR1: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
@@ -216,14 +225,14 @@ const Home = (props) => {
                     }
                     let flow_3 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 3,
                         room_id: roomId,
                         V1: Moment(date, "DD-MM-YYYY").add(23, 'days').format('YYYY-MM-DD'),
                         V2: Moment(date, "DD-MM-YYYY").add(24, 'days').format('YYYY-MM-DD'),
                     }
                     let flow_4 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 4,
                         room_id: roomId,
                         P1: Moment(date, "DD-MM-YYYY").add(25, 'days').format('YYYY-MM-DD'),
                         P2: Moment(date, "DD-MM-YYYY").add(26, 'days').format('YYYY-MM-DD'),
@@ -238,7 +247,7 @@ const Home = (props) => {
                     }
                     let flow_5 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 5,
                         room_id: roomId,
                         H1: Moment(date, "DD-MM-YYYY").add(35, 'days').format('YYYY-MM-DD'),
                         H2: Moment(date, "DD-MM-YYYY").add(36, 'days').format('YYYY-MM-DD'),
@@ -262,7 +271,7 @@ const Home = (props) => {
                 } else if (pos == 2) {
                     let flow_1 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 1,
                         room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-15, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-14, 'days').format('YYYY-MM-DD'),
@@ -282,7 +291,7 @@ const Home = (props) => {
                     }
                     let flow_2 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 2,
                         room_id: roomId,
                         CR0: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         CR1: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
@@ -294,14 +303,14 @@ const Home = (props) => {
                     }
                     let flow_3 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 3,
                         room_id: roomId,
                         V1: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
                         V2: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
                     }
                     let flow_4 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 4,
                         room_id: roomId,
                         P1: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
                         P2: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
@@ -316,7 +325,7 @@ const Home = (props) => {
                     }
                     let flow_5 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 5,
                         room_id: roomId,
                         H1: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
                         H2: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
@@ -339,7 +348,7 @@ const Home = (props) => {
                 } else if (pos == 3) {
                     let flow_1 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 1,
                         room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-22, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-21, 'days').format('YYYY-MM-DD'),
@@ -359,7 +368,7 @@ const Home = (props) => {
                     }
                     let flow_2 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 2,
                         room_id: roomId,
                         CR0: Moment(date, "DD-MM-YYYY").add(-7, 'days').format('YYYY-MM-DD'),
                         CR1: Moment(date, "DD-MM-YYYY").add(-6, 'days').format('YYYY-MM-DD'),
@@ -371,14 +380,14 @@ const Home = (props) => {
                     }
                     let flow_3 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 3,
                         room_id: roomId,
                         V1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         V2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
                     }
                     let flow_4 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 4,
                         room_id: roomId,
                         P1: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
                         P2: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
@@ -393,7 +402,7 @@ const Home = (props) => {
                     }
                     let flow_5 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 5,
                         room_id: roomId,
                         H1: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
                         H2: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
@@ -416,7 +425,7 @@ const Home = (props) => {
                 } else if (pos == 4) {
                     let flow_1 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 1,
                         room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-24, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-23, 'days').format('YYYY-MM-DD'),
@@ -436,7 +445,7 @@ const Home = (props) => {
                     }
                     let flow_2 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 2,
                         room_id: roomId,
                         CR0: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
                         CR1: Moment(date, "DD-MM-YYYY").add(-8, 'days').format('YYYY-MM-DD'),
@@ -448,14 +457,14 @@ const Home = (props) => {
                     }
                     let flow_3 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 3,
                         room_id: roomId,
                         V1: Moment(date, "DD-MM-YYYY").add(-2, 'days').format('YYYY-MM-DD'),
                         V2: Moment(date, "DD-MM-YYYY").add(-1, 'days').format('YYYY-MM-DD'),
                     }
                     let flow_4 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 4,
                         room_id: roomId,
                         P1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         P2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
@@ -470,7 +479,7 @@ const Home = (props) => {
                     }
                     let flow_5 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 5,
                         room_id: roomId,
                         H1: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
                         H2: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
@@ -493,7 +502,7 @@ const Home = (props) => {
                 } else if (pos == 5) {
                     let flow_1 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 1,
                         room_id: roomId,
                         SR0: Moment(date, "DD-MM-YYYY").add(-34, 'days').format('YYYY-MM-DD'),
                         SR1: Moment(date, "DD-MM-YYYY").add(-33, 'days').format('YYYY-MM-DD'),
@@ -513,7 +522,7 @@ const Home = (props) => {
                     }
                     let flow_2 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 2,
                         room_id: roomId,
                         CR0: Moment(date, "DD-MM-YYYY").add(-19, 'days').format('YYYY-MM-DD'),
                         CR1: Moment(date, "DD-MM-YYYY").add(-18, 'days').format('YYYY-MM-DD'),
@@ -525,14 +534,14 @@ const Home = (props) => {
                     }
                     let flow_3 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 3,
                         room_id: roomId,
                         V1: Moment(date, "DD-MM-YYYY").add(-12, 'days').format('YYYY-MM-DD'),
                         V2: Moment(date, "DD-MM-YYYY").add(-11, 'days').format('YYYY-MM-DD'),
                     }
                     let flow_4 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 4,
                         room_id: roomId,
                         P1: Moment(date, "DD-MM-YYYY").add(-10, 'days').format('YYYY-MM-DD'),
                         P2: Moment(date, "DD-MM-YYYY").add(-9, 'days').format('YYYY-MM-DD'),
@@ -547,7 +556,7 @@ const Home = (props) => {
                     }
                     let flow_5 = {
                         unit_id: unitId,
-                        stage_id: stageId,
+                        stage_id: 5,
                         room_id: roomId,
                         H1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
                         H2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
@@ -573,7 +582,7 @@ const Home = (props) => {
         setLoader(false)
         let errorObj = { ...errors };
         setStageId(id);
-        errorObj['StageId'] = '';
+        errorObj['stateId'] = '';
         setErrors(errorObj);
     }
 
@@ -587,10 +596,10 @@ const Home = (props) => {
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
-   
+
     const saveData = async (selectedCatId) => {
 
-        if (unitId && spawnRun && caseRun && venting && pinning && harvest) {
+        if (unitId && !stageId == '' && spawnRun && caseRun && venting && pinning && harvest) {
             setLoader(true);
             let saveObj = {
                 "product_name": name ? name : '-',
@@ -605,7 +614,7 @@ const Home = (props) => {
                 "venting": venting,
                 "pinning": pinning,
                 "harvest": harvest,
-                "end_date": Moment(endDate,"DD-MM-YYYY").format("YYYY-MM-DD")
+                "end_date": Moment(endDate, "DD-MM-YYYY").format("YYYY-MM-DD")
 
             }
             try {
@@ -647,6 +656,7 @@ const Home = (props) => {
             let errorObj = { ...errors };
             if (!name) errorObj['name'] = "Please Enter ProductName";
             if (!code) errorObj['code'] = "Please Enter code";
+            if (!stageId || stageId == '') errorObj['stageId'] = "Please Select Stage";
 
             setErrors(errorObj);
         }
@@ -655,7 +665,7 @@ const Home = (props) => {
     const getCategory = async () => {
         let ctr = {};
         ctr._start = 0;
-        ctr._limit = 100000;
+        ctr._limit = 100;
 
         let Unit = await UnitRepository.getUnit(ctr);
         if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
@@ -712,6 +722,7 @@ const Home = (props) => {
         setIdentifierState(event.target.value);
         let data = Moment(event.target.value).format('DD-MM-YYYY')
         setEndDate(Moment(data, "DD-MM-YYYY").add(46, 'days').format("DD-MM-YYYY"))
+        setStageId('')
         setErrors(errorObj);
     };
 
@@ -854,6 +865,7 @@ const Home = (props) => {
                                     >
                                         {tab === 'active' && <Option value="inactive">Inactive</Option>}
                                         {tab === 'inactive' && <Option value="active">Active</Option>}
+
                                         <Option value="delete">Delete</Option>
                                     </Select>
                                     <button onClick={goOnClick} style={{ backgroundColor: '#7063D8', width: '17%', height: 38, color: '#fff', border: 'none', marginLeft: 7 }}>
@@ -913,7 +925,7 @@ const Home = (props) => {
                     visible={showModal}
                     onCancel={closeModalOnClick}
                     title={selectedCatId ? "Edit Product" : "Add Product"}
-                    width={800}
+                    width={1200}
                     onOk={saveOnClick}
                     okText={selectedCatId ? "Update" : "Save"}
                     maskClosable={false}
@@ -1008,6 +1020,30 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* {selectedCatId &&
+                                <>
+                                    <label> Spawn-Run </label>
+                                    <SpawnRun Production={productflowArray.spawnRun} />
+                                    <br />
+
+                                    <label>Case-Run </label>
+                                    <CaseRunPage Production={productflowArray.caseRun} />
+                                    <br />
+
+                                    <label>Venting</label>
+                                    <Venting Production={productflowArray.venting} />
+                                    <br />
+
+                                    <label>Pinning</label>
+                                    <Pinning Production={productflowArray.pinning} />
+                                    <br />
+                                    <label>Harvest</label>
+                                    <Harvest Production={productflowArray.harvest} />
+                                    
+                                </>} */}
+                            <br />
+
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage<span style={{ color: 'red' }}>*</span></label>
@@ -1031,8 +1067,8 @@ const Home = (props) => {
                                                 )
                                             })}
                                     </Select>
-                                    {errors['stateId'] &&
-                                        <span style={{ color: 'red' }}>{errors['stateId']}</span>
+                                    {errors['stageId'] &&
+                                        <span style={{ color: 'red' }}>{errors['stageId']}</span>
                                     }
 
                                 </div>

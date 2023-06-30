@@ -19,8 +19,8 @@ const TableOverAllVentingReport = ({ reports}) => {
               <thead key={index}>
                 <tr>
                    <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col">Venting Stage</th>
-                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col">Room No</th>
-                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col">total Room</th>
+                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col">Room Number/s</th>
+                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col"> Room Count</th>
 
                 </tr>
               </thead>
@@ -40,9 +40,9 @@ const TableOverAllVentingReport = ({ reports}) => {
               </tbody>
               <tbody key={index}>
                 <tr>
-                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"> Venting Stage 2 Days</th>
-                  <td></td>
-                  <td>Total Rooms: {c.totalCount}</td>
+                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"></th>
+                  <td>Total Rooms:</td>
+                  <td> {c.totalCount}</td>
                 </tr>
               </tbody>
              

@@ -111,9 +111,9 @@ const TableOverAllReport = ({ reports}) => {
             
               <tbody key={index}>
                 <tr>
-                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"> Harvest Stage 12 Days</th>
-                  <td></td>
-                  <td>Total Rooms: {c.totalCount}</td>
+                   <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125  }} scope="col"> </th>
+                  <td>Total Rooms:</td>
+                  <td> {c.totalCount}</td>
                 </tr>
               </tbody>
              

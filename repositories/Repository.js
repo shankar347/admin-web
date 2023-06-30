@@ -6,9 +6,9 @@ export const baseurl = "https://britishagro.com/api/api";
  //export const baseurl = "http://192.168.1.165:4567/api/v1";
 
 //export const baseurl = "http://localhost:5003/api";
-export const file = "http://localhost:4567/api/v1/user";
+
 export const apiUrl = baseurl;
-export const fileUpload = file;
+
 let customHeaders = {
     Accept: 'application/json'
 };
@@ -20,4 +20,4 @@ if (local && local.usertoken) {
 
 export default axios.create({
     headers: customHeaders,
-});
+}); 
