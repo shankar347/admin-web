@@ -227,7 +227,7 @@ const Home = (props) => {
     const getCategory = async () => {
         let ctr = {};
         ctr._start = 0;
-        ctr._limit = 100000;
+        ctr._limit = 100;
        
         let Unit = await UnitRepository.getUnit(ctr);
         if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
@@ -336,7 +336,7 @@ const Home = (props) => {
     const unitOnChange = async (id) => {
         let ctr = {};
         ctr._start = 0;
-        ctr._limit = 100000;
+        ctr._limit = 100;
         ctr.unitId = id
         let errorObj = { ...errors };
         let Stage = await StageRepository.getStage(ctr);
