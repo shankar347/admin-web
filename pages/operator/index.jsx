@@ -68,7 +68,7 @@ const Home = (props) => {
         dispatch(getInactiveOperator(ctr));
         (async () => {
             let adminMenu = await AdminMenuRepository.adminMenu();
-            console.log(adminMenu.data.data,"hdfighdfughidfhgiuh")
+           
             if (adminMenu && adminMenu.data.data.length > 0) {
                 setAdminmenuItems(adminMenu.data.data);
             }
@@ -600,7 +600,7 @@ const Home = (props) => {
                                 </div>
                                 <div className="form-group">
                                     <Radio.Group onChange={typeOnChange} value={optype}>
-                                        {console.log(user,"cjnbkxcfkbzdf")}
+                                      
                                         {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"A"}>Admin</Radio>}
                                         {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"O"}> Executive</Radio>}
                                     </Radio.Group>
@@ -615,7 +615,7 @@ const Home = (props) => {
                                             <Row>
                                                 {adminmenuitems
                                                     .map((m, index) => {
-                                                        console.log(m,"fghxfghxdfgdf")
+                                                        
                                                         return (
                                                             <Col span={8} key={index} style={{ padding: 5 }}>
                                                                 <Checkbox value={m.menu_id}>{m.menu_title}</Checkbox>

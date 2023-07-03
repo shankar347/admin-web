@@ -231,7 +231,7 @@ const Home = (props) => {
             obj.stage = 3
             let res = await ReportRespository.getreports(obj);
             if (res && res.data && res.data.length > 0) {
-                console.log(res.data, "dfgdfgsdsf")
+                
                 setOverAllData(res.data);
             } else {
                 setOverAllData([]);
@@ -451,7 +451,7 @@ const Home = (props) => {
 
 
                                 <div style={{ marginTop: 15 }}>
-                                    {console.log(overall, "gjhgfjdfhdfgh")}
+
 
 
                                     {overall == 'harvest-1' && <div>
@@ -495,7 +495,7 @@ const Home = (props) => {
 
 
                                 <div style={{ marginTop: 15 }}>
-                                    {console.log(overall, "gjhgfjdfhdfgh")}
+                                 
 
 
                                     {overall == 'spawnrun-1' && <div>
@@ -539,9 +539,6 @@ const Home = (props) => {
 
 
                                 <div style={{ marginTop: 15 }}>
-                                    {console.log(overall, "gjhgfjdfhdfgh")}
-
-
                                     {overall == 'venting-1' && <div>
                                         <TableOverAllVentingReport reports={overAllData}
                                             startDate={selectedStartDate}

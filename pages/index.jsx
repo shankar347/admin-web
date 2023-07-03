@@ -55,7 +55,7 @@ const SignIn = (props) => {
     if (user && password && type) {
       let result = await AuthRepository.adminLogin({ admin_name : user, admin_pass:password, type });
       if (result && result.statusCode === 200) {
-        console.log(result,"xjhzbvjhszgdv")
+        
         let user = jwtDecode(result.token);
         await localStorage.setItem('usertoken', result.token);
         dispatch(loginSuccess({ auth: user, token: result.token }));

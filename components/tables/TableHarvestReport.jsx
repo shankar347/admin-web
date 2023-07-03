@@ -21,7 +21,7 @@ const TableOverAllReport = ({ reports,startDate,endDate }) => {
 
   let data = reports.map((a, index) => {
 
-    console.log(a,"dfghdhdfshgidsh")
+    
 
     let obj = {
         

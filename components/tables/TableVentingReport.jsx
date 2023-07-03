@@ -22,7 +22,7 @@ const TableVentingReport = ({ reports, startDate, endDate }) => {
     let data = reports.map((a, index) => {
 
 
-        console.log(a.V1, "lfdjgdxf")
+        
         let obj = {
 
             key: index,

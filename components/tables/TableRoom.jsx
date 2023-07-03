@@ -33,7 +33,7 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-    console.log(a, "fhgiudfhguihdsifh")
+   
     let obj = {
       key: a.room_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
