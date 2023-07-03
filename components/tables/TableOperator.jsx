@@ -41,23 +41,23 @@ const TableHomeCategory = ({ allOperator, editModalOnClick, openview, onSelectAl
       dataIndex: 'check'
     }
   ];
-
+console.log(allOperator,"clkjhoidjfhbj")
   let data =  allOperator.map((a, index) => {
 
     let obj = {
       Jobs_total: a.Jobs_total  ,
-      key: a._id,
+      key: a.op_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.op_name,
       name: a.op_uname,
-     pass :new Buffer.from(a.op_pass),
+     pass :new Buffer.from(a.op_password),
       type: a.op_type === "O" ? (<p style={{ color: 'green' }}>Executive</p>) : (<p style={{ color: 'red' }}>Admin</p>),
       view: (<i className="fas fa-file" onClick={() => openview(a)} style={{ cursor: 'pointer' }}></i>),
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a._id)}
-          checked={selectedHomeCatIds.indexOf(a._id) >= 0}
+          onClick={() => onSelectOne(a.op_id)}
+          checked={selectedHomeCatIds.indexOf(a.op_id) >= 0}
         />
       )
     }

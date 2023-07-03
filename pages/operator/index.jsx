@@ -42,7 +42,6 @@ const Home = (props) => {
     const [optype, settype] = useState('');
 
     const [selectedmenu, setSelectedmenu] = useState([]);
-    const [selectedSubmenu, setSelectedSubmenu] = useState([]);
 
     const [adminmenuitems, setAdminmenuItems] = useState([]);
     const [user, setUser] = useState({});
@@ -68,7 +67,7 @@ const Home = (props) => {
         dispatch(getInactiveOperator(ctr));
         (async () => {
             let adminMenu = await AdminMenuRepository.adminMenu();
-           
+
             if (adminMenu && adminMenu.data.data.length > 0) {
                 setAdminmenuItems(adminMenu.data.data);
             }
@@ -89,26 +88,23 @@ const Home = (props) => {
         setpassword('');
         settype('');
         setSelectedmenu([]);
-        setSelectedSubmenu([]);
+
         setLoader(false);
         setShowModal(true);
     }
 
     const editModalOnClick = async (data) => {
-      
+
         setLoader(true);
-        setSelectedHomeCatId(data._id);
+        setSelectedHomeCatId(data.op_id);
         setname(data.op_name)
         setUsername(data.op_uname)
         setstatus(data.op_status)
-        setpassword(new Buffer.from(data.op_pass, 'base64').toString());
+        setpassword(new Buffer.from(data.op_password, 'base64').toString());
         settype(data.op_type);
-        setSelectedmenu(data.features_id);
-        setSelectedSubmenu(data.features_id);
-        setTimeout(() => {
-            setLoader(false);
-            setShowModal(true);
-        }, 3000);
+        setSelectedmenu(data.feat_id);
+        setLoader(false);
+        setShowModal(true);
     }
 
     const openview = (open) => {
@@ -117,8 +113,8 @@ const Home = (props) => {
         setname(open.op_name)
         setUsername(open.op_uname)
         setstatus(open.op_status)
-        setSelectedmenu(open.features_id.split(',').map(Number));
-        setSelectedSubmenu(open.features_id.split(',').map(Number))
+        setSelectedmenu(open.feat_id.split(',').map(Number));
+
         setLoader(false);
         setViewModal(open);
     }
@@ -131,7 +127,7 @@ const Home = (props) => {
         setpassword('');
         settype('');
         setSelectedmenu([]);
-        setSelectedSubmenu([]);
+
         setErrors({});
         setShowModal(false);
     }
@@ -170,7 +166,6 @@ const Home = (props) => {
     const typeOnChange = async (type) => {
         settype(type.target.value);
         setSelectedmenu([]);
-        setSelectedSubmenu([])
         setErrors({});
     }
 
@@ -181,72 +176,62 @@ const Home = (props) => {
         setErrors(errorObj);
     }
 
-    const manuOnChange = async (value) => {
-        let errorObj = { ...errors };
-        let arr = [...selectedSubmenu];
-        let index = arr.indexOf(value);
-        if (index >= 0) {
-            arr.splice(index, 1);
-        } else {
-            arr.push(value);
-        }
-        setSelectedSubmenu(arr);
-        errorObj['features'] = '';
-        setErrors(errorObj);
-    }
-
     const saveOnClick = () => {
-        if (selectedHomeCatId) {
-            edit();
-        } else {
-            save();
-        }
+        saveData(selectedHomeCatId);
     }
 
-    const save = async () => {
+    const saveData = async (selectedHomeCatId) => {
         if (
             name && Username && password && optype && selectedmenu.length) {
             setLoader(true);
 
             let selectedMenu = selectedmenu && selectedmenu.length ? selectedmenu : [];
-            let selectedSubMenu = selectedSubmenu && selectedSubmenu.length ? selectedSubmenu : [];
             const password1 = Buffer.from(password).toString("base64");
             let obj = {
                 "op_name": name,
                 "op_uname": Username,
-                "op_pass": password1,
+                "op_password": password1,
                 "op_type": optype,
-                "new_features_id": selectedSubMenu,
-                "features_id": selectedMenu
+                "feat_id": String(selectedMenu)
             }
-
             try {
-                let response = await AdminfacultyRepository.saveOperator(obj);
-                if (response && response.status === 201) {
-                    notification.success({
-                        message: 'Admin & Faculty Added Successfully.',
-                        placement: 'top'
-                    });
-                    let ctr = {};
-                    ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
-                    ctr.limit = pageSizeTotal;;
-                    ctr.search = search;
-                    ctr.type = user.userType;
-                    dispatch(getAllOperator(ctr));
-                    dispatch(getInactiveOperator(ctr));
-                    closeModalOnClick();
+                if (selectedHomeCatId) {
+                    let response = await AdminfacultyRepository.editOperator(selectedHomeCatId, obj);
+                    if (response && response.status === 201) {
+                        notification.success({
+                            message: 'Admin & Faculty Added Successfully.',
+                            placement: 'top'
+                        });
+                    }
                 } else {
-                    Modal.error({
-                        title: response.message
-                    });
-                    setLoader(false);
+                    let response = await AdminfacultyRepository.saveOperator(obj);
+                    if (response && response.status === 201) {
+                        notification.success({
+                            message: 'Admin & Faculty Added Successfully.',
+                            placement: 'top'
+                        });
+                    } else {
+                        Modal.error({
+                            title: response.message
+                        });
+                    }
                 }
+                let ctr = {};
+                ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+                ctr.limit = pageSizeTotal;;
+                ctr.search = search;
+                ctr.type = user.userType;
+                closeViewOnClick()
+                dispatch(getAllOperator(ctr));
+                dispatch(getInactiveOperator(ctr));
+                closeModalOnClick();
+                setLoader(false);
             } catch (e) {
+                console.log(e, "xjcbncvbkxc")
                 notification.error({
                     message: 'Admin & Faculty Added Failed.',
                     placement: 'top'
                 });
-                setLoader(false);
             }
         } else {
             let errorObj = { ...errors };
@@ -255,64 +240,10 @@ const Home = (props) => {
             if (!password) errorObj['password'] = "Please Enter password";
             if (!optype) errorObj['type'] = "Please Select Type";
             if (!selectedmenu.length) errorObj['features'] = "Please Select Features";
-            if (!selectedSubmenu.length) errorObj['features'] = "Please Select Features";
             setErrors(errorObj);
         }
     }
 
-    const edit = async () => {
-        if (selectedHomeCatId && name && Username && password && optype) {
-            setLoader(true);
-            const password1 = Buffer.from(password).toString("base64");
-            let selectedMenu = selectedmenu && selectedmenu.length ? selectedmenu : [];
-            let selectedSubMenu = selectedSubmenu && selectedSubmenu.length ? selectedSubmenu : [];
-            let obj = {
-                "op_name": name,
-                "op_uname": Username,
-                "op_pass": password1,
-                "op_type": optype,
-                "new_features_id": selectedSubMenu ? selectedSubMenu : [],
-                "features_id": selectedMenu 
-            }
-            try {
-                let response = await AdminfacultyRepository.editOperator(selectedHomeCatId, obj);
-                if (response && response.status === 200) {
-                    notification.success({
-                        message: 'Admin & Faculty Updated Successfully.',
-                        placement: 'top'
-                    });
-                    let ctr = {};
-                    ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
-                    ctr.limit = pageSizeTotal;;
-                    ctr.search = search;
-                    ctr.type = user.userType;
-                    dispatch(getAllOperator(ctr));
-                    dispatch(getInactiveOperator(ctr));
-                    closeModalOnClick();
-                } else {
-                    Modal.error({
-                        title: response.message
-                    });
-                    setLoader(false);
-                }
-            } catch (e) {
-                notification.error({
-                    message: 'Admin & Faculty  Updated Failed.',
-                    placement: 'top'
-                });
-                setLoader(false);
-            }
-        } else {
-            let errorObj = { ...errors };
-            if (!name) errorObj['name'] = "Please Enter Name";
-            if (!Username) errorObj['username'] = "Please Enter User Name";
-            if (!password) errorObj['password'] = "Please Enter password";
-            if (!optype) errorObj['type'] = "Please Select Type";
-            if (!selectedmenu.length) errorObj['features'] = "Please Select Features";
-            if (!selectedSubmenu.length) errorObj['features'] = "Please Select Features";
-            setErrors(errorObj);
-        }
-    }
 
     const searchOnChange = (search) => {
         setLoader(true);
@@ -373,9 +304,9 @@ const Home = (props) => {
         let array = [];
         if (value) {
             if (tab === 'active') {
-                array = allOperator.map(h => h._id);
+                array = allOperator.map(h => h.op_id);
             } else {
-                array = inactiveOperator.map(h => h._id);
+                array = inactiveOperator.map(h => h.op_id);
             }
         }
         setSelectedHomeCatIds(array);
@@ -600,7 +531,7 @@ const Home = (props) => {
                                 </div>
                                 <div className="form-group">
                                     <Radio.Group onChange={typeOnChange} value={optype}>
-                                      
+
                                         {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"A"}>Admin</Radio>}
                                         {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"O"}> Executive</Radio>}
                                     </Radio.Group>
@@ -615,7 +546,7 @@ const Home = (props) => {
                                             <Row>
                                                 {adminmenuitems
                                                     .map((m, index) => {
-                                                        
+
                                                         return (
                                                             <Col span={8} key={index} style={{ padding: 5 }}>
                                                                 <Checkbox value={m.menu_id}>{m.menu_title}</Checkbox>

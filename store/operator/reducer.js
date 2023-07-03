@@ -12,6 +12,7 @@ export const initState = {
 function reducer(state = initState, action) {
     switch (action.type) {
         case actionTypes.GET_ALL_OPERATOR_SUCCESS:
+            console.log(action.payload.rows,"fnfghfhdfg")
             return {
                 ...state,
                 ...{
