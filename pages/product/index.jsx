@@ -66,6 +66,7 @@ const Home = (props) => {
     const [harvest, setHarvest] = useState({});
     const [startDate, setstartDate] = useState(Moment("DD-MM-YYYY").format('DD-MM-YYYY'))
     const [endDate, setEndDate] = useState(Moment("DD-MM-YYYY").format('DD-MM-YYYY'))
+    const [viewstage, setViewstage] = useState(null);
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -103,6 +104,7 @@ const Home = (props) => {
         setUnitId('')
         setStageId('')
         setRoomId('')
+        setViewstage('')
         setSelectedCatId('');
         setLoader(false);
         setShowModal(true);
@@ -134,7 +136,7 @@ const Home = (props) => {
         setLoader(false);
         setShowModal(true);
     }
-    
+
     const nameOnChange = (name) => {
         let errorObj = { ...errors };
         let slug = (name).replace(/ /g, "-").toLowerCase();
@@ -777,6 +779,8 @@ const Home = (props) => {
         setAction(action);
     }
 
+
+
     const goOnClick = async () => {
         let selectedHomeCatIdsArr = [...selectedCatIds];
         let obj = {
@@ -1017,11 +1021,15 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             </div>
+                            
+                            {selectedCatId && <ProessRun
+                                Production={productflowArray}
+                                selectedCatId={selectedCatId}
+                              
+                            />}
 
-                            {selectedCatId && <ProessRun Production={productflowArray} />}
 
-
-                            <div className="col-md-6">
+                            {!selectedCatId && <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage<span style={{ color: 'red' }}>*</span></label>
                                     <Select
@@ -1049,7 +1057,8 @@ const Home = (props) => {
                                     }
 
                                 </div>
-                            </div>
+                            </div>}
+
                         </div>
                     </Spin>
                 </Modal>

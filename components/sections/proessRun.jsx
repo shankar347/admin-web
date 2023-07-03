@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'antd';
 
-import { Spin, notification } from 'antd';
 import ProductflowRepository from '../../repositories/ProductflowRepository';
 import Moment from "moment"
 const SpawnRun = (props) => {
     const [productflowArray, setProductflowArray] = useState([]);
+    const [selectedCatId, setSelectedCatId] = useState('');
     const [spawnRun, setSpawnRun] = useState({});
     const [caseRun, setCaseRun] = useState({});
     const [venting, setVenting] = useState({});
     const [pinning, setPinning] = useState({});
     const [harvest, setHarvest] = useState({});
+    const [viewstage, setViewstage] = useState(null);
+
     useEffect(() => {
+
         setProductflowArray(props.Production)
+        setSelectedCatId(props.selectedCatId)
+
     }, []);
+
 
     const onSelectOneSpawnRun = (id, Sdate) => {
         let prId = ''
         props.Production.spawnRun.map((m, index) => {
+
             prId = m.product_id
             let spawnrunobj = {}
             let caseRunobj = {}
@@ -1019,6 +1027,11 @@ const SpawnRun = (props) => {
         saveData(prId);
     }
 
+    const viewOnChange = (action) => {
+        console.log(action, "jkfxhgbdfhg")
+        setViewstage(action)
+    }
+
     const onSelectOnePinning = (id) => {
         let prId = ''
         props.Production.pinning.map((m, index) => {
@@ -1462,252 +1475,280 @@ const SpawnRun = (props) => {
 
         }
     }
-
+    console.log(viewstage, "fgjhfgjhdfhdf")
 
     return (
         <>
             {<div className="container">
-
-                <label> Spawn-Run </label>
-                <div className="process">
-                    <div className="process-row ">
-                        {productflowArray && productflowArray.spawnRun &&
-                            productflowArray.spawnRun.map(m => {
-                                return (<>
-                                    {m.SR0 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" value="SR0" onClick={() => onSelectOneSpawnRun("SR0", m.SR0)}>SR0</button>
-
-                                    </div>}
-
-                                    {m.SR1 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" value="SR1" onClick={() => onSelectOneSpawnRun("SR1")} >SR1</button>
-
-                                    </div>}
-                                    {m.SR2 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR2")}>SR2</button>
-
-                                    </div>}
-                                    {m.SR3 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR3")}>SR3</button>
-
-                                    </div>}
-                                    {m.SR4 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR4")}>SR4</button>
-
-                                    </div>}
-                                    {m.SR5 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR5")}>SR5</button>
-
-                                    </div>}
-                                    {m.SR6 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" value="SR6" onClick={() => onSelectOneSpawnRun("SR6")}>SR6</button>
-
-                                    </div>}
-                                    {m.SR7 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR7")}>SR7</button>
-
-                                    </div>}
-                                    {m.SR8 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR8")}>SR8</button>
-
-                                    </div>}
-                                    {m.SR9 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR9")}>SR9</button>
-
-                                    </div>}
-                                    {m.SR10 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR10")}>SR10</button>
-
-                                    </div>}
-                                    {m.SR11 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR11")}>SR11</button>
-
-                                    </div>}
-                                    {m.SR12 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR12")}>SR12</button>
-
-                                    </div>}
-                                    {m.SR13 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR13")}>SR13</button>
-                                    </div>}
-                                    {m.SR14 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR14")}>SR14</button>
-                                    </div>}
-                                </>)
-                            })}
+                {selectedCatId && <div className="col-md-6">
+                    <div className="form-group">
+                        <label>Stage<span style={{ color: 'red' }}>*</span></label>
+                        <Select
+                            placeholder="Select Stage"
+                            className="ps-ant-dropdown"
+                            style={{ width: '80%' }}
+                            value={viewstage}
+                            onChange={viewOnChange}
+                        >
+                            <Option value="spawnRun">Spawn-Run</Option>
+                            <Option value="caseRun">Case-Run</Option>
+                            <Option value="venting">Venting</Option>
+                            <Option value="pinning">Pinning</Option>
+                            <Option value="harvest">Harvest</Option>
+                        </Select>
                     </div>
-                </div>
-                <br />
-                <label>Case-Run </label>
-                <div className="process">
-                    <div className="process-row ">
-                        {productflowArray && productflowArray.caseRun &&
-                            productflowArray.caseRun.map(m => {
-                                return (<>
-                                    {m.CR0 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR0")} >CR0</button>
-                                    </div>}
-                                    {m.CR1 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR1")}>CR1</button>
+                </div>}
+                {viewstage == 'spawnRun' && <>
+                    <label> Spawn-Run </label>
+                    <div className="process">
+                        <div className="process-row ">
+                            {productflowArray && productflowArray.spawnRun &&
+                                productflowArray.spawnRun
+                                    .filter(c => c.product_id == selectedCatId)
+                                    .map(m => {
+                                        return (<>
+                                            {m.SR0 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" value="SR0" onClick={() => onSelectOneSpawnRun("SR0", m.SR0)}>SR0</button>
 
-                                    </div>}
-                                    {m.CR2 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR2")} >CR2</button>
+                                            </div>}
 
-                                    </div>}
-                                    {m.CR3 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR3")} >CR3</button>
+                                            {m.SR1 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" value="SR1" onClick={() => onSelectOneSpawnRun("SR1")} >SR1</button>
 
-                                    </div>}
-                                    {m.CR4 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR4")}>CR4</button>
+                                            </div>}
+                                            {m.SR2 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR2")}>SR2</button>
 
-                                    </div>}
-                                    {m.CR5 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR5")} >CR5</button>
+                                            </div>}
+                                            {m.SR3 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR3")}>SR3</button>
 
-                                    </div>}
-                                    {m.CR6 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR6")} >CR6</button>
+                                            </div>}
+                                            {m.SR4 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR4")}>SR4</button>
 
-                                    </div>}
+                                            </div>}
+                                            {m.SR5 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR5")}>SR5</button>
 
-                                </>)
-                            })}
-                    </div>
-                </div>
-                <br />
-                <label>Venting</label>
-                <div className="process">
-                    <div className="process-row ">
-                        {productflowArray && productflowArray.venting &&
-                            productflowArray.venting.map(m => {
-                                return (<>
-                                    {m.V1 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V1", m.V1)}>V1</button>
+                                            </div>}
+                                            {m.SR6 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" value="SR6" onClick={() => onSelectOneSpawnRun("SR6")}>SR6</button>
 
-                                    </div>}
+                                            </div>}
+                                            {m.SR7 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR7")}>SR7</button>
 
-                                    {m.V2 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V2")} >V2</button>
+                                            </div>}
+                                            {m.SR8 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR8")}>SR8</button>
 
-                                    </div>}
+                                            </div>}
+                                            {m.SR9 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR9")}>SR9</button>
 
-                                </>)
-                            })}
+                                            </div>}
+                                            {m.SR10 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR10")}>SR10</button>
 
-                    </div>
-                </div>
-                <br />
-                <label>Pinning</label>
-                <div className="process">
-                    <div className="process-row">
-                        {productflowArray && productflowArray.pinning &&
-                            productflowArray.pinning.map(m => {
-                                return (<>
-                                    {m.P1 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P1")}>P1</button>
-                                    </div>}
-                                    {m.P2 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P2")}>P2</button>
+                                            </div>}
+                                            {m.SR11 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR11")}>SR11</button>
 
-                                    </div>}
-                                    {m.P3 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P3")}>P3</button>
+                                            </div>}
+                                            {m.SR12 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR12")}>SR12</button>
 
-                                    </div>}
-                                    {m.P4 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P4")}>P4</button>
+                                            </div>}
+                                            {m.SR13 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR13")}>SR13</button>
+                                            </div>}
+                                            {m.SR14 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR14")}>SR14</button>
+                                            </div>}
+                                        </>)
+                                    })}
+                        </div>
+                    </div></>}
+                {viewstage == 'caseRun' && <>
+                    <label>Case-Run </label>
+                    <div className="process">
+                        <div className="process-row ">
+                            {productflowArray && productflowArray.caseRun &&
+                                productflowArray.caseRun
+                                    .filter(c => c.product_id == selectedCatId)
+                                    .map(m => {
+                                        return (<>
+                                            {m.CR0 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR0")} >CR0</button>
+                                            </div>}
+                                            {m.CR1 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR1")}>CR1</button>
 
-                                    </div>}
-                                    {m.P5 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P5")}>P5</button>
+                                            </div>}
+                                            {m.CR2 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR2")} >CR2</button>
 
-                                    </div>}
-                                    {m.P6 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P6")}>P6</button>
+                                            </div>}
+                                            {m.CR3 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR3")} >CR3</button>
 
-                                    </div>}
-                                    {m.P7 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P7")}>P7</button>
+                                            </div>}
+                                            {m.CR4 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR4")}>CR4</button>
 
-                                    </div>}
-                                    {m.P8 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P8")}>P8</button>
+                                            </div>}
+                                            {m.CR5 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR5")} >CR5</button>
 
-                                    </div>}
-                                    {m.P9 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P9")}>P9</button>
+                                            </div>}
+                                            {m.CR6 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR6")} >CR6</button>
 
-                                    </div>}
-                                    {m.P10 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P10")}>P10</button>
+                                            </div>}
 
-                                    </div>}
-                                </>)
-                            })}
+                                        </>)
+                                    })}
+                        </div>
+                    </div></>}
+                {viewstage == 'venting' && <>
+                    <label>Venting</label>
+                    <div className="process">
+                        <div className="process-row ">
+                            {productflowArray && productflowArray.venting &&
+                                productflowArray.venting
+                                    .filter(c => c.product_id == selectedCatId)
+                                    .map(m => {
+                                        return (<>
+                                            {m.V1 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V1", m.V1)}>V1</button>
 
-                    </div>
-                </div>
-                <br />
-                <label>Harvest</label>
-                <div className="process">
-                    <div className="process-row">
-                        {productflowArray && productflowArray.harvest &&
-                            productflowArray.harvest.map(m => {
-                                return (<>
-                                    {m.H1 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H1")}>H1</button>
-                                    </div>}
-                                    {m.H2 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H2")} >H2</button>
+                                            </div>}
 
-                                    </div>}
-                                    {m.H3 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H3")} >H3</button>
+                                            {m.V2 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V2")} >V2</button>
 
-                                    </div>}
-                                    {m.H4 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H4")} >H4</button>
+                                            </div>}
 
-                                    </div>}
-                                    {m.H5 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H5")}>H5</button>
+                                        </>)
+                                    })}
 
-                                    </div>}
-                                    {m.H6 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H6")}>H6</button>
+                        </div>
+                    </div></>}
+                {viewstage == 'pinning' && <>
+                    <label>Pinning</label>
+                    <div className="process">
+                        <div className="process-row">
+                            {productflowArray && productflowArray.pinning &&
+                                productflowArray.pinning
+                                    .filter(c => c.product_id == selectedCatId)
+                                    .map(m => {
+                                        return (<>
+                                            {m.P1 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P1")}>P1</button>
+                                            </div>}
+                                            {m.P2 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P2")}>P2</button>
 
-                                    </div>}
-                                    {m.H7 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H7")}>H7</button>
+                                            </div>}
+                                            {m.P3 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P3")}>P3</button>
 
-                                    </div>}
-                                    {m.H8 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H8")}>H8</button>
+                                            </div>}
+                                            {m.P4 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P4")}>P4</button>
 
-                                    </div>}
-                                    {m.H9 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H9")}>H9</button>
+                                            </div>}
+                                            {m.P5 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P5")}>P5</button>
 
-                                    </div>}
-                                    {m.H10 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H10")}>H10</button>
+                                            </div>}
+                                            {m.P6 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P6")}>P6</button>
 
-                                    </div>}
-                                    {m.H11 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H11")}>H11</button>
+                                            </div>}
+                                            {m.P7 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P7")}>P7</button>
 
-                                    </div>}
-                                    {m.H12 && <div className="process-step">
-                                        <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H12")} >H12</button>
+                                            </div>}
+                                            {m.P8 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P8")}>P8</button>
 
-                                    </div>}
-                                </>)
-                            })}
+                                            </div>}
+                                            {m.P9 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P9")}>P9</button>
 
-                    </div>
-                </div>
+                                            </div>}
+                                            {m.P10 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P10")}>P10</button>
+
+                                            </div>}
+                                        </>)
+                                    })}
+
+                        </div>
+                    </div></>}
+                {viewstage == 'harvest' && <>
+                    <label>Harvest</label>
+                    <div className="process">
+                        <div className="process-row">
+                            {productflowArray && productflowArray.harvest &&
+                                productflowArray.harvest
+                                    .filter(c => c.product_id == selectedCatId)
+                                    .map(m => {
+                                        return (<>
+                                            {m.H1 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H1")}>H1</button>
+                                            </div>}
+                                            {m.H2 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H2")} >H2</button>
+
+                                            </div>}
+                                            {m.H3 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H3")} >H3</button>
+
+                                            </div>}
+                                            {m.H4 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H4")} >H4</button>
+
+                                            </div>}
+                                            {m.H5 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H5")}>H5</button>
+
+                                            </div>}
+                                            {m.H6 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H6")}>H6</button>
+
+                                            </div>}
+                                            {m.H7 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H7")}>H7</button>
+
+                                            </div>}
+                                            {m.H8 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H8")}>H8</button>
+
+                                            </div>}
+                                            {m.H9 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H9")}>H9</button>
+
+                                            </div>}
+                                            {m.H10 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H10")}>H10</button>
+
+                                            </div>}
+                                            {m.H11 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H11")}>H11</button>
+
+                                            </div>}
+                                            {m.H12 && <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H12")} >H12</button>
+
+                                            </div>}
+                                        </>)
+                                    })}
+
+                        </div>
+                    </div></>}
             </div>}
         </>
     )
