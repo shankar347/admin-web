@@ -5,11 +5,8 @@ import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'ant
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 import TableProduct from '../../components/tables/TableProduct';
-import SpawnRun from '../../components/sections/spawnRun';
-import CaseRunPage from '../../components/sections/caseRun';
-import Venting from '../../components/sections/venting'
-import Pinning from '../../components/sections/pinning'
-import Harvest from '../../components/sections/harvest'
+import ProessRun from '../../components/sections/proessRun';
+
 import { getAllProduct, getInactiveProduct } from '../../store/Product/action';
 import ProductRepository from '../../repositories/ProductRepository';
 
@@ -137,7 +134,7 @@ const Home = (props) => {
         setLoader(false);
         setShowModal(true);
     }
-    console.log(productflowArray, "setProductflowArray")
+    
     const nameOnChange = (name) => {
         let errorObj = { ...errors };
         let slug = (name).replace(/ /g, "-").toLowerCase();
@@ -1021,28 +1018,8 @@ const Home = (props) => {
                                 </div>
                             </div>
 
-                            {/* {selectedCatId &&
-                                <>
-                                    <label> Spawn-Run </label>
-                                    <SpawnRun Production={productflowArray.spawnRun} />
-                                    <br />
+                            {selectedCatId && <ProessRun Production={productflowArray} />}
 
-                                    <label>Case-Run </label>
-                                    <CaseRunPage Production={productflowArray.caseRun} />
-                                    <br />
-
-                                    <label>Venting</label>
-                                    <Venting Production={productflowArray.venting} />
-                                    <br />
-
-                                    <label>Pinning</label>
-                                    <Pinning Production={productflowArray.pinning} />
-                                    <br />
-                                    <label>Harvest</label>
-                                    <Harvest Production={productflowArray.harvest} />
-                                    
-                                </>} */}
-                            <br />
 
                             <div className="col-md-6">
                                 <div className="form-group">

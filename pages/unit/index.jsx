@@ -90,8 +90,6 @@ const Home = (props) => {
     }
 
     const editModalOnClick = async (data) => {
-console.log(data,"jhdbgjkdfghd")
-      
         setLoader(true);
         setName(data.unit_name);
         setSlug(data.unit_slug)

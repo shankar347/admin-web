@@ -20,7 +20,7 @@ const TablePinningReport = ({ reports,startDate,endDate }) => {
   ];
 
   let data = reports.map((a, index) => {
-    console.log(a,"jbfgbfxghb")
+   
     let obj = {
         key: index,
         no: (index + 1),
