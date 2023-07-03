@@ -8,7 +8,7 @@ class AuthRepository {
 
 
     async getOperator(payload) {
-        let url = `${apiUrl}/operator/Y`;
+        let url = `${apiUrl}/operator/`;
         url += jsonToQuery(payload);
         url += `&status=Y`;
         const reponse = await Repository.get(url)
