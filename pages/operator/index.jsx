@@ -186,7 +186,7 @@ const Home = (props) => {
             setLoader(true);
 
             let selectedMenu = selectedmenu && selectedmenu.length ? selectedmenu : [];
-            const password1 = Buffer.from(password).toString("base64");
+            const password1 =new Buffer.from(password).toString("base64");
             let obj = {
                 "op_name": name,
                 "op_uname": Username,

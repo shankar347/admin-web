@@ -119,7 +119,7 @@ const Home = (props) => {
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
             setRoomArray(Room.data.rows);
         }
-        let productflow = await ProductRepository.getProduct({ productId: data.product_id });
+        let productflow = await ProductRepository.getProduct({ productId: data.product_id, offset: 0, limit: 10000 });
         if (productflow && productflow.data && productflow.data && productflow.data.rows.length > 0) {
             setProductflowArray(productflow.data);
         }
@@ -1021,11 +1021,11 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {selectedCatId && <ProessRun
                                 Production={productflowArray}
                                 selectedCatId={selectedCatId}
-                              
+
                             />}
 
 

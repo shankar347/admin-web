@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'antd';
+import { notification, Select } from 'antd';
 
 import ProductflowRepository from '../../repositories/ProductflowRepository';
+import ProductRepository from '../../repositories/ProductRepository';
 import Moment from "moment"
 const SpawnRun = (props) => {
     const [productflowArray, setProductflowArray] = useState([]);
@@ -14,18 +15,13 @@ const SpawnRun = (props) => {
     const [viewstage, setViewstage] = useState(null);
 
     useEffect(() => {
-
         setProductflowArray(props.Production)
         setSelectedCatId(props.selectedCatId)
 
     }, []);
-
-
+console.log(props.Production,"exurcytiugiho")
     const onSelectOneSpawnRun = (id, Sdate) => {
-        let prId = ''
         props.Production.spawnRun.map((m, index) => {
-
-            prId = m.product_id
             let spawnrunobj = {}
             let caseRunobj = {}
             let ventingobj = {}
@@ -686,13 +682,11 @@ const SpawnRun = (props) => {
             setHarvest(harvestobj);
             return (spawnrunobj);
         })
-        saveData(prId);
+        saveData(selectedCatId);
     }
 
     const onSelectOneCaseRun = (id) => {
-        let prId = ''
         props.Production.caseRun.map((m, index) => {
-            prId = m.product_id
             let spawnrunobj = {}
             let caseRunobj = {}
             let ventingobj = {}
@@ -943,13 +937,13 @@ const SpawnRun = (props) => {
             setHarvest(harvestobj);
             return (spawnrunobj);
         })
-        saveData(prId);
+        saveData(selectedCatId);
     }
 
     const onSelectOneVenting = (id) => {
-        let prId = ''
+
         props.Production.venting.map((m, index) => {
-            prId = m.product_id
+
             let spawnrunobj = {}
             let caseRunobj = {}
             let ventingobj = {}
@@ -1024,18 +1018,15 @@ const SpawnRun = (props) => {
             setHarvest(harvestobj);
             return (spawnrunobj);
         })
-        saveData(prId);
+        saveData(selectedCatId);
     }
 
     const viewOnChange = (action) => {
-        console.log(action, "jkfxhgbdfhg")
         setViewstage(action)
     }
 
     const onSelectOnePinning = (id) => {
-        let prId = ''
         props.Production.pinning.map((m, index) => {
-            prId = m.product_id
             let spawnrunobj = {}
             let caseRunobj = {}
             let ventingobj = {}
@@ -1228,13 +1219,11 @@ const SpawnRun = (props) => {
             setHarvest(harvestobj);
             return (spawnrunobj);
         })
-        saveData(prId);
+        saveData(selectedCatId);
     }
 
     const onSelectOneHarvest = (id) => {
-        let prId = ''
         props.Production.harvest.map((m, index) => {
-            prId = m.product_id
             let spawnrunobj = {}
             let caseRunobj = {}
             let ventingobj = {}
@@ -1441,10 +1430,11 @@ const SpawnRun = (props) => {
             setHarvest(harvestobj);
             return (spawnrunobj);
         })
-        saveData(prId);
+        saveData(selectedCatId);
     }
 
     const saveData = async (selectedCatId) => {
+
         if (spawnRun && caseRun && venting && pinning && harvest) {
             let saveObj = {
                 "spawnRun": spawnRun,
@@ -1462,6 +1452,10 @@ const SpawnRun = (props) => {
                             placement: 'top'
                         });
                 }
+                let productflow = await ProductRepository.getProduct({ productId: selectedCatId ,offset: 0, limit: 10000 });
+                if (productflow && productflow.data && productflow.data && productflow.data.rows.length > 0) {
+                    setProductflowArray(productflow.data);
+                }
             } catch (e) {
                 notification.error({
                     message: e.message,
@@ -1475,7 +1469,7 @@ const SpawnRun = (props) => {
 
         }
     }
-    console.log(viewstage, "fgjhfgjhdfhdf")
+
 
     return (
         <>
@@ -1500,72 +1494,74 @@ const SpawnRun = (props) => {
                 </div>}
                 {viewstage == 'spawnRun' && <>
                     <label> Spawn-Run </label>
+                  
                     <div className="process">
                         <div className="process-row ">
                             {productflowArray && productflowArray.spawnRun &&
                                 productflowArray.spawnRun
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
+                                        {console.log(productflowArray.spawnRun,"ryguijo")}
+                                        console.log(m, "excyvubnkl")
                                         return (<>
-                                            {m.SR0 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" value="SR0" onClick={() => onSelectOneSpawnRun("SR0", m.SR0)}>SR0</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR0 == null ? 'red' : "#28a745", backgroundColor: m.SR0 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR0", m.SR0)}>SR0</button>
 
-                                            </div>}
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR1 == null ? 'red' : "#28a745", backgroundColor: m.SR1 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR1")} >SR1</button>
 
-                                            {m.SR1 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" value="SR1" onClick={() => onSelectOneSpawnRun("SR1")} >SR1</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR2 == null ? 'red' : "#28a745", backgroundColor: m.SR2 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR2")}>SR2</button>
 
-                                            </div>}
-                                            {m.SR2 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR2")}>SR2</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR3 == null ? 'red' : "#28a745", backgroundColor: m.SR3 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR3")}>SR3</button>
 
-                                            </div>}
-                                            {m.SR3 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR3")}>SR3</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR4 == null ? 'red' : "#28a745", backgroundColor: m.SR4 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR4")}>SR4</button>
 
-                                            </div>}
-                                            {m.SR4 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR4")}>SR4</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR5 == null ? 'red' : "#28a745", backgroundColor: m.SR5 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR5")}>SR5</button>
 
-                                            </div>}
-                                            {m.SR5 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR5")}>SR5</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR6 == null ? 'red' : "#28a745", backgroundColor: m.SR6 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR6")}>SR6</button>
 
-                                            </div>}
-                                            {m.SR6 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" value="SR6" onClick={() => onSelectOneSpawnRun("SR6")}>SR6</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR7 == null ? 'red' : "#28a745", backgroundColor: m.SR7 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR7")}>SR7</button>
 
-                                            </div>}
-                                            {m.SR7 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR7")}>SR7</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR8 == null ? 'red' : "#28a745", backgroundColor: m.SR8 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR8")}>SR8</button>
 
-                                            </div>}
-                                            {m.SR8 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR8")}>SR8</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR9 == null ? 'red' : "#28a745", backgroundColor: m.SR9 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR9")}>SR9</button>
 
-                                            </div>}
-                                            {m.SR9 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR9")}>SR9</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR10 == null ? 'red' : "#28a745", backgroundColor: m.SR10 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR10")}>SR10</button>
 
-                                            </div>}
-                                            {m.SR10 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR10")}>SR10</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR11 == null ? 'red' : "#28a745", backgroundColor: m.SR11 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR11")}>SR11</button>
+                                            </div>
 
-                                            </div>}
-                                            {m.SR11 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR11")}>SR11</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR12 == null ? 'red' : "#28a745", backgroundColor: m.SR12 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR12")}>SR12</button>
 
-                                            </div>}
-                                            {m.SR12 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR12")}>SR12</button>
-
-                                            </div>}
-                                            {m.SR13 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR13")}>SR13</button>
-                                            </div>}
-                                            {m.SR14 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneSpawnRun("SR14")}>SR14</button>
-                                            </div>}
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR13 == null ? 'red' : "#28a745", backgroundColor: m.SR13 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR13")}>SR13</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR14 == null ? 'red' : "#28a745", backgroundColor: m.SR14 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR14")}>SR14</button>
+                                            </div>
                                         </>)
                                     })}
                         </div>
@@ -1579,33 +1575,28 @@ const SpawnRun = (props) => {
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
                                         return (<>
-                                            {m.CR0 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR0")} >CR0</button>
-                                            </div>}
-                                            {m.CR1 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR1")}>CR1</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR0 == null ? 'red' : "#28a745", backgroundColor: m.CR0 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR0")} >CR0</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR1 == null ? 'red' : "#28a745", backgroundColor: m.CR1 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR1")}>CR1</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR2 == null ? 'red' : "#28a745", backgroundColor: m.CR2 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR2")} >CR2</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR3 == null ? 'red' : "#28a745", backgroundColor: m.CR3 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR3")} >CR3</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR4 == null ? 'red' : "#28a745", backgroundColor: m.CR4 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR4")}>CR4</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR5 == null ? 'red' : "#28a745", backgroundColor: m.CR5 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR5")} >CR5</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.CR6 == null ? 'red' : "#28a745", backgroundColor: m.CR6 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneCaseRun("CR6")} >CR6</button>
 
-                                            </div>}
-                                            {m.CR2 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR2")} >CR2</button>
-
-                                            </div>}
-                                            {m.CR3 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR3")} >CR3</button>
-
-                                            </div>}
-                                            {m.CR4 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR4")}>CR4</button>
-
-                                            </div>}
-                                            {m.CR5 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR5")} >CR5</button>
-
-                                            </div>}
-                                            {m.CR6 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneCaseRun("CR6")} >CR6</button>
-
-                                            </div>}
+                                            </div>
 
                                         </>)
                                     })}
@@ -1620,15 +1611,14 @@ const SpawnRun = (props) => {
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
                                         return (<>
-                                            {m.V1 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V1", m.V1)}>V1</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.V1 == null ? 'red' : "#28a745", backgroundColor: m.V1 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneVenting("V1", m.V1)}>V1</button>
+                                            </div>
 
-                                            </div>}
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.V2 == null ? 'red' : "#28a745", backgroundColor: m.V2 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneVenting("V2")} >V2</button>
 
-                                            {m.V2 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneVenting("V2")} >V2</button>
-
-                                            </div>}
+                                            </div>
 
                                         </>)
                                     })}
@@ -1644,45 +1634,39 @@ const SpawnRun = (props) => {
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
                                         return (<>
-                                            {m.P1 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P1")}>P1</button>
-                                            </div>}
-                                            {m.P2 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P2")}>P2</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P1 == null ? 'red' : "#28a745", backgroundColor: m.P1 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P1")}>P1</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P2 == null ? 'red' : "#28a745", backgroundColor: m.P2 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P2")}>P2</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P3 == null ? 'red' : "#28a745", backgroundColor: m.P3 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P3")}>P3</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P4 == null ? 'red' : "#28a745", backgroundColor: m.P4 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P4")}>P4</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P5 == null ? 'red' : "#28a745", backgroundColor: m.P5 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P5")}>P5</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P6 == null ? 'red' : "#28a745", backgroundColor: m.P6 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P6")}>P6</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P7 == null ? 'red' : "#28a745", backgroundColor: m.P7 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P7")}>P7</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P8 == null ? 'red' : "#28a745", backgroundColor: m.P8 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P8")}>P8</button>
 
-                                            </div>}
-                                            {m.P3 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P3")}>P3</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P9 == null ? 'red' : "#28a745", backgroundColor: m.P9 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P9")}>P9</button>
 
-                                            </div>}
-                                            {m.P4 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P4")}>P4</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.P10 == null ? 'red' : "#28a745", backgroundColor: m.P10 == null ? 'red' : "#28a745" }} onClick={() => onSelectOnePinning("P10")}>P10</button>
 
-                                            </div>}
-                                            {m.P5 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P5")}>P5</button>
-
-                                            </div>}
-                                            {m.P6 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P6")}>P6</button>
-
-                                            </div>}
-                                            {m.P7 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P7")}>P7</button>
-
-                                            </div>}
-                                            {m.P8 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P8")}>P8</button>
-
-                                            </div>}
-                                            {m.P9 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P9")}>P9</button>
-
-                                            </div>}
-                                            {m.P10 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOnePinning("P10")}>P10</button>
-
-                                            </div>}
+                                            </div>
                                         </>)
                                     })}
 
@@ -1696,54 +1680,53 @@ const SpawnRun = (props) => {
                                 productflowArray.harvest
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
+
                                         return (<>
-                                            {m.H1 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H1")}>H1</button>
-                                            </div>}
-                                            {m.H2 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H2")} >H2</button>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H1 == null ? 'red' : "#28a745", backgroundColor: m.H1 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H1")}>H1</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H2 == null ? 'red' : "#28a745", backgroundColor: m.H2 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H2")} >H2</button>
 
-                                            </div>}
-                                            {m.H3 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H3")} >H3</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H3 == null ? 'red' : "#28a745", backgroundColor: m.H3 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H3")} >H3</button>
 
-                                            </div>}
-                                            {m.H4 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H4")} >H4</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H4 == null ? 'red' : "#28a745", backgroundColor: m.H4 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H4")} >H4</button>
 
-                                            </div>}
-                                            {m.H5 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H5")}>H5</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H5 == null ? 'red' : "#28a745", backgroundColor: m.H5 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H5")}>H5</button>
 
-                                            </div>}
-                                            {m.H6 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H6")}>H6</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H6 == null ? 'red' : "#28a745", backgroundColor: m.H6 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H6")}>H6</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H7 == null ? 'red' : "#28a745", backgroundColor: m.H7 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H7")}>H7</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H8 == null ? 'red' : "#28a745", backgroundColor: m.H8 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H8")}>H8</button>
 
-                                            </div>}
-                                            {m.H7 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H7")}>H7</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H9 == null ? 'red' : "#28a745", backgroundColor: m.H9 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H9")}>H9</button>
 
-                                            </div>}
-                                            {m.H8 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H8")}>H8</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H10 == null ? 'red' : "#28a745", backgroundColor: m.H10 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H10")}>H10</button>
 
-                                            </div>}
-                                            {m.H9 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H9")}>H9</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H11 == null ? 'red' : "#28a745", backgroundColor: m.H11 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H11")}>H11</button>
 
-                                            </div>}
-                                            {m.H10 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H10")}>H10</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.H12 == null ? 'red' : "#28a745", backgroundColor: m.H12 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneHarvest("H12")} >H12</button>
 
-                                            </div>}
-                                            {m.H11 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H11")}>H11</button>
-
-                                            </div>}
-                                            {m.H12 && <div className="process-step">
-                                                <button type="button" class="btn btn-success btn-circle" onClick={() => onSelectOneHarvest("H12")} >H12</button>
-
-                                            </div>}
+                                            </div>
                                         </>)
                                     })}
 

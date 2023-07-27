@@ -2458,3 +2458,12 @@ body{margin:40px;}
   line-height: 1.428571429;
   border-radius: 15px;
 }
+
+.triangle {
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0 47px 20px 47px;
+  border-color: transparent transparent #FF4532 transparent;
+  transform: rotate(180deg);
+}

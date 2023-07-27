@@ -52,7 +52,7 @@ const Header = () => {
                 setTheme('dark')
             }
     }
-
+console.log(auth,"fukghjldkbj")
     return (
         <div>
             <div className='header-nav d-flex justify-content-between align-items-center'>
@@ -65,6 +65,10 @@ const Header = () => {
                         </div>
                     </a>
                 </div>
+                <h4 className="user-name m-0">
+                            <i className="fas fa-user pr-2" style={{ color: '#fff', fontSize: '18px' }} ></i>
+                            {auth && auth.userType == "SA" ? auth.userName : auth.userName}
+                        </h4>
                 <div className="d-flex">
                     <ul className="nav__menu m-0 d-flex justify-content-between align-items-center">
                         <li className="nav__menu-item" style={{ cursor: 'pointer' }}>

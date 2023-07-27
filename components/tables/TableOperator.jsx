@@ -20,10 +20,7 @@ const TableHomeCategory = ({ allOperator, editModalOnClick, openview, onSelectAl
       title: 'Type',
       dataIndex: 'type'
     },
-    {
-      title: 'Total Jobs',
-      dataIndex: 'Jobs_total'
-    },
+   
   
     {
       title: 'view',
@@ -45,7 +42,6 @@ console.log(allOperator,"clkjhoidjfhbj")
   let data =  allOperator.map((a, index) => {
 
     let obj = {
-      Jobs_total: a.Jobs_total  ,
       key: a.op_id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.op_name,
