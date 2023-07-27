@@ -45,7 +45,7 @@ const Dashboard = () => {
         ctr.roomId = id
         const Product = await ProductRepository.getProduct(ctr);
         if (Product && Product?.data) {
-         
+
             setStageArray(Product.data)
         }
     };
@@ -103,11 +103,13 @@ const Dashboard = () => {
                 {allUnit.map((u, index) => {
                     return (
                         <div className="col-md-2" key={index}>
-                            <div className={`row-${index + 1}-stage-card d-flex justify-content-between`}>
+                            <div style={{ borderStyle: `${selectedPhase == u.unit_id ? 'double' : ''}` }}
+                                className={`row-${index + 1}-stage-card d-flex justify-content-between`}>
                                 <div onClick={() => featuresOnChange(u.unit_id, index)} value={selectedPhase}>
                                     <h3>{u.unit_name}</h3>
                                 </div>
                             </div>
+                            {selectedPhase == u.unit_id ? <i className="fas fa-angle-down" style={{ fontSize: 48, color:  colors[colorId] }}></i> : <></>}
                         </div>
                     )
                 })}
@@ -115,7 +117,7 @@ const Dashboard = () => {
 
             {selectedPhase ? <div className="row mt-5">
                 {selectedRoom.map((c, index) => {
-                    
+
                     return (
                         <div className='row phase ' key={index}>
                             <div className="collapse  show" >
@@ -126,14 +128,17 @@ const Dashboard = () => {
                                                 className="fas fa-home"></i> {c.room_name}</button>
                                         </div>
                                     </div>
+                                    {selectedRoomId == c.room_id ? <i className="fas fa-angle-down" style={{ fontSize: 48, color:  colors[colorId] }}></i> : <></>}
+
                                 </div>
                             </div>
+                            
                         </div>
                     )
                 })}
             </div> : <></>
             }
-          
+
             {isActive ? <div className="row mt-5">
                 <table class="table"  >
                     {stageArray && stageArray?.spawnRun.map((c, index) => {

@@ -10,7 +10,7 @@ class AuthRepository {
         if (payload.type === "SA") {
             url = `${apiUrl}/login`;
         } else {
-            url = `${apiUrl}/operatorLogin`;
+            url = `${apiUrl}/login/operator`;
         }
         const reponse = await Repository.post(url, payload)
             .then(response => {
