@@ -345,6 +345,15 @@ const Home = (props) => {
                                         />
                                     </div>
                                     <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
                                         <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
                                             <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-setting" /> Clear

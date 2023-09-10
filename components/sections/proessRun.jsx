@@ -13,13 +13,13 @@ const SpawnRun = (props) => {
     const [pinning, setPinning] = useState({});
     const [harvest, setHarvest] = useState({});
     const [viewstage, setViewstage] = useState(null);
-
+    const [count, setCount] = useState('');
     useEffect(() => {
         setProductflowArray(props.Production)
         setSelectedCatId(props.selectedCatId)
 
     }, []);
-console.log(props.Production,"exurcytiugiho")
+    console.log(props.Production, "exurcytiugiho")
     const onSelectOneSpawnRun = (id, Sdate) => {
         props.Production.spawnRun.map((m, index) => {
             let spawnrunobj = {}
@@ -27,8 +27,9 @@ console.log(props.Production,"exurcytiugiho")
             let ventingobj = {}
             let pinningobj = {}
             let harvestobj = {}
+            let endDate = 0
             if (id == "SR0") {
-
+                endDate = 15
                 let date = Moment(m.SR0).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: null, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -72,6 +73,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR1") {
+                endDate = 14
                 let date = Moment(m.SR1).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -115,6 +117,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR2") {
+                endDate = 13
                 let date = Moment(m.SR2).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -158,6 +161,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR3") {
+                endDate = 12
                 let date = Moment(m.SR3).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -201,6 +205,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR4") {
+                endDate = 11
                 let date = Moment(m.SR4).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -244,6 +249,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR5") {
+                endDate = 10
                 let date = Moment(m.SR5).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -287,6 +293,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR6") {
+                endDate = 9
                 let date = Moment(m.SR6).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -330,6 +337,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR7") {
+                endDate = 8
                 let date = Moment(m.SR7).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -373,6 +381,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR8") {
+                endDate = 7
                 let date = Moment(m.SR8).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -416,6 +425,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR9") {
+                endDate = 6
                 let date = Moment(m.SR9).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -459,7 +469,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR10") {
-
+                endDate = 5
                 let date = Moment(m.SR10).format('DD-MM-YYYY')
 
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
@@ -504,6 +514,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR11") {
+                endDate = 4
                 let date = Moment(m.SR11).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: null, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -547,6 +558,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR12") {
+                endDate = 3
                 let date = Moment(m.SR12).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: null, SR13: null, SR14: null }
                 caseRunobj = {
@@ -590,6 +602,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR13") {
+                endDate = 2
                 let date = Moment(m.SR13).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: null, SR14: null }
                 caseRunobj = {
@@ -633,6 +646,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "SR14") {
+                endDate = 1
                 let date = Moment(m.SR14).format('DD-MM-YYYY')
                 spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: m.SR13, SR14: null }
                 caseRunobj = {
@@ -675,6 +689,7 @@ console.log(props.Production,"exurcytiugiho")
                     H12: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
                 }
             }
+            setCount(endDate)
             setSpawnRun(spawnrunobj);
             setCaseRun(caseRunobj);
             setVenting(ventingobj);
@@ -692,7 +707,9 @@ console.log(props.Production,"exurcytiugiho")
             let ventingobj = {}
             let pinningobj = {}
             let harvestobj = {}
+            let endDate = 0
             if (id == "CR0") {
+                endDate = 7
                 let date = Moment(m.CR0).format('DD-MM-YYYY')
                 caseRunobj = { CR0: null, CR1: null, CR2: null, CR3: null, CR4: null, CR5: null, CR6: null }
                 ventingobj = {
@@ -727,6 +744,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR1") {
+                endDate = 6
                 let date = Moment(m.CR1).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: null, CR2: null, CR3: null, CR4: null, CR5: null, CR6: null }
                 ventingobj = {
@@ -761,6 +779,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR2") {
+                endDate = 5
                 let date = Moment(m.CR2).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: m.CR1, CR2: null, CR3: null, CR4: null, CR5: null, CR6: null }
                 ventingobj = {
@@ -795,6 +814,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR3") {
+                endDate = 4
                 let date = Moment(m.CR3).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: m.CR1, CR2: m.CR2, CR3: null, CR4: null, CR5: null, CR6: null }
                 ventingobj = {
@@ -829,6 +849,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR4") {
+                endDate = 3
                 let date = Moment(m.CR4).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: m.CR1, CR2: m.CR2, CR3: m.CR3, CR4: null, CR5: null, CR6: null }
                 ventingobj = {
@@ -863,6 +884,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR5") {
+                endDate = 2
                 let date = Moment(m.CR5).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: m.CR1, CR2: m.CR2, CR3: m.CR3, CR4: m.CR4, CR5: null, CR6: null }
                 ventingobj = {
@@ -897,6 +919,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "CR6") {
+                endDate = 1
                 let date = Moment(m.CR6).format('DD-MM-YYYY')
                 caseRunobj = { CR0: m.CR0, CR1: m.CR1, CR2: m.CR2, CR3: m.CR3, CR4: m.CR4, CR5: m.CR5, CR6: null }
                 ventingobj = {
@@ -930,6 +953,7 @@ console.log(props.Production,"exurcytiugiho")
                     H12: Moment(date, "DD-MM-YYYY").add(23, 'days').format('YYYY-MM-DD'),
                 }
             }
+            setCount(endDate)
             setSpawnRun(spawnrunobj);
             setCaseRun(caseRunobj);
             setVenting(ventingobj);
@@ -949,7 +973,9 @@ console.log(props.Production,"exurcytiugiho")
             let ventingobj = {}
             let pinningobj = {}
             let harvestobj = {}
+            let endDate = 0
             if (id == "V1") {
+                endDate = 2
                 let date = Moment(m.V1).format('DD-MM-YYYY')
                 ventingobj = { V1: null, V2: null }
 
@@ -981,6 +1007,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "V2") {
+                endDate = 1
                 let date = Moment(m.V1).format('DD-MM-YYYY')
                 ventingobj = { V1: m.V1, V2: null }
 
@@ -1011,6 +1038,7 @@ console.log(props.Production,"exurcytiugiho")
                     H12: Moment(date, "DD-MM-YYYY").add(21, 'days').format('YYYY-MM-DD'),
                 }
             }
+            setCount(endDate)
             setSpawnRun(spawnrunobj);
             setCaseRun(caseRunobj);
             setVenting(ventingobj);
@@ -1032,7 +1060,9 @@ console.log(props.Production,"exurcytiugiho")
             let ventingobj = {}
             let pinningobj = {}
             let harvestobj = {}
+            let endDate = 0
             if (id == "P1") {
+                endDate = 10
                 let date = Moment(m.P1).format('DD-MM-YYYY')
                 pinningobj = { P1: null, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1051,6 +1081,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P2") {
+                endDate = 9
                 let date = Moment(m.P2).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: null, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1069,6 +1100,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P3") {
+                endDate = 8
                 let date = Moment(m.P3).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: null, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1087,6 +1119,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P4") {
+                endDate = 7
                 let date = Moment(m.P4).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: null, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1105,6 +1138,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P5") {
+                endDate = 6
                 let date = Moment(m.P5).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: null, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1123,6 +1157,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P6") {
+                endDate = 5
                 let date = Moment(m.P6).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: m.P5, P6: null, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1141,6 +1176,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P7") {
+                endDate = 4
                 let date = Moment(m.P7).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: m.P5, P6: m.P6, P7: null, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1159,6 +1195,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P8") {
+                endDate = 3
                 let date = Moment(m.P8).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: m.P5, P6: m.P6, P7: m.P7, P8: null, P9: null, P10: null }
                 harvestobj = {
@@ -1177,6 +1214,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P9") {
+                endDate = 2
                 let date = Moment(m.P9).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: m.P5, P6: m.P6, P7: m.P7, P8: m.P8, P9: null, P10: null }
                 harvestobj = {
@@ -1195,6 +1233,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "P10") {
+                endDate = 1
                 let date = Moment(m.P10).format('DD-MM-YYYY')
                 pinningobj = { P1: m.P1, P2: m.P2, P3: m.P3, P4: m.P4, P5: m.P5, P6: m.P6, P7: m.P7, P8: m.P8, P9: m.P10, P10: null }
                 harvestobj = {
@@ -1212,6 +1251,7 @@ console.log(props.Production,"exurcytiugiho")
                     H12: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
                 }
             }
+            setCount(endDate)
             setSpawnRun(spawnrunobj);
             setCaseRun(caseRunobj);
             setVenting(ventingobj);
@@ -1229,7 +1269,9 @@ console.log(props.Production,"exurcytiugiho")
             let ventingobj = {}
             let pinningobj = {}
             let harvestobj = {}
+            let endDate = 0
             if (id == "H1") {
+                endDate = 12
                 let date = Moment(m.H1).format('DD-MM-YYYY')
 
                 harvestobj = {
@@ -1248,6 +1290,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H2") {
+                endDate = 11
                 harvestobj = {
                     H1: m.H1,
                     H2: null,
@@ -1264,6 +1307,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H3") {
+                endDate = 10
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1280,6 +1324,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H4") {
+                endDate = 9
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1296,6 +1341,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H5") {
+                endDate = 8
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1312,6 +1358,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H6") {
+                endDate = 7
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1328,6 +1375,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H7") {
+                endDate = 6
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1344,6 +1392,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H8") {
+                endDate = 5
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1360,6 +1409,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H9") {
+                endDate = 4
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1376,6 +1426,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H10") {
+                endDate = 3
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1392,6 +1443,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H11") {
+                endDate = 2
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1408,6 +1460,7 @@ console.log(props.Production,"exurcytiugiho")
                 }
             }
             if (id == "H12") {
+                endDate = 1
                 harvestobj = {
                     H1: m.H1,
                     H2: m.H2,
@@ -1423,6 +1476,7 @@ console.log(props.Production,"exurcytiugiho")
                     H12: null,
                 }
             }
+            setCount(endDate)
             setSpawnRun(spawnrunobj);
             setCaseRun(caseRunobj);
             setVenting(ventingobj);
@@ -1442,6 +1496,7 @@ console.log(props.Production,"exurcytiugiho")
                 "venting": venting,
                 "pinning": pinning,
                 "harvest": harvest,
+                "count":count
             };
             try {
                 if (selectedCatId) {
@@ -1452,7 +1507,7 @@ console.log(props.Production,"exurcytiugiho")
                             placement: 'top'
                         });
                 }
-                let productflow = await ProductRepository.getProduct({ productId: selectedCatId ,offset: 0, limit: 10000 });
+                let productflow = await ProductRepository.getProduct({ productId: selectedCatId, offset: 0, limit: 10000 });
                 if (productflow && productflow.data && productflow.data && productflow.data.rows.length > 0) {
                     setProductflowArray(productflow.data);
                 }
@@ -1494,14 +1549,14 @@ console.log(props.Production,"exurcytiugiho")
                 </div>}
                 {viewstage == 'spawnRun' && <>
                     <label> Spawn-Run </label>
-                  
+
                     <div className="process">
                         <div className="process-row ">
                             {productflowArray && productflowArray.spawnRun &&
                                 productflowArray.spawnRun
                                     .filter(c => c.product_id == selectedCatId)
                                     .map(m => {
-                                        {console.log(productflowArray.spawnRun,"ryguijo")}
+                                        { console.log(productflowArray.spawnRun, "ryguijo") }
                                         console.log(m, "excyvubnkl")
                                         return (<>
                                             <div className="process-step">

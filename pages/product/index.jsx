@@ -612,15 +612,14 @@ const Home = (props) => {
                 "caseRun": caseRun,
                 "venting": venting,
                 "pinning": pinning,
-                "harvest": harvest,
-                "end_date": Moment(endDate, "DD-MM-YYYY").format("YYYY-MM-DD")
-
+                "harvest": harvest
             }
             try {
                 if (selectedCatId) {
                     let result = await ProductRepository.editProduct(selectedCatId, saveObj);
                     setResult(result)
                 } else {
+                    saveObj.end_date=Moment(endDate, "DD-MM-YYYY").format("YYYY-MM-DD")
                     await ProductRepository.saveProduct(saveObj);
                 }
                 if (result && result.status === 200) {
