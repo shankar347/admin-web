@@ -9,6 +9,9 @@ import Sidebar from '../../components/sections/sidebar';
 import TableOverAllReport from '../../components/tables/TableOverAllReport';
 import TableOverAllSRReport from '../../components/tables/TableOverAll-SR-Report';
 import TableOverAllVentingReport from '../../components/tables/TableOverAllVentingReport';
+import TableOverAllPinningReport from '../../components/tables/TableOverAll-Pinning-Report';
+
+import TableOverAllCRReport from '../../components/tables/TableOverAll-CR-Report';
 import TablePinningReport from '../../components/tables/TablePinningReport';
 import TableVentingReport from '../../components/tables/TableVentingReport';
 import TableHarvestReport from '../../components/tables/TableHarvestReport';
@@ -70,9 +73,13 @@ const Home = (props) => {
         setOverAllData([]);
         if (tab == 'harvest') {
             setOverAll('harvest-1');
-        } else if (tab == 'spawnrun'){
+        } else if (tab == 'spawnrun') {
             setOverAll('spawnrun-1');
-        }else{
+        } else if (tab == 'caserun') {
+            setOverAll('caserun-1');
+        } else if (tab == "pinning")
+            setOverAll('pinning-1');
+        else {
             setOverAll('venting-1')
         }
         setTab(tab);
@@ -113,7 +120,7 @@ const Home = (props) => {
         let obj = {
             period: 'all',
             startDate: selectedStartDate,
-            endDate: selectedEndDate
+            endDate: selectedStartDate//endDate is not us
         };
         if (overall === 'harvest') {
             obj.stage = 5
@@ -168,20 +175,20 @@ const Home = (props) => {
 
     const harvestSearchOnChange = async () => {
         let obj = {
-            stage: 5,
             period: 'all',
             startDate: selectedStartDate,
+            endDate: selectedEndDate
         };
         if (tab == 'harvest') {
             obj.stage = 5
             let res = await ReportRespository.getRoomreports(obj);
-
-            if (res && res.data && res.data.length > 0) {
+            console.log(res, "dzfgbdfzhz")
+            if (res && res.data) {
                 setOverAllData(res.data);
             } else {
                 setOverAllData([]);
             }
-        } else if(tab == 'spawnrun') {
+        } else if (tab == 'spawnrun') {
             obj.stage = 1
             let res = await ReportRespository.getRoomreports(obj);
             if (res && res.data && res.data.length > 0) {
@@ -189,7 +196,24 @@ const Home = (props) => {
             } else {
                 setOverAllData([]);
             }
-        }else{
+        } else if (tab == 'pinning') {
+            obj.stage = 4
+            let res = await ReportRespository.getRoomreports(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
+            } else {
+                setOverAllData([]);
+            }
+        } else if (tab == 'caserun') {
+            obj.stage = 2
+            let res = await ReportRespository.getRoomreports(obj);
+            if (res && res.data && res.data.length > 0) {
+                setOverAllData(res.data);
+            } else {
+                setOverAllData([]);
+            }
+        }
+        else {
             obj.stage = 3
             let res = await ReportRespository.getRoomreports(obj);
             if (res && res.data && res.data.length > 0) {
@@ -231,7 +255,7 @@ const Home = (props) => {
             obj.stage = 3
             let res = await ReportRespository.getreports(obj);
             if (res && res.data && res.data.length > 0) {
-                
+
                 setOverAllData(res.data);
             } else {
                 setOverAllData([]);
@@ -344,7 +368,7 @@ const Home = (props) => {
                                             onChange={(e) => handleStartDateChange(e.target.value)}
                                         />
                                     </div>
-                                    <div className="col-lg-4">
+                                    {/* <div className="col-lg-4">
                                         <input
                                             className="form-control"
                                             type="date"
@@ -352,7 +376,7 @@ const Home = (props) => {
                                             placeholder=""
                                             onChange={(e) => handleEndDateChange(e.target.value)}
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="col-lg-4">
                                         <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
                                             <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
@@ -430,6 +454,209 @@ const Home = (props) => {
 
                                 </div>
                             </TabPane>
+                            <TabPane tab={<p className="active-green" style={{ color: '#0e0606' }}>Spawn-Run</p>} key="spawnrun" style={{ background: ' #f7f7f7 !important' }}>
+                                <div className="row" style={{ padding: 10 }}>
+
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedStartDate}
+                                            placeholder=""
+                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div style={{ marginTop: 15 }}>
+
+
+
+                                    {overall == 'spawnrun-1' && <div>
+                                        <TableOverAllSRReport reports={overAllData}
+                                            startDate={selectedStartDate}
+                                            endDate={selectedEndDate} />
+                                    </div>}
+
+
+
+
+                                </div>
+                            </TabPane>
+                            <TabPane tab={<p className="active-green" style={{ color: '#f39521' }}>Case-Run</p>} key="caserun" style={{ background: ' #f7f7f7 !important' }}>
+                                <div className="row" style={{ padding: 10 }}>
+
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedStartDate}
+                                            placeholder=""
+                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div style={{ marginTop: 15 }}>
+                                    {overall == 'caserun-1' && <div>
+                                        <TableOverAllCRReport reports={overAllData}
+                                            startDate={selectedStartDate}
+                                            endDate={selectedEndDate} />
+                                    </div>}
+
+
+
+
+                                </div>
+                            </TabPane>
+                            <TabPane tab={<p className="active-green" style={{ color: '#f32121' }}>Venting</p>} key="venting" style={{ background: ' #f7f7f7 !important' }}>
+                                <div className="row" style={{ padding: 10 }}>
+
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedStartDate}
+                                            placeholder=""
+                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div style={{ marginTop: 15 }}>
+                                    {overall == 'venting-1' && <div>
+                                        <TableOverAllVentingReport reports={overAllData}
+                                            startDate={selectedStartDate}
+                                            endDate={selectedEndDate} />
+                                    </div>}
+
+
+
+
+                                </div>
+                            </TabPane>
+                            <TabPane tab={<p className="active-green" style={{ color: '#2196f3' }}>Pinning</p>} key="pinning" style={{ background: ' #f7f7f7 !important' }}>
+                                <div className="row" style={{ padding: 10 }}>
+
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedStartDate}
+                                            placeholder=""
+                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
+                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-search" /> Search
+                                            </button>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div style={{ marginTop: 15 }}>
+                                    {overall == 'pinning-1' && <div>
+                                        <TableOverAllPinningReport reports={overAllData}
+                                            startDate={selectedStartDate}
+                                            endDate={selectedEndDate} />
+                                    </div>}
+
+
+
+
+                                </div>
+                            </TabPane>
                             <TabPane tab={<p className="active-green" style={{ color: '#3d1ecd' }}>Harvest</p>} key="harvest" style={{ background: ' #f7f7f7 !important' }}>
                                 <div className="row" style={{ padding: 10 }}>
 
@@ -440,6 +667,15 @@ const Home = (props) => {
                                             value={selectedStartDate}
                                             placeholder=""
                                             onChange={(e) => handleStartDateChange(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            value={selectedEndDate}
+                                            placeholder=""
+                                            onChange={(e) => handleEndDateChange(e.target.value)}
                                         />
                                     </div>
                                     <div className="col-lg-4">
@@ -465,91 +701,6 @@ const Home = (props) => {
 
                                     {overall == 'harvest-1' && <div>
                                         <TableOverAllReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#0e0606' }}>Spawnrun</p>} key="spawnrun" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                 
-
-
-                                    {overall == 'spawnrun-1' && <div>
-                                        <TableOverAllSRReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#2196f3' }}>Venting</p>} key="venting" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                    {overall == 'venting-1' && <div>
-                                        <TableOverAllVentingReport reports={overAllData}
                                             startDate={selectedStartDate}
                                             endDate={selectedEndDate} />
                                     </div>}
