@@ -2467,3 +2467,10 @@ body{margin:40px;}
   border-color: transparent transparent #FF4532 transparent;
   transform: rotate(180deg);
 }
+
+.table th, .table td{
+  text-align: center;
+}
+.table th:first-child{
+
+}

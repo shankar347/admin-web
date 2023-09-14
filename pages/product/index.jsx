@@ -990,7 +990,7 @@ const Home = (props) => {
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Product Title <span style={{ color: 'red' }}>*</span></label>
+                                    <label>Room Name <span style={{ color: 'red' }}>*</span></label>
                                     <input
                                         className="form-control"
                                         type="text"
