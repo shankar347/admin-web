@@ -5,19 +5,32 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
 
   const [colorId] = useState(0)
 
+  let count = reports && reports.map((c, index) => {
+    let data =
+      (c.H1?.length ? c.H1?.length : 0) +
+      (c.H2?.length ? c.H2?.length : 0) +
+      (c.H3?.length ? c.H3?.length : 0) +
+      (c.H4?.length ? c.H4?.length : 0) +
+      (c.H5?.length ? c.H5?.length : 0) +
+      (c.H6?.length ? c.H6?.length : 0) +
+      (c.H7?.length ? c.H7?.length : 0) +
+      (c.H8?.length ? c.H8?.length : 0) +
+      (c.H9?.length ? c.H9?.length : 0) +
+      (c.H10?.length ? c.H10?.length : 0) +
+      (c.H11?.length ? c.H11?.length : 0) +
+      (c.H12?.length ? c.H12?.length : 0)
+    return data
+  })
 
-  let colors = [
-    "#3d1ecd"
-  ]
-  console.log(reports, "fghfghnjdfjdt")
   return (
     <div className="row mt-5 px-4">
-      <table class="table"  >
+      <table class="table table-bordered "  >
 
         <thead>
           <tr>
             <th rowspan="2">Date</th>
-            <th colspan="11">Harvest Processing Rooms</th>
+            <th colspan="12">Harvest Processing Rooms</th>
+            <th rowspan="2">Room Count</th>
           </tr>
           <tr>
             <th>H1</th>
@@ -36,10 +49,9 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
         </thead>
         {
           reports && reports.map((c, index) => {
-            console.log(c, "hgfvyhfhhhy")
             return (
               <>
-                <tbody key={index}>
+                <tbody key={index} >
                   <tr>
 
                     <td>
@@ -51,7 +63,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                                 <>{c.H11 ? c.H11 && <>{`${(c.H11[0].date)}`}</> : <>{c.H12 ? c.H12 && <>{`${(c.H12[0].date)}`}</> :
                                   <> </>} </>} </>} </>}</>}</>} </>}</>}</>}</>}</>}</>}</td>
                     <td>
-                      {c.H1 ? c.H1.map((a, index) => {
+                      {c.H1 ? c.H1.sort((a, b) => a.date - b.date).map((a, index) => {
                         return (<>
                           <i className="fal fa-home"></i>{`${(a.room_name).replace(/Room No/g, "")}`} {<hr />}
                         </>)
@@ -138,15 +150,60 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                       }
                       ) : <>Nil</>}
                     </td>
+                    <th rowspan="2">
+                      {(c.H1?.length ? c.H1?.length : 0) +
+                        (c.H2?.length ? c.H2?.length : 0) +
+                        (c.H3?.length ? c.H3?.length : 0) +
+                        (c.H4?.length ? c.H4?.length : 0) +
+                        (c.H5?.length ? c.H5?.length : 0) +
+                        (c.H6?.length ? c.H6?.length : 0) +
+                        (c.H7?.length ? c.H7?.length : 0) +
+                        (c.H8?.length ? c.H8?.length : 0) +
+                        (c.H9?.length ? c.H9?.length : 0) +
+                        (c.H10?.length ? c.H10?.length : 0) +
+                        (c.H11?.length ? c.H11?.length : 0) +
+                        (c.H12?.length ? c.H12?.length : 0)}
+                    </th>
+                  </tr>
+
+                  <tr>
+                    <th>Total</th>
+                    <th> {c.H1?.length ? c.H1?.length : 0}</th>
+                    <th> {c.H2?.length ? c.H2?.length : 0}</th>
+                    <th> {c.H3?.length ? c.H3?.length : 0}</th>
+                    <th> {c.H4?.length ? c.H4?.length : 0}</th>
+                    <th> {c.H5?.length ? c.H5?.length : 0}</th>
+                    <th> {c.H6?.length ? c.H6?.length : 0}</th>
+                    <th> {c.H7?.length ? c.H7?.length : 0}</th>
+                    <th> {c.H8?.length ? c.H8?.length : 0}</th>
+                    <th> {c.H9?.length ? c.H9?.length : 0}</th>
+                    <th> {c.H10?.length ? c.H10?.length : 0}</th>
+                    <th> {c.H11?.length ? c.H11?.length : 0}</th>
+                    <th> {c.H12?.length ? c.H12?.length : 0}</th>
                   </tr>
                 </tbody>
 
               </>
             )
           })}
+        {/* <tfoot>
+          <tr>
 
-
+            <th colspan="13">Total Rooms:</th>
+            <th>
+              {reports && reports.map((c, index) => {
+                console.log(c, "xfgbnxgnm ")
+                return (
+                  <>
+              {count}
+              </>
+                )
+              })}
+            </th>
+          </tr>
+        </tfoot> */}
       </table>
+
     </div>
 
   );
