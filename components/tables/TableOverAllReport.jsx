@@ -21,9 +21,13 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
       (c.H12?.length ? c.H12?.length : 0)
     return data
   })
-
+  let total = 0
+  for (var i in count) {
+    total += count[i];
+  }
   return (
     <div className="row mt-5 px-4">
+      {total ? <h3>count:{total}</h3> : <></>}
       <table class="table table-bordered "  >
 
         <thead>
@@ -53,7 +57,6 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
               <>
                 <tbody key={index} >
                   <tr>
-
                     <td>
                       {c.H1 ? c.H1 && <>{`${(c.H1[0].date)}`}</> : <> {c.H2 ? c.H2 && <>{`${(c.H2[0].date)}`}</> :
                         <> {c.H3 ? c.H3 && <>{`${(c.H3[0].date)}`}</> : <> {c.H4 ? c.H4 && <>{`${(c.H4[0].date)}`}</> :
@@ -186,22 +189,15 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
               </>
             )
           })}
-        {/* <tfoot>
+        <tfoot>
           <tr>
 
             <th colspan="13">Total Rooms:</th>
             <th>
-              {reports && reports.map((c, index) => {
-                console.log(c, "xfgbnxgnm ")
-                return (
-                  <>
-              {count}
-              </>
-                )
-              })}
+              {total}
             </th>
           </tr>
-        </tfoot> */}
+        </tfoot>
       </table>
 
     </div>
