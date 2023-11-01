@@ -286,37 +286,45 @@ const Home = (props) => {
 
     const downloadOverAll = async () => {
         setLoader(true);
+        console.log(overall, "overall")
+        // window.print()
         let obj = {
             period: 'all',
             startDate: selectedStartDate,
-            endDate: selectedEndDate
+            endDate: selectedEndDate,
+            isdownload: true
         };
-        if (overall === 'harvest') {
-            obj.stage = 5
-            let res = await ReportRespository.getreports(obj);
-            fileDownload(res, 'Overall report.pdf');
-        };
-        if (overall === 'pinning') {
-            obj.stage = 4
-            let activerespdf = await ReportRespository.getreports(obj);
-            fileDownload(activerespdf, 'Main Category report.pdf');
-        };
-        if (overall === 'venting') {
-            obj.stage = 3
-            let activerespdf = await ReportRespository.getreports(obj);
-            fileDownload(activerespdf, 'Test Category report.pdf');
-        };
-        if (overall === 'caseRun') {
-            obj.stage = 2
-            let activerespdf = await ReportRespository.getreports(obj);
-            fileDownload(activerespdf, 'Overall Main Category report.pdf');
-        };
-        if (overall === 'spawnRun') {
-            obj.stage = 1
-            let activerespdf = await ReportRespository.getreports(obj);
-            fileDownload(activerespdf, 'Overall Main Category report.pdf');
-        };
+        console.log(overall, "cbbzdfgs")
 
+        let res = []
+        if (overall === 'harvest-1') {
+            obj.stage = 5
+            res = await ReportRespository.downloadRoomreports(obj);
+            if (res) {
+                fileDownload(res, 'OverallReport.xlsx');
+            }
+        };
+        if (overall === 'pinning-1') {
+            obj.stage = 4
+            res = await ReportRespository.downloadRoomreports(obj);
+            fileDownload(res, 'Overall-pinning-Report.xlsx');
+        };
+        if (overall === 'venting-1') {
+            obj.stage = 3
+            res = await ReportRespository.downloadRoomreports(obj);
+            fileDownload(res, 'Overall-venting-Report.xlsx');
+        };
+        if (overall === 'caserun-1') {
+            obj.stage = 2
+            res = await ReportRespository.downloadRoomreports(obj);
+            fileDownload(res, 'Overall-caseRun-Report.xlsx');
+        };
+        if (overall === 'spawnrun-1') {
+            obj.stage = 1
+            res = await ReportRespository.downloadRoomreports(obj);
+            fileDownload(res, 'Overall-spawnRun-Report.xlsx');
+        };
+        // createResult(res.data)
         setLoader(false);
     }
 
@@ -385,9 +393,9 @@ const Home = (props) => {
                                             <button onClick={searchOverAll} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-search" /> Search
                                             </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                            {/* <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
                                                 <i className="fas fa-file-pdf" /> Download
-                                            </button>
+                                            </button> */}
 
                                         </div>
                                     </div>

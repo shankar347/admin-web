@@ -1,73 +1,93 @@
 import React, { useState } from 'react';
 import Moment from "moment"
-const TableOverAllVentingReport = ({ reports }) => {
+const TableOverAllReport = ({ reports, startDate, endDate }) => {
 
 
   const [colorId] = useState(0)
 
+  let count = reports && reports.map((c, index) => {
+    let data =
+      (c.V1?.length ? c.V1?.length : 0) +
+      (c.V2?.length ? c.V2?.length : 0)
 
-  let colors = [
-    "#3d1ecd"
-  ]
-  console.log(reports, "gvhhghghgghh")
+    return data
+  })
+  let total = 0
+  for (var i in count) {
+    total += count[i];
+  }
   return (
     <div className="row mt-5 px-4">
-      <table class="table"  >{
-        reports && reports.map((c, index) => {
-          return (
-            <>
-              <thead key={index}>
-                <tr>
+      {total ? <h3>count:{total}</h3> : <></>}
+      <table class="table table-bordered "  >
 
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col">Venting Stage</th>
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} colSpan='2' scope="col">Room Number</th>
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col"> Room Count</th>
+        {total ? <thead>
+          <tr>
+            <th rowspan="2">Date</th>
+            <th colspan="2">Venting Processing Rooms</th>
+            <th rowspan="2">Room Count</th>
+          </tr>
+          <tr>
+            <th>V1</th>
+            <th>V2</th>
 
-                </tr>
-              </thead>
-              <tbody key={index}>
-                <tr>
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col">V1</th>
-                  <td class='border-1'>{c.v1.length && c.v1.map((c,ind) => <>
-                  {`${Moment(c.V1).format('DD-MM-YYYY')}`}
-                  {console.log(Object.values(ind)[Object.values(ind).length - 1],"hkhjkvfhjkch")}
-                  {!ind[ind.length - 1] &&<hr />}</>)}</td>
-                  <td>{c.v1.length ? c.v1.map(({ room_name }) => <><i className="fal fa-home"></i>{`${(room_name).replace(/Room No/g, "")}`} {<hr />}
-                  </>) : <>Nil</>}</td>
+          </tr>
+        </thead> : <></>}
+        {
+          reports && reports.map((c, index) => {
+            let date = c.V1 ? c.V1[0].date : c.V2 ? c.V2[0].date : ''
+            return (
+              <>
+                <tbody key={index} >
+                  <tr>
+                    <td>
+                      {c.V1 ? c.V1 && <>{`${(c.V1[0].date)}`}</> : <> {c.V2 ? c.V2 && <>{`${(c.V2[0].date)}`}</> :
+                        <> </>}</>} </td>
+                    <td>
+                      {c.V1 ? c.V1.sort((a, b) => a.date - b.date).map((a, index) => {
+                        return (<>
+                          <i className="fal fa-home"></i>{`${(a.room_name).replace(/Room No/g, "")}`} {<hr />}
+                        </>)
+                      }) : <>Nil</>} </td>
 
-                  <td >{c.v1 && c.v1.length}</td>
-                </tr>
+                    <td>
+                      {c.V2 ? c.V2.map((a, index) => {
+                        return (<>
+                          <i className="fal fa-home"></i>{`${(a.room_name).replace(/Room No/g, "")}`} {<hr />}
+                        </>)
+                      }) : <>Nil</>} </td>
 
+                    <th rowspan="2">
+                      {(c.V1?.length ? c.V1?.length : 0) +
+                        (c.V2?.length ? c.V2?.length : 0)}
+                    </th>
+                  </tr>
 
+                  <tr>
+                    <th>Total</th>
+                    <th> {c.V1?.length ? c.V1?.length : 0}</th>
+                    <th> {c.V2?.length ? c.V2?.length : 0}</th>
+                  </tr>
+                </tbody>
 
+              </>
+            )
+          })}
+        {total ? <tfoot>
+          <tr>
 
-              </tbody>
-              <tbody key={index}>
-                <tr>
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col">V2</th>
-                  <td class='border-0'>{c.v2.length && c.v2.map(({ V2 }) => <>{`${Moment(V2).format('DD-MM-YYYY')}`} <hr /></>)}</td>
-                  <td>{c.v2.length ? c.v2.map(({ room_name }) => <><i className="fal fa-home"></i>{`${(room_name).replace(/Room No/g, "")}`} <hr />
-                  </>) : <>Nil</>}</td>
-                  <td>{c.v2.length}</td>
-                </tr>
-              </tbody>
-              <tbody key={index}>
-                <tr>
-                  <th style={{ borderColor: colors[colorId], color: colors[colorId], width: 125 }} scope="col"></th>
-                  <td>Total Rooms:</td>
-                  <td> {c.totalCount}</td>
-                </tr>
-              </tbody>
-
-            </>)
-        })}
-
-
+            <th colspan="13">Total Rooms:</th>
+            <th>
+              {total}
+            </th>
+          </tr>
+        </tfoot> : <></>}
       </table>
+
     </div>
 
   );
 };
 
 
-export default TableOverAllVentingReport;
+export default TableOverAllReport;
