@@ -1496,7 +1496,7 @@ const SpawnRun = (props) => {
                 "venting": venting,
                 "pinning": pinning,
                 "harvest": harvest,
-                "count":count
+                "count": count
             };
             try {
                 if (selectedCatId) {
