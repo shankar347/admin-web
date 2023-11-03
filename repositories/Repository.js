@@ -2,8 +2,8 @@ import axios from 'axios';
 // export const baseurl = "https://medadmin.questioncloud.in/api";
 export const baseurl = "https://britishagro.com/api/api";
 
-//export const baseurl = "http://192.168.1.170:5003/api";//JP
- //export const baseurl = "http://192.168.1.165:4567/api/v1";
+//export const baseurl = "http://192.168.1.148:5003/api";
+//export const baseurl = "http://192.168.1.165:4567/api/v1";
 
 //export const baseurl = "http://localhost:5003/api";
 
