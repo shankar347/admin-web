@@ -37,7 +37,7 @@ const Home = (props) => {
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
     const [StartDate, setStartDate] = useState(Moment().format('YYYY-MM-DD'));
-    const [endDate, setEndDate] =  useState(Moment().format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(Moment().format('YYYY-MM-DD'));
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
     const [unitArray, setUnitArray] = useState([]);
@@ -50,8 +50,8 @@ const Home = (props) => {
     const [search, setSearch] = useState('');
     const [isActive, setActive] = useState(false);
     const [result, setResult] = useState('');
-    const [minDays,setMinDays]= useState('');
-    const [maxDays,setMaxDays]= useState('');
+    const [minDays, setMinDays] = useState('');
+    const [maxDays, setMaxDays] = useState('');
     const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
 
     useEffect(() => {
@@ -67,7 +67,6 @@ const Home = (props) => {
         let ctr = {};
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-
         dispatch(getAllStage(ctr));
         dispatch(getInactiveStage(ctr));
         getCategory()
@@ -80,8 +79,6 @@ const Home = (props) => {
     const toggleClass = () => {
         setActive(!isActive);
     };
-
-
 
     const addModalOnClick = async () => {
         setLoader(true);
@@ -121,7 +118,6 @@ const Home = (props) => {
     }
 
     const editModalOnClick = async (data) => {
-
         setLoader(true);
         setName(data.stage_name);
         setCode(data.stage_code);
@@ -139,29 +135,27 @@ const Home = (props) => {
     const closeModalOnClick = () => {
         setName('');
         setCode('');
-
         setSelectedCatId('');
         setErrors({});
         setShowModal(false);
     }
-
 
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
 
     const saveData = async (selectedCatId) => {
-
         if (name) {
             setLoader(true);
             let saveObj = {
-                
                 "stage_name": name,
                 "stage_slug": slug,
                 "stage_code": code,
                 "start_date": StartDate,
                 "end_date": endDate,
-                "stage_pos": position
+                "stage_pos": position,
+                "min_days" : minDays,
+                "max_days" : maxDays
             };
             try {
                 if (selectedCatId) {
@@ -270,15 +264,15 @@ const Home = (props) => {
         let ctr = {};
         ctr._start = 0;
         ctr._limit = 100;
-       
+
         let Unit = await UnitRepository.getUnit(ctr);
         if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
             setUnitArray(Unit.data.rows)
         }
-      
+
     };
 
-   
+
 
     const onSelectAll = (value) => {
         let array = [];
@@ -482,8 +476,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                                </div>
-                                <div className="col-md-6">
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Stage Code <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -499,8 +493,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                                </div>
-                                <div className="col-md-6">
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Minimum Days<span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -516,8 +510,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                                </div>
-                                <div className="col-md-6">
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Maximum Date<span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -533,8 +527,8 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                                </div>
-                                {/* <div className="col-md-6">
+                            </div>
+                            {/* <div className="col-md-6">
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Position <span style={{ color: 'red' }}>*</span></label>

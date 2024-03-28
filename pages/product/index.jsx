@@ -137,7 +137,7 @@ const Home = (props) => {
         { _id: 131, name: 'P7', pid: 4 },
         { _id: 132, name: 'P8', pid: 4 },
         { _id: 133, name: 'P9', pid: 4 },
-        { _id: 134, name: 'P10', pid: 4 },
+        // { _id: 134, name: 'P10', pid: 4 },
         { _id: 135, name: 'H1', pid: 5 },
         { _id: 136, name: 'H2', pid: 5 },
         { _id: 137, name: 'H3', pid: 5 },
@@ -303,6 +303,7 @@ const Home = (props) => {
                                     SR12: addDate >= 3 ? Moment(date, "DD-MM-YYYY").add(addDate == 3 ? 1 : addDate == 4 ? 2 : addDate == 5 ? 3 : addDate == 6 ? 4 : addDate == 7 ? 5 : addDate == 8 ? 6 : addDate == 9 ? 7 : addDate == 10 ? 8 : addDate == 11 ? 9 : addDate == 12 ? 10 : addDate == 13 ? 11 : addDate == 14 ? 12 : 13, 'days').format('YYYY-MM-DD') : Moment(m.SR12).format('YYYY-MM-DD'),
                                     SR13: addDate >= 2 ? Moment(date, "DD-MM-YYYY").add(addDate == 2 ? 1 : addDate == 3 ? 2 : addDate == 4 ? 3 : addDate == 5 ? 4 : addDate == 6 ? 5 : addDate == 7 ? 6 : addDate == 8 ? 7 : addDate == 9 ? 8 : addDate == 10 ? 9 : addDate == 11 ? 10 : addDate == 12 ? 11 : addDate == 13 ? 12 : addDate == 14 ? 13 : 14, 'days').format('YYYY-MM-DD') : Moment(m.SR13).format('YYYY-MM-DD'),
                                     SR14: addDate >= 1 ? Moment(date, "DD-MM-YYYY").add(addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : 15, 'days').format('YYYY-MM-DD') : Moment(m.SR14).format('YYYY-MM-DD'),
+                                    SR15: addDate >= 0 ? Moment(date, "DD-MM-YYYY").add(addDate == 0 ? 0 : addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : addDate == 15 ? 15 : 16, 'days').format('YYYY-MM-DD') : Moment(m.SR15).format('YYYY-MM-DD'),
                                 })
                         }) :
                             flow_1 = {
@@ -324,6 +325,7 @@ const Home = (props) => {
                                 SR12: addDate >= 3 ? Moment(date, "DD-MM-YYYY").add(addDate == 3 ? 1 : addDate == 4 ? 2 : addDate == 5 ? 3 : addDate == 6 ? 4 : addDate == 7 ? 5 : addDate == 8 ? 6 : addDate == 9 ? 7 : addDate == 10 ? 8 : addDate == 11 ? 9 : addDate == 12 ? 10 : addDate == 13 ? 11 : addDate == 14 ? 12 : 13, 'days').format('YYYY-MM-DD') : null,
                                 SR13: addDate >= 2 ? Moment(date, "DD-MM-YYYY").add(addDate == 2 ? 1 : addDate == 3 ? 2 : addDate == 4 ? 3 : addDate == 5 ? 4 : addDate == 6 ? 5 : addDate == 7 ? 6 : addDate == 8 ? 7 : addDate == 9 ? 8 : addDate == 10 ? 9 : addDate == 11 ? 10 : addDate == 12 ? 11 : addDate == 13 ? 12 : addDate == 14 ? 13 : 14, 'days').format('YYYY-MM-DD') : null,
                                 SR14: addDate >= 1 ? Moment(date, "DD-MM-YYYY").add(addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : 15, 'days').format('YYYY-MM-DD') : null,
+                                SR15: addDate >= 0 ? Moment(date, "DD-MM-YYYY").add(addDate == 0 ? 0 : addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : addDate == 15 ? 15 : 16, 'days').format('YYYY-MM-DD') : Moment(m.SR15).format('YYYY-MM-DD'),
                             }
                     }
 
@@ -413,6 +415,7 @@ const Home = (props) => {
                                     SR12: Moment(m.SR12).format('YYYY-MM-DD'),
                                     SR13: Moment(m.SR13).format('YYYY-MM-DD'),
                                     SR14: Moment(m.SR14).format('YYYY-MM-DD'),
+                                    SR15: Moment(m.SR15).format('YYYY-MM-DD'),
                                 }
                             )
                         })
@@ -505,6 +508,7 @@ const Home = (props) => {
                                     SR12: Moment(m.SR12).format('YYYY-MM-DD'),
                                     SR13: Moment(m.SR13).format('YYYY-MM-DD'),
                                     SR14: Moment(m.SR14).format('YYYY-MM-DD'),
+                                    SR15: Moment(m.SR15).format('YYYY-MM-DD'),
                                 }
                             )
                         })
@@ -602,6 +606,7 @@ const Home = (props) => {
                                     SR12: Moment(m.SR12).format('YYYY-MM-DD'),
                                     SR13: Moment(m.SR13).format('YYYY-MM-DD'),
                                     SR14: Moment(m.SR14).format('YYYY-MM-DD'),
+                                    SR15: Moment(m.SR15).format('YYYY-MM-DD'),
                                 }
                             )
                         })
@@ -704,6 +709,7 @@ const Home = (props) => {
                                     SR12: Moment(m.SR12).format('YYYY-MM-DD'),
                                     SR13: Moment(m.SR13).format('YYYY-MM-DD'),
                                     SR14: Moment(m.SR14).format('YYYY-MM-DD'),
+                                    SR15: Moment(m.SR15).format('YYYY-MM-DD'),
                                 }
                             )
                         })
@@ -814,6 +820,7 @@ const Home = (props) => {
                         SR12: addDate >= 3 ? Moment(date, "DD-MM-YYYY").add(addDate == 3 ? 1 : addDate == 4 ? 2 : addDate == 5 ? 3 : addDate == 6 ? 4 : addDate == 7 ? 5 : addDate == 8 ? 6 : addDate == 9 ? 7 : addDate == 10 ? 8 : addDate == 11 ? 9 : addDate == 12 ? 10 : addDate == 13 ? 11 : addDate == 14 ? 12 : 13, 'days').format('YYYY-MM-DD') : null,
                         SR13: addDate >= 2 ? Moment(date, "DD-MM-YYYY").add(addDate == 2 ? 1 : addDate == 3 ? 2 : addDate == 4 ? 3 : addDate == 5 ? 4 : addDate == 6 ? 5 : addDate == 7 ? 6 : addDate == 8 ? 7 : addDate == 9 ? 8 : addDate == 10 ? 9 : addDate == 11 ? 10 : addDate == 12 ? 11 : addDate == 13 ? 12 : addDate == 14 ? 13 : 14, 'days').format('YYYY-MM-DD') : null,
                         SR14: addDate >= 1 ? Moment(date, "DD-MM-YYYY").add(addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : 15, 'days').format('YYYY-MM-DD') : null,
+                        SR15: addDate >= 0 ? Moment(date, "DD-MM-YYYY").add(addDate == 0 ? 0 : addDate == 1 ? 1 : addDate == 2 ? 2 : addDate == 3 ? 3 : addDate == 4 ? 4 : addDate == 5 ? 5 : addDate == 6 ? 6 : addDate == 7 ? 7 : addDate == 8 ? 8 : addDate == 9 ? 9 : addDate == 10 ? 10 : addDate == 11 ? 11 : addDate == 12 ? 12 : addDate == 13 ? 13 : addDate == 14 ? 14 : addDate == 15 ? 15 : 16, 'days').format('YYYY-MM-DD') : null,
                     }
 
                     flow_2 = {
@@ -1500,7 +1507,6 @@ const Home = (props) => {
                                         <Option value="">--Room--</Option>
                                         {roomArray.filter(c => c.room_id !== 0 && c.room_id != alreadyExisting.room_id)
                                             .map(m => {
-                                                console.log(m.room_id, alreadyExisting, "xcbzcvbnxfgn")
                                                 return (
                                                     <Option value={m.room_id}>{m.room_name}</Option>
                                                 )
