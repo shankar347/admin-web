@@ -1101,7 +1101,8 @@ const Home = (props) => {
                 "caseRun": caseRun,
                 "venting": venting,
                 "pinning": pinning,
-                "harvest": harvest
+                "harvest": harvest,
+                "flow" : selectFlow ? selectFlow : null
             }
             try {
                 if (selectedCatId) {
