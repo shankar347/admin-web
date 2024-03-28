@@ -363,7 +363,7 @@ const Home = (props) => {
                                                 <Option value="pinning">Pinning</Option>
                                                 <Option value="venting">Venting</Option>
                                                 <Option value="caseRun">CaseRun</Option>
-                                                {/* <Option value="spawnRun">SpawnRun</Option> */}
+                                                <Option value="spawnRun">SpawnRun</Option>
                                             </Select>
                                         </div>
                                     </div>
@@ -462,7 +462,7 @@ const Home = (props) => {
 
                                 </div>
                             </TabPane>
-                            {/* <TabPane tab={<p className="active-green" style={{ color: '#0e0606' }}>Spawn-Run</p>} key="spawnrun" style={{ background: ' #f7f7f7 !important' }}>
+                            <TabPane tab={<p className="active-green" style={{ color: '#0e0606' }}>Spawn-Run</p>} key="spawnrun" style={{ background: ' #f7f7f7 !important' }}>
                                 <div className="row" style={{ padding: 10 }}>
 
                                     <div className="col-lg-4">
@@ -514,7 +514,7 @@ const Home = (props) => {
 
 
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
                             <TabPane tab={<p className="active-green" style={{ color: '#f39521' }}>Case-Run</p>} key="caserun" style={{ background: ' #f7f7f7 !important' }}>
                                 <div className="row" style={{ padding: 10 }}>
 
