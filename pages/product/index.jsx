@@ -192,6 +192,7 @@ const Home = (props) => {
         setUnitId(data.unit_id)
         setStageId(data.stage_id)
         setRoomId(data.room_id)
+        setSelectFlow(data.flow ? data.flow : null)
         setEndDate(Moment(data.end_date).format('YYYY-MM-DD'))
         setstartDate(Moment(data.start_date).format('YYYY-MM-DD'))
         setLoader(false);
