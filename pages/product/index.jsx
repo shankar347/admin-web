@@ -118,7 +118,7 @@ const Home = (props) => {
         { _id: 113, name: 'SR12', pid: 1 },
         { _id: 114, name: 'SR13', pid: 1 },
         { _id: 115, name: 'SR14', pid: 1 },
-
+        { _id: 147, name: 'SR15', pid: 1 },
         { _id: 116, name: 'CR0', pid: 2 },
         { _id: 117, name: 'CR1', pid: 2 },
         { _id: 118, name: 'CR2', pid: 2 },
@@ -126,10 +126,8 @@ const Home = (props) => {
         { _id: 120, name: 'CR4', pid: 2 },
         { _id: 121, name: 'CR5', pid: 2 },
         { _id: 122, name: 'CR6', pid: 2 },
-
         { _id: 123, name: 'V1', pid: 3 },
         { _id: 124, name: 'V2', pid: 3 },
-
         { _id: 125, name: 'P1', pid: 4 },
         { _id: 126, name: 'P2', pid: 4 },
         { _id: 127, name: 'P3', pid: 4 },
@@ -140,7 +138,6 @@ const Home = (props) => {
         { _id: 132, name: 'P8', pid: 4 },
         { _id: 133, name: 'P9', pid: 4 },
         { _id: 134, name: 'P10', pid: 4 },
-
         { _id: 135, name: 'H1', pid: 5 },
         { _id: 136, name: 'H2', pid: 5 },
         { _id: 137, name: 'H3', pid: 5 },
@@ -153,7 +150,6 @@ const Home = (props) => {
         { _id: 144, name: 'H10', pid: 5 },
         { _id: 145, name: 'H11', pid: 5 },
         { _id: 146, name: 'H12', pid: 5 }
-
     ]
 
     const addModalOnClick = async () => {
@@ -229,8 +225,6 @@ const Home = (props) => {
         ctr.unitId = id
         let Room = await RoomRepository.getRoom(ctr);
         if (Room && Room.data && Room.data && Room.data.rows.length > 0) {
-            console.log(Room?.data.data.spawnrun, "Cvhxfghd")
-
             if (startDate && Room?.data?.data?.spawnrun) {
                 let data = Room?.data?.data?.spawnrun
                 for (let i = 0; i <= 14; i++) {
@@ -245,7 +239,6 @@ const Home = (props) => {
                             console.log(obj, "bhmvbhmcg1")
                             return (obj)
                         })
-
                 }
                 setRoomArray(Room.data.rows);
             } else {
@@ -268,8 +261,8 @@ const Home = (props) => {
         errorObj['stateId'] = '';
         setErrors(errorObj);
     }
-    const flowOnChange = async (value, id) => {
 
+    const flowOnChange = async (value, id) => {
         let errorObj = { ...errors };
         setSelectFlow(value);
         setLoader(true)
@@ -316,7 +309,6 @@ const Home = (props) => {
                                 unit_id: unitId,
                                 stage_id: 1,
                                 room_id: roomId,
-
                                 SR0: addDate == 15 ? Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD') : null,
                                 SR1: addDate >= 14 ? Moment(date, "DD-MM-YYYY").add(addDate == 14 ? 1 : 2, 'days').format('YYYY-MM-DD') : null,
                                 SR2: addDate >= 13 ? Moment(date, "DD-MM-YYYY").add(addDate == 13 ? 1 : addDate == 14 ? 2 : 3, 'days').format('YYYY-MM-DD') : null,
@@ -1556,7 +1548,6 @@ const Home = (props) => {
                                     <div className="form-group">
                                         <Select
                                             onChange={event => flowOnChange(event, stageId)}
-
                                             placeholder="Select flow Name"
                                             className="ps-ant-dropdown"
                                             style={{ width: '100%' }}
