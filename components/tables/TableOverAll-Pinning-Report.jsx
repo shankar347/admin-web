@@ -15,8 +15,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
       (c.P6?.length ? c.P6?.length : 0) +
       (c.P7?.length ? c.P7?.length : 0) +
       (c.P8?.length ? c.P8?.length : 0) +
-      (c.P9?.length ? c.P9?.length : 0) +
-      (c.P10?.length ? c.P10?.length : 0)
+      (c.P9?.length ? c.P9?.length : 0)
 
     return data
   })
@@ -32,7 +31,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
         <thead>
           <tr>
             <th rowspan="2">Date</th>
-            <th colspan="10">Pinning Processing Rooms</th>
+            <th colspan="9">Pinning Processing Rooms</th>
             <th rowspan="2">Room Count</th>
           </tr>
           <tr>
@@ -45,7 +44,6 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
             <th>P7</th>
             <th>P8</th>
             <th>P9</th>
-            <th>P10</th>
           </tr>
         </thead>
         {
@@ -53,7 +51,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
             let d = c
             let date = d.P1 ? d.P1[0].date : d.P2 ? d.P2[0].date : d.P3 ? d.P3[0].date : d.P4 ? d.P4[0].date :
               d.P5 ? d.P5[0].date : d.P6 ? d.P6[0].date : d.P7 ? d.P7[0].date : d.P8 ? d.P8[0].date :
-                d.P9 ? d.P9[0].date : d.P10 ? d.P10[0].date : ''
+                d.P9 ? d.P9[0].date: ''
             return (
               <>
                 <tbody key={index} >
@@ -122,14 +120,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                         </>)
                       }) : <>Nil</>}  </td>
 
-                    <td>
-                      {c.P10?.length ? c.P10.map((a, index) => {
-                        return (<>
-                          <i className="fal fa-home"></i>{`${(a.room_name).replace(/Room No/g, "")}`} {<hr />}
-                        </>)
-                      }
-                      ) : <>Nil</>}  </td>
-
+  
                     <th rowspan="2">
                       {(c.P1?.length ? c.P1?.length : 0) +
                         (c.P2?.length ? c.P2?.length : 0) +
@@ -139,8 +130,8 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                         (c.P6?.length ? c.P6?.length : 0) +
                         (c.P7?.length ? c.P7?.length : 0) +
                         (c.P8?.length ? c.P8?.length : 0) +
-                        (c.P9?.length ? c.P9?.length : 0) +
-                        (c.P10?.length ? c.P10?.length : 0)}
+                        (c.P9?.length ? c.P9?.length : 0)
+                      }
                     </th>
                   </tr>
 
@@ -155,7 +146,6 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                     <th> {c.P7?.length ? c.P7?.length : 0}</th>
                     <th> {c.P8?.length ? c.P8?.length : 0}</th>
                     <th> {c.P9?.length ? c.P9?.length : 0}</th>
-                    <th> {c.P10?.length ? c.P10?.length : 0}</th>
                   </tr>
                 </tbody>
 
@@ -164,7 +154,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
           })}
         <tfoot>
           <tr>
-            <th colspan="13">Total Rooms:</th>
+            <th colspan="10">Total Rooms:</th>
             <th>
               {total}
             </th>
