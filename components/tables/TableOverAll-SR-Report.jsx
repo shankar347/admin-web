@@ -4,7 +4,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
 
 
   const [colorId] = useState(0)
-
+console.log( reports, 'reports')
   let count = reports && reports.map((c, index) => {
     let data =
       (c.SR0?.length ? c.SR0?.length : 0) +
@@ -21,7 +21,8 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
       (c.SR11?.length ? c.SR11?.length : 0) +
       (c.SR812?.length ? c.SR12?.length : 0) +
       (c.SR13?.length ? c.SR13?.length : 0) +
-      (c.SR14?.length ? c.SR14?.length : 0)
+      (c.SR14?.length ? c.SR14?.length : 0) +
+      (c.SR15?.length ? c.SR15?.length : 0)
 
     return data
   })
@@ -37,7 +38,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
         <thead>
           <tr>
             <th rowspan="2">Date</th>
-            <th colspan="15">SpawnRun processing Rooms</th>
+            <th colspan="16">SpawnRun processing Rooms</th>
             <th rowspan="2">Room Count</th>
           </tr>
           <tr>
@@ -56,15 +57,17 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
             <th>SR12</th>
             <th>SR13</th>
             <th>SR14</th>
+            <th>SR15</th>
           </tr>
         </thead>
         {
           reports && reports.map((c, index) => {
+            console.log( c, "frfrfr")
             let d = c
             let date = d.SR0 ? d.SR0[0].date : d.SR1 ? d.SR1[0].date : d.SR2 ? d.SR2[0].date : d.SR3 ? d.SR3[0].date :
               d.SR4 ? d.SR4[0].date : d.SR5 ? d.SR5[0].date : d.SR6 ? d.SR6[0].date : d.SR7 ? d.SR7[0].date :
                 d.SR8 ? d.SR8[0].date : d.SR9 ? d.SR9[0].date : d.SR10 ? d.SR10[0].date : d.SR11 ? d.SR11[0].date :
-                  d.SR12 ? d.SR12[0].date : d.SR13 ? d.SR13[0].date : d.SR14 ? d.SR14[0].date : ''
+                  d.SR12 ? d.SR12[0].date : d.SR13 ? d.SR13[0].date : d.SR14 ? d.SR14[0].date : d.SR15 ? d.SR15[0].date :''
             return (
               <>
                 <tbody key={index} >
@@ -168,6 +171,13 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                         </>)
                       }
                       ) : <>Nil</>}  </td>
+                    <td>
+                      {c.SR15?.length ? c.SR15.map((a, index) => {
+                        return (<>
+                          <i className="fal fa-home"></i>{`${(a.room_name).replace(/Room No/g, "")}`} {<hr />}
+                        </>)
+                      }
+                      ) : <>Nil</>}  </td>
                     <th rowspan="2">
                       {(c.SR0?.length ? c.SR0?.length : 0) +
                         (c.SR1?.length ? c.SR1?.length : 0) +
@@ -183,12 +193,14 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                         (c.SR11?.length ? c.SR11?.length : 0) +
                         (c.SR12?.length ? c.SR12?.length : 0) +
                         (c.SR13?.length ? c.SR13?.length : 0) +
-                        (c.SR14?.length ? c.SR14?.length : 0)}
+                        (c.SR14?.length ? c.SR14?.length : 0) +
+                        (c.SR15?.length ? c.SR15?.length : 0)
+                        }
                     </th>
                   </tr>
-
                   <tr>
                     <th>Total</th>
+                    <th> {c.SR0?.length ? c.SR0?.length : 0}</th>
                     <th> {c.SR1?.length ? c.SR1?.length : 0}</th>
                     <th> {c.SR2?.length ? c.SR2?.length : 0}</th>
                     <th> {c.SR3?.length ? c.SR3?.length : 0}</th>
@@ -203,6 +215,7 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
                     <th> {c.SR12?.length ? c.SR12?.length : 0}</th>
                     <th> {c.SR13?.length ? c.SR13?.length : 0}</th>
                     <th> {c.SR14?.length ? c.SR14?.length : 0}</th>
+                    <th> {c.SR15?.length ? c.SR15?.length : 0}</th>
                   </tr>
                 </tbody>
 
@@ -211,7 +224,6 @@ const TableOverAllReport = ({ reports, startDate, endDate }) => {
           })}
         <tfoot>
           <tr>
-
             <th colspan="13">Total Rooms:</th>
             <th>
               {total}

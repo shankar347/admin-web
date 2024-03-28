@@ -31,7 +31,7 @@ const SpawnRun = (props) => {
             if (id == "SR0") {
                 endDate = 15
                 let date = Moment(m.SR0).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: null, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: null, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -75,7 +75,7 @@ const SpawnRun = (props) => {
             if (id == "SR1") {
                 endDate = 14
                 let date = Moment(m.SR1).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: null, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -119,7 +119,7 @@ const SpawnRun = (props) => {
             if (id == "SR2") {
                 endDate = 13
                 let date = Moment(m.SR2).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: null, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -163,7 +163,7 @@ const SpawnRun = (props) => {
             if (id == "SR3") {
                 endDate = 12
                 let date = Moment(m.SR3).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: null, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -207,7 +207,7 @@ const SpawnRun = (props) => {
             if (id == "SR4") {
                 endDate = 11
                 let date = Moment(m.SR4).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: null, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -251,7 +251,7 @@ const SpawnRun = (props) => {
             if (id == "SR5") {
                 endDate = 10
                 let date = Moment(m.SR5).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: null, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -295,7 +295,7 @@ const SpawnRun = (props) => {
             if (id == "SR6") {
                 endDate = 9
                 let date = Moment(m.SR6).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: null, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -339,7 +339,7 @@ const SpawnRun = (props) => {
             if (id == "SR7") {
                 endDate = 8
                 let date = Moment(m.SR7).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: null, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -383,7 +383,7 @@ const SpawnRun = (props) => {
             if (id == "SR8") {
                 endDate = 7
                 let date = Moment(m.SR8).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: null, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -427,7 +427,7 @@ const SpawnRun = (props) => {
             if (id == "SR9") {
                 endDate = 6
                 let date = Moment(m.SR9).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: null, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -472,7 +472,7 @@ const SpawnRun = (props) => {
                 endDate = 5
                 let date = Moment(m.SR10).format('DD-MM-YYYY')
 
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: null, SR11: null, SR12: null, SR13: null, SR14: null, SR15 : null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -516,7 +516,7 @@ const SpawnRun = (props) => {
             if (id == "SR11") {
                 endDate = 4
                 let date = Moment(m.SR11).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: null, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: null, SR12: null, SR13: null, SR14: null, SR15: null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -560,7 +560,7 @@ const SpawnRun = (props) => {
             if (id == "SR12") {
                 endDate = 3
                 let date = Moment(m.SR12).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: null, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: null, SR13: null, SR14: null, SR15: null  }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -604,7 +604,7 @@ const SpawnRun = (props) => {
             if (id == "SR13") {
                 endDate = 2
                 let date = Moment(m.SR13).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: null, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: null, SR14: null, SR15: null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -648,7 +648,51 @@ const SpawnRun = (props) => {
             if (id == "SR14") {
                 endDate = 1
                 let date = Moment(m.SR14).format('DD-MM-YYYY')
-                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: m.SR13, SR14: null }
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: m.SR13, SR14: null, SR15 : null }
+                caseRunobj = {
+                    CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
+                    CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
+                    CR2: Moment(date, "DD-MM-YYYY").add(2, 'days').format('YYYY-MM-DD'),
+                    CR3: Moment(date, "DD-MM-YYYY").add(3, 'days').format('YYYY-MM-DD'),
+                    CR4: Moment(date, "DD-MM-YYYY").add(4, 'days').format('YYYY-MM-DD'),
+                    CR5: Moment(date, "DD-MM-YYYY").add(5, 'days').format('YYYY-MM-DD'),
+                    CR6: Moment(date, "DD-MM-YYYY").add(6, 'days').format('YYYY-MM-DD'),
+                }
+                ventingobj = {
+                    V1: Moment(date, "DD-MM-YYYY").add(7, 'days').format('YYYY-MM-DD'),
+                    V2: Moment(date, "DD-MM-YYYY").add(8, 'days').format('YYYY-MM-DD'),
+                }
+                pinningobj = {
+                    P1: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                    P2: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                    P3: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                    P4: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                    P5: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                    P6: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                    P7: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                    P8: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                    P9: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                    P10: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                }
+                harvestobj = {
+                    H1: Moment(date, "DD-MM-YYYY").add(9, 'days').format('YYYY-MM-DD'),
+                    H2: Moment(date, "DD-MM-YYYY").add(10, 'days').format('YYYY-MM-DD'),
+                    H3: Moment(date, "DD-MM-YYYY").add(11, 'days').format('YYYY-MM-DD'),
+                    H4: Moment(date, "DD-MM-YYYY").add(12, 'days').format('YYYY-MM-DD'),
+                    H5: Moment(date, "DD-MM-YYYY").add(13, 'days').format('YYYY-MM-DD'),
+                    H6: Moment(date, "DD-MM-YYYY").add(14, 'days').format('YYYY-MM-DD'),
+                    H7: Moment(date, "DD-MM-YYYY").add(15, 'days').format('YYYY-MM-DD'),
+                    H8: Moment(date, "DD-MM-YYYY").add(16, 'days').format('YYYY-MM-DD'),
+                    H9: Moment(date, "DD-MM-YYYY").add(17, 'days').format('YYYY-MM-DD'),
+                    H10: Moment(date, "DD-MM-YYYY").add(18, 'days').format('YYYY-MM-DD'),
+                    H11: Moment(date, "DD-MM-YYYY").add(19, 'days').format('YYYY-MM-DD'),
+                    H12: Moment(date, "DD-MM-YYYY").add(20, 'days').format('YYYY-MM-DD'),
+                }
+            }
+            if (id == "SR15") {
+                endDate = 1
+                let date = Moment(m.SR15).format('DD-MM-YYYY')
+                spawnrunobj = { SR0: m.SR0, SR1: m.SR1, SR2: m.SR2, SR3: m.SR3, SR4: m.SR4, SR5: m.SR5, SR6: m.SR6, SR7: m.SR7, SR8: m.SR8, SR9: m.SR9, SR10: m.SR10, SR11: m.SR11, SR12: m.SR12, SR13: m.SR13, SR14: null, SR15 : null }
                 caseRunobj = {
                     CR0: Moment(date, "DD-MM-YYYY").add(0, 'days').format('YYYY-MM-DD'),
                     CR1: Moment(date, "DD-MM-YYYY").add(1, 'days').format('YYYY-MM-DD'),
@@ -1616,6 +1660,9 @@ const SpawnRun = (props) => {
                                             </div>
                                             <div className="process-step">
                                                 <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR14 == null ? 'red' : "#28a745", backgroundColor: m.SR14 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR14")}>SR14</button>
+                                            </div>
+                                            <div className="process-step">
+                                                <button type="button" class="btn btn-success btn-circle" style={{ borderColor: m.SR15 == null ? 'red' : "#28a745", backgroundColor: m.SR15 == null ? 'red' : "#28a745" }} onClick={() => onSelectOneSpawnRun("SR15")}>SR15</button>
                                             </div>
                                         </>)
                                     })}

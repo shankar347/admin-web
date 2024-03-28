@@ -161,6 +161,7 @@ const Dashboard = () => {
                                         {c.SR12 && <th style={{ borderColor: colors[colorId], color: colors[colorId] }} scope="col">SR12</th>}
                                         {c.SR13 && <th style={{ borderColor: colors[colorId], color: colors[colorId] }} scope="col">SR13</th>}
                                         {c.SR14 && <th style={{ borderColor: colors[colorId], color: colors[colorId] }} scope="col">SR14</th>}
+                                        {c.SR15 && <th style={{ borderColor: colors[colorId], color: colors[colorId] }} scope="col">SR15</th>}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -181,7 +182,7 @@ const Dashboard = () => {
                                         {c.SR12 && <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR12).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1 }}>{`${Moment(c.SR12).format('DD-MM-YYYY')}`}</td>}
                                         {c.SR13 && <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR13).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1 }}>{`${Moment(c.SR13).format('DD-MM-YYYY')}`}</td>}
                                         {c.SR14 && <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR14).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1 }}>{`${Moment(c.SR14).format('DD-MM-YYYY')}`}</td>}
-
+                                        {c.SR15 && <td className={Moment(new Date(), "DD-MM-YYYY").format('DD-MM-YYYY') == Moment(c.SR15).format('DD-MM-YYYY') ? 'acivecol' : null} style={{ fontSize: 13, padding: 1 }}>{`${Moment(c.SR15).format('DD-MM-YYYY')}`}</td>}
                                     </tr>
                                 </tbody>
                             </>)

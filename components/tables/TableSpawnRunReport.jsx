@@ -38,7 +38,8 @@ const TablePinningReport = ({ reports,startDate,endDate }) => {
         Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR11).format('DD-MM-YYYY')?`SR11 - ${Moment(a.SR11).format('DD-MM-YYYY')}`:
         Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR12).format('DD-MM-YYYY')?`SR12 - ${Moment(a.SR12).format('DD-MM-YYYY')}`:
         Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR13).format('DD-MM-YYYY')?`SR13 - ${Moment(a.SR13).format('DD-MM-YYYY')}`:
-        Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR14).format('DD-MM-YYYY')?`SR14 - ${Moment(a.SR14).format('DD-MM-YYYY')}`:'',
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR14).format('DD-MM-YYYY')?`SR14 - ${Moment(a.SR14).format('DD-MM-YYYY')}`:
+        Moment(startDate).format('DD-MM-YYYY')==Moment(a.SR15).format('DD-MM-YYYY')?`SR15 - ${Moment(a.SR15).format('DD-MM-YYYY')}`:'',
         room: a.room_name,
       }
     return (obj);
