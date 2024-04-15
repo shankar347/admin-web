@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const baseurl = "https://britishagro.com/api/api";
+export const baseurl = "https://britishagro.com/api/api/v1";
 // export const baseurl = "http://localhost:3001/api/v1";
 
 export const apiUrl = baseurl;
