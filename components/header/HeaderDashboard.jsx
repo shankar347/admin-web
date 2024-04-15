@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/auth/action';
 import { Modal } from 'antd';
+
+import { logout } from '../../store/auth/action';
 
 const Header = () => {
 
@@ -18,7 +19,6 @@ const Header = () => {
             changeTheme('light');
             setTheme('light');
         }
-
     }, []);
 
     const logoutOne = () => {
@@ -55,8 +55,8 @@ const Header = () => {
 
     return (
         <div>
-            <div className='header-nav d-flex justify-content-between align-items-center'>
-                <div className="logo">
+            <div className='header-nav d-flex justify-content-between'>
+                <div className="logo text-left">
                     <a href="/home">
                         <div className="text-center">
                             <img src={"/img/logo_12.png"}
@@ -65,16 +65,18 @@ const Header = () => {
                         </div>
                     </a>
                 </div>
-                <h4 className="user-name m-0">
-                    <i className="fas fa-user pr-2" style={{ color: '#fff', fontSize: '18px' }} ></i>
-                    {auth && auth.userType == "SA" ? auth.userName : auth.userName}
-                </h4>
-                <div className="d-flex">
-                    <ul className="nav__menu m-0 d-flex justify-content-between align-items-center">
-                        <li className="nav__menu-item" style={{ cursor: 'pointer' }}>
-                            <i className="fas fa-sign-out-alt" style={{ color: '#fff', fontSize: '25px' }} onClick={logoutOne}></i>
-                        </li>
-                    </ul>
+                <div className='d-flex align-items-center'>
+                    <h4 className="user-name m-0">
+                        <i className="fas fa-user pr-2" style={{ color: '#fff', fontSize: '18px' }} ></i>
+                        {auth.name}
+                    </h4>
+                    <div>
+                        <ul className="nav__menu m-0 d-flex justify-content-between align-items-center">
+                            <li className="nav__menu-item" style={{ cursor: 'pointer' }}>
+                                <i className="fas fa-sign-out-alt" style={{ color: '#fff', fontSize: '25px' }} onClick={logoutOne}></i>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

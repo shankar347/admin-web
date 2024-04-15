@@ -1,38 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spin, notification } from 'antd';
-import Joi from 'joi-browser';
 
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 
 import { logout } from '../../store/auth/action';
-import { getCurrentUser, getQuery } from '../../helper/auth';
-import adminService from '../../repositories/AuthRepository';
-import Password from 'antd/lib/input/Password';
-import OperatorRepository from '../../repositories/OperatorRepository';
+import AuthRepository from '~/repositories/AuthRepository';
+
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
 
 const Home = (props) => {
 
   const dispatch = useDispatch();
-  const user = getCurrentUser();
   const { auth } = useSelector(({ auth }) => auth);
-  const [errors, setErrors] = useState({});
-  const [loader, setLoader] = useState(false);
-  const [Username, setUsername] = useState('');
+
+  const [isActive, setActive] = useState(false);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userType, setUserType] = useState("");
-  const [isActive, setActive] = useState(false);
-  const [query, setQuery] = useState({});
-  const [password1, setpassword1] = useState('');
-  const [userData, setUserData] = useState([]);
-  const schema = {
-    OldPassword: Joi.string().required(),
-    NewPassword: Joi.string().min(5).required(),
-    ConfirmPassword: Joi.string().required(),
-  }
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [errors, setErrors] = useState({});
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -42,21 +35,15 @@ const Home = (props) => {
     }
   }, [auth]);
 
-  const logoutOnClick = () => {
-    dispatch(logout());
-    if (user && user.logintype === 'I') {
-      window.location.href = "/institutionlogin/";
-    } else {
-      window.location.href = "/";
-    }
-  }
+  useEffect(() => {
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  }, [])
 
-  const UsernameOnChange = (Username) => {
-    let errorObj = { ...errors };
-    errorObj['Username'] = '';
-    setUsername(Username);
-    setErrors(errorObj);
-  }
+  const toggleClass = () => {
+    setActive(!isActive);
+  };
 
   const OldPasswordOnChange = (oldPassword) => {
     let errorObj = { ...errors };
@@ -79,172 +66,44 @@ const Home = (props) => {
     setErrors(errorObj);
   }
 
-  useEffect(() => {
-    handleRefresh()
-  }, [])
-
-  const handleRefresh = async () => {
-    let ctr = {}
-    ctr.id = user.id
-    if (user.type == 'SA') {
-      let admin = await adminService.getAdmin();
-      if (admin && admin.data && admin.data ) {
-        let pass = admin.data;
-      setLoader(true);
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setUsername('');
-      setpassword1(new Buffer.from(pass.admin_pass, 'base64').toString())
-      setUserType(user.type);
-      setLoader(false);
-    }
-    } else {
-    
-      let operator = await OperatorRepository.getOperator(ctr);
-      if (operator && operator.data && operator.data.data) {
-        let pass= operator.data.data;
-        setLoader(true);
-        setOldPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setUsername('');
-        setpassword1(new Buffer.from(pass[0].op_pass, 'base64').toString())
-        setUserType(user.type);
-        setLoader(false);
-      }
-    }
-  }
-
-
-  useEffect(() => {
-    setLoader(true);
-    let query = getQuery();
-    setQuery(query)
-    setLoader(false)
-  }, []);
-  const valiadateProperty = (e) => {
-    let { name, value, className } = e.currentTarget;
-    const obj = { [name]: value };
-    const filedSchema = { [name]: schema[name] };
-    const { error } = Joi.validate(obj, filedSchema);
-    let message = error ? error.details[0].message : null;
-    setErrors({ ...errors, [name]: message, "errordetails": null })
-  }
-    ;
-
   const saveOnClick = async () => {
-
-    if (Username === user.userName && user.type == 'SA') {
-      if (oldPassword === password1) {
-        
-        if (newPassword != confirmPassword) {
-          notification.error({
-            message: 'Confirm Password Is Not Same As NewPassword',
-            placement: 'top'
-          });
-          setErrors({ ...errors, ['ConfirmPassword']: 'Confirm Password must match New Password', "errordetails": null })
-        } else {
-          if (oldPassword && newPassword && confirmPassword && errors['ConfirmPassword'] === null &&
-            errors['NewPassword'] === null && errors['OldPassword'] === null) {
-            let obj = {
-              admin_name: Username,
-              old_pass: oldPassword,
-              new_pass: newPassword
-            };
-            try {
-
-              let result = await adminService.changePassword(obj);
-              if (result && result.status === 200) {
-                notification.success({
-                  message: 'Password Changed Successfull',
-                  placement: 'top'
-                });
-                setTimeout(() => {
-                  logoutOnClick();
-                }, 1000);
-              }
-            } catch (err) {
-              notification.error({
-                message: 'Password Changed Failed.',
-                placement: 'top'
-              });
-            }
-          } else {
-            let errorObj = { ...errors };
-            if (!oldPassword) errorObj['OldPassword'] = "Please Enter OldPassword";
-            if (!newPassword) errorObj['NewPassword'] = "Please Enter newPassword";
-            if (!confirmPassword) errorObj['ConfirmPassword'] = "Please Enter ConfirmPassword";
-            setErrors(errorObj);
-          }
-        }
+    setLoader(true)
+    let isNewPasswordValid = passwordRegex.test(newPassword);
+    let isConfirmPasswordValid = passwordRegex.test(confirmPassword);
+    let newAndOldPasswordsSame = newPassword === confirmPassword;
+    if (oldPassword && newPassword && confirmPassword && isNewPasswordValid && isConfirmPasswordValid && newAndOldPasswordsSame) {
+      let payload = {
+        currentPassword: oldPassword,
+        newPassword, confirmPassword
+      }
+      let result = await AuthRepository.changePassword(payload);
+      if (result && result.status === 200) {
+        notification.success({
+          message: "Password Changed Succesfully."
+        });
+        setTimeout(() => {
+          logoutOnClick()
+        }, 2000)
       } else {
         notification.error({
-          message: 'Incorrect Old Password',
-          placement: 'top'
+          message: result.message
         });
       }
-    } else if (Username === auth.name && auth.type !== 'SA') {
-      if (oldPassword === password1) {
-        if (newPassword != confirmPassword) {
-          notification.error({
-            message: 'Confirm Password Is Not Same As NewPassword',
-            placement: 'top'
-          });
-          setErrors({ ...errors, ['ConfirmPassword']: 'Confirm Password must match New Password', "errordetails": null })
-        } else {
-          if (oldPassword && newPassword && confirmPassword && errors['ConfirmPassword'] === null &&
-            errors['NewPassword'] === null && errors['OldPassword'] === null) {
-            let obj = {
-              user_name: Username,
-              old_pass: oldPassword,
-              new_pass: newPassword
-            };
-            try {
-
-              let result = await OperatorRepository.changePassword(obj);
-              if (result && result.status === 200) {
-                notification.success({
-                  message: 'Password Changed Successfull',
-                  placement: 'top'
-                });
-                setTimeout(() => {
-                  logoutOnClick();
-                }, 1000);
-              }
-            } catch (err) {
-              notification.error({
-                message: 'Password Changed Failed.',
-                placement: 'top'
-              });
-            }
-          } else {
-            let errorObj = { ...errors };
-            if (!oldPassword) errorObj['OldPassword'] = "Please Enter OldPassword";
-            if (!newPassword) errorObj['NewPassword'] = "Please Enter newPassword";
-            if (!confirmPassword) errorObj['ConfirmPassword'] = "Please Enter ConfirmPassword";
-            setErrors(errorObj);
-          }
-        }
-      } else {
-        notification.error({
-          message: 'Incorrect Old Password',
-          placement: 'top'
-        });
-      }
+    } else {
+      let errorObj = { ...errors };
+      if (!oldPassword) errorObj['OldPassword'] = 'Please Enter Current Password';
+      if (!isNewPasswordValid) errorObj['NewPassword'] = 'Please Enter Valid Password';
+      if (!isConfirmPasswordValid) errorObj['ConfirmPassword'] = 'Please Enter Valid Password';
+      if (!newAndOldPasswordsSame) errorObj['ConfirmPassword'] = 'New Password and Confirm Password should be same';
+      setErrors(errorObj);
     }
-    else {
-      notification.error({
-        message: 'User Not Found',
-        placement: 'top'
-      });
-    }
-
+    setLoader(false)
   }
 
-  const toggleClass = () => {
-    setActive(!isActive);
-  };
+  const logoutOnClick = () => {
+    dispatch(logout());
+    window.location.href = "/";
+  }
 
   return (
     <div>
@@ -258,33 +117,26 @@ const Home = (props) => {
             </div>
           </div>
           <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-            <h3 className='page_header py-3'>Change Password</h3>
+            <h3 className='page_header py-3 text-white'>Change Password</h3>
             <div className='row' style={{ padding: 30 }}>
               <div className="col-md-12">
                 <div className="form-group">
-                  <label>User Name<span style={{ color: 'red' }}>*</span></label>
+                  <label>Current Password <span style={{ color: 'red' }}>*</span></label>
                   <input
                     className="form-control"
-                    type="text"
-                    value={Username}
-                    placeholder=""
-                    onChange={(e) => UsernameOnChange(e.target.value)}
-                  />
-                  {errors['Username'] &&
-                    <span style={{ color: 'red' }}>{errors['Username']}</span>
-                  }
-                </div>
-                <div className="form-group">
-                  <label>Old Password <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    className="form-control"
-                    type={'password'}
+                    type={showOldPassword ? 'text' : 'password'}
                     name={'OldPassword'}
                     value={oldPassword}
-                    onBlur={valiadateProperty}
                     placeholder=""
                     onChange={(e) => OldPasswordOnChange(e.target.value)}
                   />
+                  <div style={{ position: 'absolute', marginTop: -30, right: 50 }}>
+                    <i 
+                      className={showOldPassword ? "fa fa-eye" : "fa fa-eye-slash"} 
+                      onClick={() => setShowOldPassword(!showOldPassword)} 
+                      style={{ cursor: 'pointer', fontSize: 20 }} 
+                    />
+                  </div>
                   {errors['OldPassword'] &&
                     <span style={{ color: 'red' }}>{errors['OldPassword']}</span>
                   }
@@ -293,13 +145,19 @@ const Home = (props) => {
                   <label>New Password <span style={{ color: 'red' }}>*</span></label>
                   <input
                     className="form-control"
-                    type={'password'}
+                    type={showNewPassword ? 'text' : 'password'}
                     name={'NewPassword'}
                     value={newPassword}
-                    onBlur={valiadateProperty}
                     placeholder=""
                     onChange={(e) => NewPasswordOnChange(e.target.value)}
                   />
+                  <div style={{ position: 'absolute', marginTop: -30, right: 50 }}>
+                    <i 
+                      className={showNewPassword ? "fa fa-eye" : "fa fa-eye-slash"} 
+                      onClick={() => setShowNewPassword(!showNewPassword)} 
+                      style={{ cursor: 'pointer', fontSize: 20 }} 
+                    />
+                  </div>
                   {errors['NewPassword'] &&
                     <span style={{ color: 'red' }}>{errors['NewPassword']}</span>
                   }
@@ -308,13 +166,19 @@ const Home = (props) => {
                   <label>Confirm Password<span style={{ color: 'red' }}>*</span></label>
                   <input
                     className="form-control"
-                    type={'password'}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     name={'ConfirmPassword'}
                     value={confirmPassword}
-                    onBlur={valiadateProperty}
                     placeholder=""
                     onChange={(e) => ConfirmPasswordOnChange(e.target.value)}
                   />
+                  <div style={{ position: 'absolute', marginTop: -30, right: 50 }}>
+                    <i 
+                      className={showConfirmPassword ? "fa fa-eye" : "fa fa-eye-slash"} 
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                      style={{ cursor: 'pointer', fontSize: 20 }} 
+                    />
+                  </div>
                   {errors['ConfirmPassword'] &&
                     <span style={{ color: 'red' }}>{errors['ConfirmPassword']}</span>
                   }

@@ -6,48 +6,42 @@ import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 import TableUnit from '../../components/tables/TableUnit';
 
-import { getAllUnit, getInactiveUnit } from '../../store/Unit/action';
+import { getAllUnit } from '../../store/Unit/action';
 import UnitRepository from '../../repositories/UnitRepository';
-
 
 const Home = (props) => {
 
     const { TabPane } = Tabs;
     const { Option } = Select;
     const dispatch = useDispatch();
-    const valueRef = React.createRef();
     const { auth } = useSelector(({ auth }) => auth);
     const {
         allUnit,
-        activeTotalCount,
         activeCount,
-        inactiveUnit,
-        inactiveTotalCount,
         inactiveCount,
     } = useSelector(({ Unit }) => Unit);
+
+    const [isActive, setActive] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSizeTotal, setPageSizeTotal] = useState(10);
+    const [tab, setTab] = useState('active');
+    const [action, setAction] = useState(null);
 
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [loader, setLoader] = useState(false);
 
-
-
-    const [image, setImage] = useState('');
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');
+    const [position, setPosition] = useState('');
+
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
-    const [position, setPosition] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSizeTotal, setPageSizeTotal] = useState(10);
-    const [tab, setTab] = useState('active');
     const [selectAll, setSelectAll] = useState(false);
-    const [action, setAction] = useState(null);
-    const [search, setSearch] = useState('');
-    const [isActive, setActive] = useState(false);
-    const [result, setResult] = useState('');
     const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
+
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -60,30 +54,25 @@ const Home = (props) => {
     useEffect(() => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-
         dispatch(getAllUnit(ctr));
-        dispatch(getInactiveUnit(ctr));
-
     }, []);
 
     useEffect(() => {
         setLoader(false);
-    }, [allUnit, inactiveUnit]);
+    }, [allUnit]);
 
     const toggleClass = () => {
         setActive(!isActive);
     };
 
-
-
     const addModalOnClick = async () => {
         setLoader(true);
         setName('');
         setCode('');
-        setImage('');
-        setPosition(activeTotalCount + 1);
+        setPosition(activeCount + 1);
         setSelectedCatId('');
         setLoader(false);
         setShowModal(true);
@@ -91,11 +80,10 @@ const Home = (props) => {
 
     const editModalOnClick = async (data) => {
         setLoader(true);
-        setName(data.unit_name);
-        setSlug(data.unit_slug)
-        setCode(data.unit_code);
-        setPosition(data.unit_pos)
-        setSelectedCatId(data.unit_id);
+        setName(data.name);
+        setSlug(data.slug)
+        setPosition(data.position)
+        setSelectedCatId(data._id);
         setLoader(false);
         setShowModal(true);
     }
@@ -103,8 +91,7 @@ const Home = (props) => {
     const closeModalOnClick = () => {
         setName('');
         setCode('');
-        setImage('');
-        setPosition(activeTotalCount + 1);
+        setPosition(activeCount + 1);
         setSelectedCatId('');
         setErrors({});
         setShowModal(false);
@@ -124,12 +111,12 @@ const Home = (props) => {
         let array = [...posotionChangeCategorys];
         const re = /^[0-9\b]+$/; //rules
         if (position === "" || re.test(position)) {
-            let index = array.findIndex(a => a.unit_id === id);
+            let index = array.findIndex(a => a._id === id);
             if (index >= 0) {
                 array[index]['position'] = position;
             } else {
                 array.push({
-                    unit_id: id,
+                    _id: id,
                     position: position
                 });
             }
@@ -155,77 +142,95 @@ const Home = (props) => {
         setErrors(errorObj);
     }
 
-
     const saveOnClick = () => {
         saveData(selectedCatId);
     }
 
     const saveData = async (selectedCatId) => {
-
-        if (name) {
+        if (name && position) {
             setLoader(true);
-            let saveObj = {
-                "unit_name": name,
-                "unit_slug": slug,
-                "unit_code":code,
-                "unit_pos": position,
-            };
-            
-            try {
-                if (selectedCatId) {
-                    let result = await UnitRepository.editUnit(selectedCatId, saveObj);
-                    setResult(result)
-                } else {
-                    await UnitRepository.saveUnit(saveObj);
-                }
-                if (result && result.status === 200) {
-                    notification.success({
-                        message: 'Unit Updated Successfully.',
-                        placement: 'top'
-                    });
-                } else {
-                    notification.success({
-                        message: 'Unit Added Successfully.',
-                        placement: 'top'
-                    });
-                }
-                let ctr = {}//chaptId: query.chapter_id };
-                ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
-                ctr.limit = pageSizeTotal;
-                ctr.type = 'Unit'
-                if (search) {
-                    ctr.search = search;
-                }
-                setLoader(false);
-                dispatch(getAllUnit(ctr));
-                dispatch(getInactiveUnit(ctr));
-                closeModalOnClick();
-            } catch (e) {
-                notification.error({
-                    message: 'Unit Updated Failed.',
-                    placement: 'top'
-                });
+            let saveObj = { name, position };
+            if (selectedCatId) {
+                update(selectedCatId, saveObj);
+            } else {
+                add(saveObj);
             }
         } else {
             let errorObj = { ...errors };
-            if (!name) errorObj['name'] = "Please Enter UnitName";
-            if (!code) errorObj['code'] = "Please Enter code";
-
+            if (!name) errorObj['name'] = "Please Enter Name";
+            if (!position) errorObj['position'] = "Please Enter Position";
             setErrors(errorObj);
         }
+    }
+
+    const add = async (saveObj) =>{
+        let result = await UnitRepository.saveUnit(saveObj);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Phase Added Successfully.',
+                placement: 'top'
+            });
+            let ctr = {}
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;
+            if (search) {
+                ctr.search = search;
+            }
+            dispatch(getAllUnit(ctr));
+            closeModalOnClick();
+        }  else if (result && result.status) {
+            notification.error({
+                message: result.message,
+                placement: 'top'
+            });
+        } else {
+            notification.error({
+                message: 'Phase Added Failed.',
+                placement: 'top'
+            });
+        }
+        setLoader(false);
+    }
+
+    const update = async (selectedCatId, saveObj) => {
+        let result = await UnitRepository.editUnit(selectedCatId, saveObj);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Phase Updated Successfully.',
+                placement: 'top'
+            });
+            let ctr = {}
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;
+            if (search) {
+                ctr.search = search;
+            }
+            dispatch(getAllUnit(ctr));
+            closeModalOnClick();
+        } else if (result && result.status) {
+            notification.error({
+                message: result.message,
+                placement: 'top'
+            });
+        } else {
+            notification.error({
+                message: 'Phase Updated Failed.',
+                placement: 'top'
+            });
+        }
+        setLoader(false);
     }
 
     const searchOnChange = (search) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        if (tab === "active") {
-            dispatch(getAllUnit(ctr));
-        } else {
-            dispatch(getInactiveUnit(ctr));
-        }
+        dispatch(getAllUnit(ctr));
         setSearch(search);
         setCurrentPage(1);
     }
@@ -233,15 +238,11 @@ const Home = (props) => {
     const pageSizeChange = async (page, pageSize) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSize;
         if (search) ctr.search = search;
-
-        if (tab === "active") {
-            dispatch(getAllUnit(ctr));
-        } else {
-            dispatch(getInactiveUnit(ctr));
-        }
+        dispatch(getAllUnit(ctr));
         setCurrentPage(page);
         setPageSizeTotal(pageSize);
     }
@@ -256,13 +257,10 @@ const Home = (props) => {
     const changeTab = (tab) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = 0;
         ctr.limit = 10;
-        if (tab === "active") {
-            dispatch(getAllUnit(ctr));
-        } else if (tab === "inactive") {
-            dispatch(getInactiveUnit(ctr));
-        }
+        dispatch(getAllUnit(ctr));
         setCurrentPage(1);
         setPageSizeTotal(10);
         setSelectedCatIds([]);
@@ -275,11 +273,7 @@ const Home = (props) => {
     const onSelectAll = (value) => {
         let array = [];
         if (value) {
-            if (tab === 'active') {
-                array = allUnit.map(h => h.unit_id);
-            } else {
-                array = inactiveUnit.map(h => h.unit_id);
-            }
+            array = allUnit.map(h => h._id);
         }
         setSelectedCatIds(array);
         setSelectAll(value);
@@ -287,7 +281,7 @@ const Home = (props) => {
 
     const onSelectOne = (id) => {
         let array = [...selectedCatIds];
-        let array1 = tab === 'active' ? [...allUnit] : [...inactiveUnit];
+        let array1 = [...allUnit];
         let index = array.indexOf(id);
         if (index >= 0) {
             array.splice(index, 1);
@@ -317,7 +311,7 @@ const Home = (props) => {
                 obj['status'] = 'Y';
                 await UnitRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Phase Updated Successfully.',
                     placement: 'top'
                 });
             }
@@ -325,27 +319,26 @@ const Home = (props) => {
                 obj['status'] = 'N';
                 await UnitRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Phase Updated Successfully.',
                     placement: 'top'
                 });
             }
             if (action === "delete") {
-                obj['status'] = 'D';
-                await UnitRepository.updateStatus(obj);
+                await UnitRepository.delete(obj);
                 notification.success({
-                    message: 'Location Deleted Successfully.',
+                    message: 'Phase Deleted Successfully.',
                     placement: 'top'
                 });
             }
             setSelectedCatIds([]);
             let ctr = {};
+            ctr.status = tab === "active" ? "Y" : "N";
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;
             if (search) {
                 ctr.search = search;
             }
             dispatch(getAllUnit(ctr));
-            dispatch(getInactiveUnit(ctr));
         } else {
             if (!action) {
                 Modal.error({
@@ -353,7 +346,7 @@ const Home = (props) => {
                 });
             } else if (!selectedHomeCatIdsArr.length) {
                 Modal.error({
-                    title: 'Please Select One Location'
+                    title: 'Please Select One Phase'
                 });
             }
         }
@@ -365,17 +358,17 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Phase'} />
+                        <Sidebar page={'unit'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
                     </div>
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-                        <h3 className={'page_header'}>Unit</h3>
+                        <h3 className={'page_header'}>Phase</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
-                            <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
+                            <TabPane tab={<p className="active-green">Active {activeCount}</p>} key="active">
                             </TabPane>
-                            <TabPane tab={<p className="inactive-red">Inactive {inactiveTotalCount}</p>} key="inactive">
+                            <TabPane tab={<p className="inactive-red">Inactive {inactiveCount}</p>} key="inactive">
                             </TabPane>
                         </Tabs>
                         <div className='row px-2'>
@@ -420,7 +413,7 @@ const Home = (props) => {
                         </div>
                         <div className='px-2'>
                             <TableUnit
-                                category={tab === "active" ? allUnit : inactiveUnit}
+                                category={allUnit}
                                 editModalOnClick={editModalOnClick}
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
@@ -434,7 +427,7 @@ const Home = (props) => {
                         </div>
                         <div style={{ margin: '10px auto', textAlign: 'right' }}>
                             <Pagination
-                                total={tab === "active" ? activeTotalCount : inactiveTotalCount}
+                                total={tab === "active" ? activeCount : inactiveCount}
                                 defaultCurrent={1}
                                 current={currentPage}
                                 defaultPageSize={10}
@@ -449,7 +442,7 @@ const Home = (props) => {
                 <Modal
                     visible={showModal}
                     onCancel={closeModalOnClick}
-                    title={selectedCatId ? "Edit Unit" : "Add Unit"}
+                    title={selectedCatId ? "Edit Phase" : "Add Phase"}
                     width={800}
                     onOk={saveOnClick}
                     okText={selectedCatId ? "Update" : "Save"}
@@ -472,7 +465,7 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-                            <div className="col-md-6">
+                            {/* <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Slug <span style={{ color: 'red' }}>*</span></label>
                                     <input
@@ -486,9 +479,9 @@ const Home = (props) => {
                                         <span style={{ color: 'red' }}>{errors['slug']}</span>
                                     }
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className="col-md-6">
+                            {/* <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Code <span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
@@ -504,7 +497,7 @@ const Home = (props) => {
                                         }
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-md-6">
                                 <div className="form-group">
@@ -521,7 +514,6 @@ const Home = (props) => {
                                     }
                                 </div>
                             </div>
-
                         </div>
                     </Spin>
                 </Modal>

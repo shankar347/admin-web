@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
-import Moment from "moment"
-const TableVentingReport = ({ reports, startDate, endDate }) => {
+
+const TableRoomWiseReport = ({ reports }) => {
     const columns = [
         {
             title: 'S.No',
@@ -14,23 +14,17 @@ const TableVentingReport = ({ reports, startDate, endDate }) => {
             dataIndex: 'room',
         },
         {
-            title: 'Venting',
-            dataIndex: 'venting',
+            title: 'Flow',
+            dataIndex: 'flow',
         }
     ];
 
     let data = reports.map((a, index) => {
-
-
-        
         let obj = {
-
             key: index,
             no: (index + 1),
-            venting: Moment(startDate).format('DD-MM-YYYY') == Moment(a.V1).format('DD-MM-YYYY') ? `V1 - ${Moment(a.V1).format('DD-MM-YYYY')}` :
-                Moment(startDate).format('DD-MM-YYYY') == Moment(a.V2).format('DD-MM-YYYY') ? `V2 - ${Moment(a.V2).format('DD-MM-YYYY')}` : '',
-            room: a.room_name,
-
+            room: a.roomName,
+            flow: a.stage
         }
         return (obj);
     });
@@ -44,5 +38,4 @@ const TableVentingReport = ({ reports, startDate, endDate }) => {
     );
 };
 
-
-export default TableVentingReport;
+export default TableRoomWiseReport;

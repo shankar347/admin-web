@@ -6,27 +6,23 @@ const TableHomeCategory = ({ allOperator, editModalOnClick, openview, onSelectAl
     {
       title: 'S No',
       dataIndex: 'sno',
-
     },
     {
       title: 'Name',
       dataIndex: 'title',
     },
     {
-      title: 'Username',
+      title: 'UserName',
       dataIndex: 'name',
     },
     {
       title: 'Type',
       dataIndex: 'type'
     },
-   
-  
     {
-      title: 'view',
+      title: 'View',
       dataIndex: 'view',
       align: 'center',
-      width: '3%',
     },
     {
       title: 'Edit',
@@ -35,29 +31,27 @@ const TableHomeCategory = ({ allOperator, editModalOnClick, openview, onSelectAl
     },
     {
       title: <Checkbox checked={selectAll} onClick={(e) => onSelectAll(e.target.checked)}></Checkbox>,
-      dataIndex: 'check'
+      dataIndex: 'check',
+      align: 'center'
     }
   ];
-console.log(allOperator,"clkjhoidjfhbj")
-  let data =  allOperator.map((a, index) => {
 
+  let data = allOperator.map((a, index) => {
     let obj = {
-      key: a.op_id,
+      key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
-      title: a.op_name,
-      name: a.op_uname,
-     pass :new Buffer.from(a.op_password),
-      type: a.op_type === "O" ? (<p style={{ color: 'green' }}>Executive</p>) : (<p style={{ color: 'red' }}>Admin</p>),
+      title: a.name,
+      name: a.userName,
+      type: a.type === "O" ? (<p style={{ color: 'green' }}>Executive</p>) : (<p style={{ color: 'green' }}>Admin</p>),
       view: (<i className="fas fa-file" onClick={() => openview(a)} style={{ cursor: 'pointer' }}></i>),
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a.op_id)}
-          checked={selectedHomeCatIds.indexOf(a.op_id) >= 0}
+          onClick={() => onSelectOne(a._id)}
+          checked={selectedHomeCatIds.indexOf(a._id) >= 0}
         />
       )
     }
-
     return (obj);
   });
 

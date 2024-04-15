@@ -1,51 +1,92 @@
-import Repository, { apiUrl } from './Repository';
+import Repository, { apiUrl } from "./Repository";
 
 class AuthRepository {
-    constructor(callback) {
-        this.callback = callback;
-    }
+  constructor(callback) {
+    this.callback = callback;
+  }
 
-    async adminLogin(payload) {
-        let url = '';
-        if (payload.type === "SA") {
-            url = `${apiUrl}/login`;
-        } else {
-            url = `${apiUrl}/login/operator`;
-        }
-        const reponse = await Repository.post(url, payload)
-            .then(response => {
-                return response.data;
-            })
-            .catch(error => {
-                return error.response.data;
-            });
-        return reponse;
-    } 
+  async login(payload) {
+    let url = `${apiUrl}/auth/login`;
+    const reponse = await Repository.post(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
 
-    async getAdmin() {
-        let url = `${apiUrl}/`;
-        const reponse = await Repository.get(url)
-            .then(response => {
-                return response.data;
-            })
-            .catch(error => {
-                return error.response.data;
-            });
-        return reponse;
-    }
+  async changePassword(payload) {
+    let url = `${apiUrl}/auth/changePassword`;
+    const reponse = await Repository.post(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
 
-    async changePassword( formdata) {
-        let url = `${apiUrl}/changePassword`
-        const reponse = await Repository.put(url, formdata)
-            .then(response => {
-                return response.data;
-            })
-            .catch(error => {
-                return error.response.data;
-            });
-        return reponse;
-    }
+  async getAdmins(params) {
+    let url = `${apiUrl}/auth/`;
+    const reponse = await Repository.get(url, { params })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+  async createAdmin(payload) {
+    let url = `${apiUrl}/auth/`;
+    const reponse = await Repository.post(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+  async updateAdmin(id, payload) {
+    let url = `${apiUrl}/auth/${id}`;
+    const reponse = await Repository.put(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+  async updateStatusAdmin( payload) {
+    let url = `${apiUrl}/auth/status`;
+    const reponse = await Repository.post(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+  async getMenu() {
+    const reponse = await Repository.get(`${apiUrl}/auth/menus`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
 }
 
 export default new AuthRepository();
-

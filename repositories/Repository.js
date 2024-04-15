@@ -1,11 +1,6 @@
 import axios from 'axios';
-// export const baseurl = "https://medadmin.questioncloud.in/api";
 export const baseurl = "https://britishagro.com/api/api";
-
-//export const baseurl = "http://192.168.1.148:5003/api";
-//export const baseurl = "http://192.168.1.165:4567/api/v1";
-
-//export const baseurl = "http://localhost:5003/api";
+// export const baseurl = "http://localhost:3001/api/v1";
 
 export const apiUrl = baseurl;
 
@@ -15,7 +10,7 @@ let customHeaders = {
 
 let local = typeof window !== 'undefined' ? localStorage : null;
 if (local && local.usertoken) {
-    customHeaders['x-auth-token'] = `${local.usertoken}`;
+    customHeaders['authorization'] = `Bearer ${local.usertoken}`;
 }
 
 export default axios.create({

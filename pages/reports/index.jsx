@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Spin, Select, Tabs, Modal } from 'antd';
+import { Spin, Select, Tabs } from 'antd';
 import Moment from "moment";
+const fileDownload = require('js-file-download');
 
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
+import TableRoomWiseReport from '~/components/tables/TableRoomWiseReport';
+import TableStageWiseReport from '~/components/tables/TableStageWiseReport';
 
-import TableOverAllReport from '../../components/tables/TableOverAllReport';
-import TableOverAllSRReport from '../../components/tables/TableOverAll-SR-Report';
-import TableOverAllVentingReport from '../../components/tables/TableOverAllVentingReport';
-import TableOverAllPinningReport from '../../components/tables/TableOverAll-Pinning-Report';
-
-import TableOverAllCRReport from '../../components/tables/TableOverAll-CR-Report';
-import TablePinningReport from '../../components/tables/TablePinningReport';
-import TableVentingReport from '../../components/tables/TableVentingReport';
-import TableHarvestReport from '../../components/tables/TableHarvestReport';
-import TableCaseRunReport from '../../components/tables/TableCaseRunReport';
-import TableSpawnRunReport from '../../components/tables/TableSpawnRunReport';
-
-import { getCurrentUser } from '../../helper/auth';
+import StageRepository from '../../repositories/StageRepository';
 import ReportRespository from '../../repositories/ReportRespository';
 
-import UnitRepository from '~/repositories/UnitRepository';
-
-import { Button } from 'antd/lib/radio';
-
-var fileDownload = require('js-file-download');
+const colors = ['#0e0606', '#f39521', '#f32121', '#2196f3', '#3d1ecd'];
 
 const Home = (props) => {
 
@@ -33,19 +20,18 @@ const Home = (props) => {
     const { Option } = Select;
     const { auth } = useSelector(({ auth }) => auth);
 
-    const [tab, setTab] = useState('');
-    const [errors, setErrors] = useState({});
-    const [user, setUser] = useState({});
+    const [tab, setTab] = useState('all');
     const [loader, setLoader] = useState(false);
     const [isActive, setActive] = useState(false);
 
-    const [search, setSearch] = useState('');
-
+    const [stage, setStage] = useState([]);
     const [selectedStartDate, setStartDateChange] = useState(Moment().format('YYYY-MM-DD'));
     const [selectedEndDate, setEndDateChange] = useState(Moment().format('YYYY-MM-DD'));
-    const [overall, setOverAll] = useState('');
-
-    const [overAllData, setOverAllData] = useState([]);
+    const [selectedStageId, setSelectedStageId] = useState('');
+    const [roomWiseData, setRoomWiseData] = useState([]);
+    const [stageWiseData, setStageWiseData] = useState({});
+    const [stageWiseFlow, setStageWiseFlow] = useState([]);
+    const [totolCount, setTotalCount] = useState(0);
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -56,39 +42,32 @@ const Home = (props) => {
     }, [auth]);
 
     useEffect(() => {
-        let user = getCurrentUser();
-        setUser(user);
-
-
+        getStage();
     }, []);
 
-    const clearOnClick = () => {
-        setOverAll('');
-        setOverAllData([]);
+    const getStage = async () => {
+        let result = await StageRepository.getStage({ status: "Y" });
+        if (result && result.data && result.data.data) {
+            setStage(result.data.data)
+        } else {
+            setStage([])
+        }
+    };
 
+    const toggleClass = () => {
+        setActive(!isActive);
+    };
+
+    const clearOnClick = () => {
+        setSelectedStageId('');
+        setRoomWiseData([]);
+        setStageWiseData({})
     };
 
     const changeTab = (tab) => {
-        setOverAll('');
-        setOverAllData([]);
-        if (tab == 'harvest') {
-            setOverAll('harvest-1');
-        } else if (tab == 'spawnrun') {
-            setOverAll('spawnrun-1');
-        } else if (tab == 'caserun') {
-            setOverAll('caserun-1');
-        } else if (tab == "pinning")
-            setOverAll('pinning-1');
-        else {
-            setOverAll('venting-1')
-        }
+        setRoomWiseData([]);
+        setStageWiseData({})
         setTab(tab);
-    }
-
-    const overAllOnChange = (value) => {
-
-        setOverAllData([]);
-        setOverAll(value);
     }
 
     const handleStartDateChange = (date) => {
@@ -115,222 +94,67 @@ const Home = (props) => {
         setEndDateChange(endDate);
     }
 
+    const stageOnChange = (stageId) => {
+        setSelectedStageId(stageId)
+    }
+
     const searchOverAll = async () => {
         setLoader(true);
+        setRoomWiseData([]);
         let obj = {
-            period: 'all',
-            startDate: selectedStartDate,
-            endDate: selectedStartDate//endDate is not us
+            stageId: selectedStageId,
+            date: selectedStartDate,
         };
-        if (overall === 'harvest') {
-            obj.stage = 5
-            let res = await ReportRespository.getreports(obj);
-
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'pinning') {
-            obj.stage = 4
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'venting') {
-            obj.stage = 3
-            let res = await ReportRespository.getreports(obj);
-
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'caseRun') {
-            obj.stage = 2
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'spawnRun') {
-            obj.stage = 1
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-
+        let res = await ReportRespository.getRoomreports(obj);
+        if (res && res.data && res.data.length > 0) {
+            setRoomWiseData(res.data);
+        } else {
+            setRoomWiseData([]);
+        }
         setLoader(false);
     }
 
-    const harvestSearchOnChange = async () => {
+    const stageWiseSearch = async () => {
+        setLoader(true);
+        setStageWiseData({});
         let obj = {
-            period: 'all',
+            stageId: tab,
             startDate: selectedStartDate,
             endDate: selectedEndDate
         };
-        if (tab == 'harvest') {
-            obj.stage = 5
-            let res = await ReportRespository.getRoomreports(obj);
-            console.log(res, "dzfgbdfzhz")
-            if (res && res.data) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        } else if (tab == 'spawnrun') {
-            obj.stage = 1
-            let res = await ReportRespository.getRoomreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        } else if (tab == 'pinning') {
-            obj.stage = 4
-            let res = await ReportRespository.getRoomreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        } else if (tab == 'caserun') {
-            obj.stage = 2
-            let res = await ReportRespository.getRoomreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
+        let flowRes = await StageRepository.getStageFlow(tab);
+        if (flowRes && flowRes.data) {
+            setStageWiseFlow(flowRes.data)
+
         }
-        else {
-            obj.stage = 3
-            let res = await ReportRespository.getRoomreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
+        let res = await ReportRespository.getStageReport(obj);
+        if (res && res.data && res.data.data) {
+            setStageWiseData(res.data.data);
+            setTotalCount(res.data.total)
+        } else {
+            setStageWiseData({});
+            setTotalCount(0)
         }
-    }
-
-    const searchOnChange = async () => {
-        setLoader(true);
-        let obj = {
-            period: 'all',
-            startDate: selectedStartDate,
-            endDate: selectedEndDate,
-            search: search
-        };
-
-        if (overall === 'harvest') {
-            obj.stage = 5
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.qdata && res.qdata.length > 0) {
-                setOverAllData(res.qdata);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'pinning') {
-            obj.stage = 4
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'venting') {
-            obj.stage = 3
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'caseRun') {
-            obj.stage = 2
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-        if (overall === 'spawnRun') {
-            obj.stage = 1
-            let res = await ReportRespository.getreports(obj);
-            if (res && res.data && res.data.length > 0) {
-                setOverAllData(res.data);
-            } else {
-                setOverAllData([]);
-            }
-        };
-
         setLoader(false);
-        //  setSearch(search);
     }
 
     const downloadOverAll = async () => {
         setLoader(true);
-        console.log(overall, "overall")
-        // window.print()
         let obj = {
-            period: 'all',
+            stageId: tab,
             startDate: selectedStartDate,
             endDate: selectedEndDate,
-            isdownload: true
+            isDownload: true
         };
-        console.log(overall, "cbbzdfgs")
-
-        let res = []
-        if (overall === 'harvest-1') {
-            obj.stage = 5
-            res = await ReportRespository.downloadRoomreports(obj);
-            if (res) {
-                fileDownload(res, 'OverallReport.xlsx');
-            }
-        };
-        if (overall === 'pinning-1') {
-            obj.stage = 4
-            res = await ReportRespository.downloadRoomreports(obj);
-            fileDownload(res, 'Overall-pinning-Report.xlsx');
-        };
-        if (overall === 'venting-1') {
-            obj.stage = 3
-            res = await ReportRespository.downloadRoomreports(obj);
-            fileDownload(res, 'Overall-venting-Report.xlsx');
-        };
-        if (overall === 'caserun-1') {
-            obj.stage = 2
-            res = await ReportRespository.downloadRoomreports(obj);
-            fileDownload(res, 'Overall-caseRun-Report.xlsx');
-        };
-        if (overall === 'spawnrun-1') {
-            obj.stage = 1
-            res = await ReportRespository.downloadRoomreports(obj);
-            fileDownload(res, 'Overall-spawnRun-Report.xlsx');
-        };
-        // createResult(res.data)
+        let result = await ReportRespository.downloadReports(obj);
+        let stageObj = stageArray.find( s => s._id === tab);
+        fileDownload(result, `${stageObj.name}_report.xlsx`)
         setLoader(false);
     }
 
-    const toggleClass = () => {
-        setActive(!isActive);
-    };
+    let stageArray = [...stage];
+    stageArray.sort((a, b) => a.position - b.position)
+    let stageObj = stageArray.find( s => s._id === tab);
 
     return (
         <div>
@@ -338,32 +162,41 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar active={isActive} page={'Reports'} />
+                        <Sidebar active={isActive} page={'reports'} />
                         <div className="slide-toggle" onClick={toggleClass}>
-                            <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i class="fas fa-angle-double-left"></i></span>
+                            <span className={"qc-arrow"}><i class="fas fa-angle-double-left"></i></span>
                         </div>
                     </div>
-                    <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
-                        <h3 className={'page_header'}>Reports</h3>
+                    <div className="content content-width mt-3" id={'style-2'}>
+                        <h3 className={'page_header text-white'}>Reports</h3>
                         <Tabs accessKey={tab} onChange={changeTab}>
-                            <TabPane tab={<p className="active-green" style={{ color: '#8a1ccf' }}>Room Wise Report</p>} key="all" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
+                            <TabPane tab={<p className="active-green" style={{ color: '#8a1ccf' }}>Room Wise Report</p>} key="all" style={{ background: ' #f7f7f7 !important' }}></TabPane>
+                            {stageArray.map((s, index) => {
+                                return (
+                                    <TabPane
+                                        tab={<p className="active-green" style={{ color: colors[index] }}>{s.name}</p>}
+                                        key={s._id} style={{ background: '#f7f7f7 !important' }}
+                                    />
+                                )
+                            })}
+                        </Tabs>
+                        {tab === "all" &&
+                            <div style={{ padding: 10 }}>
+                                <div className="row">
                                     <div className="col-lg-4">
                                         <div className="form-group">
                                             <Select
-                                                onChange={overAllOnChange}
+                                                onChange={stageOnChange}
                                                 placeholder="Select Report Type"
                                                 className="ps-ant-dropdown"
                                                 style={{ width: '100%' }}
-                                                value={overall ? overall : null}
-                                                defaultValue={overall ? overall : null}
+                                                value={selectedStageId ? selectedStageId : null}
                                             >
-
-                                                <Option value="harvest">Harvest</Option>
-                                                <Option value="pinning">Pinning</Option>
-                                                <Option value="venting">Venting</Option>
-                                                <Option value="caseRun">CaseRun</Option>
-                                                <Option value="spawnRun">SpawnRun</Option>
+                                                {stageArray.map(d => {
+                                                    return (
+                                                        <Option value={d._id} key={d._id}>{d.name}</Option>
+                                                    )
+                                                })}
                                             </Select>
                                         </div>
                                     </div>
@@ -376,95 +209,27 @@ const Home = (props) => {
                                             onChange={(e) => handleStartDateChange(e.target.value)}
                                         />
                                     </div>
-                                    {/* <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
-                                    </div> */}
                                     <div className="col-lg-4">
                                         <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
                                             <button onClick={searchOverAll} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-search" /> Search
                                             </button>
-                                            {/* <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button> */}
-
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                    {overall &&
-                                        <div className="d-flex justify-content-end mr-2 mb-2">
-                                            <div className="form-group mb-0 ml-4 d-flex">
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    placeholder="Search"
-                                                    value={search}
-                                                    onChange={(e) => setSearch(e.target.value)}
-                                                />
-                                                <Button onClick={searchOnChange} style={{ height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <i className="fas fa-search" style={{ fontSize: '16px', color: 'red' }}></i>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    }
-                                    {overall === 'harvest' &&
-                                        <div>
-                                            <TableHarvestReport reports={overAllData}
-                                                startDate={selectedStartDate}
-                                                endDate={selectedEndDate} />
-                                        </div>
-                                    }
-
-                                    {overall === 'pinning' &&
-                                        <div>
-                                            <TablePinningReport reports={overAllData}
-                                                startDate={selectedStartDate}
-                                                endDate={selectedEndDate} />
-                                        </div>
-                                    }
-
-                                    {overall === 'venting' &&
-                                        <div>
-                                            <TableVentingReport reports={overAllData}
-                                                startDate={selectedStartDate}
-                                                endDate={selectedEndDate} />
-                                        </div>
-                                    }
-
-                                    {overall === 'caseRun' &&
-                                        <div>
-                                            <TableCaseRunReport reports={overAllData}
-                                                startDate={selectedStartDate}
-                                                endDate={selectedEndDate} />
-                                        </div>
-
-                                    }
-                                    {overall === 'spawnRun' &&
-                                        <div>
-                                            <TableSpawnRunReport reports={overAllData}
-                                                startDate={selectedStartDate}
-                                                endDate={selectedEndDate} />
-                                        </div>
-
-                                    }
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#0e0606' }}>Spawn-Run</p>} key="spawnrun" style={{ background: ' #f7f7f7 !important' }}>
+                                {roomWiseData && roomWiseData.length > 0 &&
+                                    <div style={{ marginTop: 15 }}>
+                                        <TableRoomWiseReport reports={roomWiseData} />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {tab !== "all" &&
+                            <div>
                                 <div className="row" style={{ padding: 10 }}>
-
                                     <div className="col-lg-4">
                                         <input
                                             className="form-control"
@@ -485,240 +250,30 @@ const Home = (props) => {
                                     </div>
                                     <div className="col-lg-4">
                                         <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                            <button onClick={stageWiseSearch} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-search" /> Search
                                             </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
+                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-file-pdf" /> Download
                                             </button>
-
+                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none' }}>
+                                                <i className="fas fa-setting" /> Clear
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-
-
-
-                                    {overall == 'spawnrun-1' && <div>
-                                        <TableOverAllSRReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#f39521' }}>Case-Run</p>} key="caserun" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
+                                {stageWiseData && Object.keys(stageWiseData).length > 0 &&
+                                    <div style={{ marginTop: 15 }}>
+                                        <TableStageWiseReport
+                                            headers={stageWiseFlow}
+                                            reports={stageWiseData}
+                                            totolCount={totolCount}
+                                            stage={stageObj}
                                         />
                                     </div>
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                    {overall == 'caserun-1' && <div>
-                                        <TableOverAllCRReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#f32121' }}>Venting</p>} key="venting" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                    {overall == 'venting-1' && <div>
-                                        <TableOverAllVentingReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#2196f3' }}>Pinning</p>} key="pinning" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-                                    {overall == 'pinning-1' && <div>
-                                        <TableOverAllPinningReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                            <TabPane tab={<p className="active-green" style={{ color: '#3d1ecd' }}>Harvest</p>} key="harvest" style={{ background: ' #f7f7f7 !important' }}>
-                                <div className="row" style={{ padding: 10 }}>
-
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedStartDate}
-                                            placeholder=""
-                                            onChange={(e) => handleStartDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <input
-                                            className="form-control"
-                                            type="date"
-                                            value={selectedEndDate}
-                                            placeholder=""
-                                            onChange={(e) => handleEndDateChange(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                                            <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-setting" /> Clear
-                                            </button>
-                                            <button onClick={harvestSearchOnChange} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
-                                                <i className="fas fa-search" /> Search
-                                            </button>
-                                            <button onClick={downloadOverAll} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none' }}>
-                                                <i className="fas fa-file-pdf" /> Download
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div style={{ marginTop: 15 }}>
-
-
-
-                                    {overall == 'harvest-1' && <div>
-                                        <TableOverAllReport reports={overAllData}
-                                            startDate={selectedStartDate}
-                                            endDate={selectedEndDate} />
-                                    </div>}
-
-
-
-
-                                </div>
-                            </TabPane>
-                        </Tabs>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </Spin>

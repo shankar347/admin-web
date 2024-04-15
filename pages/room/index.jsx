@@ -1,60 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Spin, notification, Pagination, Tabs, Select, Button } from 'antd';
+import { Modal, Spin, notification, Pagination, Tabs, Select } from 'antd';
 
 import HeaderDashboard from '../../components/header/HeaderDashboard';
 import Sidebar from '../../components/sections/sidebar';
 import TableRoom from '../../components/tables/TableRoom';
 
-import { getAllRoom, getInactiveRoom } from '../../store/Room/action';
-import LocationRepository from '../../repositories/RoomRepository';
+import { getAllRoom } from '../../store/Room/action';
+import RoomRepository from '../../repositories/RoomRepository';
 import UnitRepository from '../../repositories/UnitRepository';
-import StageRepository from '../../repositories/StageRepository';
 
 const Home = (props) => {
 
     const { TabPane } = Tabs;
     const { Option } = Select;
     const dispatch = useDispatch();
-    const valueRef = React.createRef();
     const { auth } = useSelector(({ auth }) => auth);
     const {
         allRoom,
-        activeTotalCount,
         activeCount,
-        inactiveRoom,
-        inactiveTotalCount,
         inactiveCount,
     } = useSelector(({ Room }) => Room);
+
+    const [isActive, setActive] = useState(false);
+    const [tab, setTab] = useState('active');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSizeTotal, setPageSizeTotal] = useState(10);
+    const [unitArray, setUnitArray] = useState([]);
+
+    const [name, setName] = useState('');
+    const [unitId, setUnitId] = useState('');
+
+    const [selectedCatId, setSelectedCatId] = useState('');
+    const [selectedCatIds, setSelectedCatIds] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
+    const [action, setAction] = useState(null);
+    const [search, setSearch] = useState('');
 
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [loader, setLoader] = useState(false);
-
-
-
-    const [code, setCode] = useState('');
-    const [name, setName] = useState('');
-    const [slug, setSlug] = useState('');
-    const [stageId, setStageId] = useState('');
-    const [unitId, setUnitId] = useState('');
-    const [status, setStatus] = useState('');
-    const [roomNo, setRoomNo] = useState('');
-    const [position, setPosition] = useState('');
-    const [selectedCatId, setSelectedCatId] = useState('');
-    const [selectedCatIds, setSelectedCatIds] = useState([]);
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSizeTotal, setPageSizeTotal] = useState(10);
-    const [tab, setTab] = useState('active');
-    const [selectAll, setSelectAll] = useState(false);
-    const [action, setAction] = useState(null);
-    const [search, setSearch] = useState('');
-    const [isActive, setActive] = useState(false);
-    const [result, setResult] = useState('');
-    const [posotionChangeCategorys, setPosotionChangeCategorys] = useState([]);
-    const [unitArray, setUnitArray] = useState([]);
-    const [stageArray, setStageArray] = useState([]);
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -67,98 +52,63 @@ const Home = (props) => {
     useEffect(() => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-       
         dispatch(getAllRoom(ctr));
-        dispatch(getInactiveRoom(ctr));
-        getCategory()
+        getPhase()
     }, []);
 
     useEffect(() => {
         setLoader(false);
-    }, [allRoom, inactiveRoom]);
+    }, [allRoom]);
 
     const toggleClass = () => {
         setActive(!isActive);
     };
 
-
+    const getPhase = async () => {
+        let result = await UnitRepository.getUnit({ status: "Y" });
+        if (result && result.data && result.data.data) {
+            setUnitArray(result.data.data)
+        } else {
+            setUnitArray([])
+        }
+    };
 
     const addModalOnClick = async () => {
-        setLoader(true);
         setName('');
-          setPosition(activeTotalCount + 1);
-        setPosition(activeTotalCount + 1);
+        setUnitId('');
         setSelectedCatId('');
-        setLoader(false);
         setShowModal(true);
     }
 
     const editModalOnClick = async (data) => {
-        setLoader(true);
-        setName(data.room_name);
-        setSlug(data.room_slug)
-        setRoomNo(data.room_no)
-        setUnitId(data.unit_id)
-        setStageId(data.stage_id)
-        setSelectedCatId(data.room_id);
-        setPosition(data.room_pos );
-        setLoader(false);
+        setName(data.name);
+        setUnitId(data.phaseId)
+        setSelectedCatId(data._id);
         setShowModal(true);
     }
 
     const closeModalOnClick = () => {
         setName('');
-       
-      
+        setUnitId('');
         setSelectedCatId('');
         setErrors({});
         setShowModal(false);
     }
 
-    const positionOnChange = (position) => {
-        const re = /^[0-9\b]+$/; //rules
-        if (position === "" || re.test(position)) {
-            let errorObj = { ...errors };
-            errorObj['position'] = '';
-            setPosition(position);
-            setErrors(errorObj);
-        }
-    }
-
-    const mainPositionOnChange = (id, position) => {
-        let array = [...posotionChangeCategorys];
-        const re = /^[0-9\b]+$/; //rules
-        if (position === "" || re.test(position)) {
-            let index = array.findIndex(a => a.room_id === id);
-            if (index >= 0) {
-                array[index]['position'] = position;
-            } else {
-                array.push({
-                    room_id: id,
-                    position: position
-                });
-            }
-            setPosotionChangeCategorys(array);
-        }
+    const unitOnChange = async (id) => {
+        let errorObj = { ...errors };
+        setUnitId(id);
+        errorObj['unitId'] = '';
+        setErrors(errorObj);
     }
 
     const nameOnChange = (name) => {
         let errorObj = { ...errors };
-        let slug = (name).replace(/ /g, "-").toLowerCase();
         errorObj['name'] = '';
-        errorObj['slug'] = '';
         setName(name);
-        setSlug(slug);
-        setErrors(errorObj);
-    }
-
-    const slugOnChange = (slug) => {
-        let errorObj = { ...errors };
-        slug = (slug).replace(/ /g, "-").toLowerCase();
-        errorObj['slug'] = '';
-        setSlug(slug);
         setErrors(errorObj);
     }
 
@@ -167,92 +117,93 @@ const Home = (props) => {
     }
 
     const saveData = async (selectedCatId) => {
-
-        if (name) {
+        if (name && unitId) {
             setLoader(true);
             let saveObj = {
-                "room_name": name,
-                "room_slug": slug,
-                "room_pos": position,
-                "unit_id": unitId,
-                "stage_id": stageId,
-                "room_no": roomNo
-
+                name,
+                "phaseId": unitId
             };
-
-            try {
-                if (selectedCatId) {
-                    let result = await LocationRepository.editRoom(selectedCatId, saveObj);
-                    setResult(result)
-                } else {
-                    await LocationRepository.saveRoom(saveObj);
-                }
-                if (result && result.status === 200) {
-                    notification.success({
-                        message: 'Room Updated Successfully.',
-                        placement: 'top'
-                    });
-                } else {
-                    notification.success({
-                        message: 'Room Added Successfully.',
-                        placement: 'top'
-                    });
-                }
-                let ctr = {}//chaptId: query.chapter_id };
-                ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
-                ctr.limit = pageSizeTotal;
-                
-                if (search) {
-                    ctr.search = search;
-                }
-                setLoader(false);
-                dispatch(getAllRoom(ctr));
-                dispatch(getInactiveRoom(ctr));
-                closeModalOnClick();
-            } catch (e) {
-                notification.error({
-                    message: 'Room Updated Failed.',
-                    placement: 'top'
-                });
+            if (selectedCatId) {
+                update(selectedCatId, saveObj);
+            } else {
+                add(saveObj);
             }
         } else {
             let errorObj = { ...errors };
-            if (!name) errorObj['name'] = "Please Enter RoomName";
-            if (!roomNo) errorObj['code'] = "Please Enter code";
-
+            if (!name) errorObj['name'] = "Please Enter Name";
+            if (!unitId) errorObj['unitId'] = "Please Select";
             setErrors(errorObj);
         }
     }
 
-    const getCategory = async () => {
-        let ctr = {};
-        ctr._start = 0;
-        ctr._limit = 100;
-       
-        let Unit = await UnitRepository.getUnit(ctr);
-        if (Unit && Unit.data && Unit.data && Unit.data.rows.length > 0) {
-            setUnitArray(Unit.data.rows)
+    const add = async (saveObj) => {
+        let result = await RoomRepository.saveRoom(saveObj);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Room Added Successfully.',
+                placement: 'top'
+            });
+            let ctr = {}
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;
+            if (search) {
+                ctr.search = search;
+            }
+            dispatch(getAllRoom(ctr));
+            closeModalOnClick();
+        } else if (result && result.status) {
+            notification.error({
+                message: result.message,
+                placement: 'top'
+            });
+        } else {
+            notification.error({
+                message: 'Room Added Failed.',
+                placement: 'top'
+            });
         }
-      
-        let Stage = await StageRepository.getStage(ctr);
-        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
-            setStageArray(Stage.data.rows);
+        setLoader(false);
+    }
+
+    const update = async (selectedCatId, saveObj) => {
+        let result = await RoomRepository.editRoom(selectedCatId, saveObj);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Room Updated Successfully.',
+                placement: 'top'
+            });
+            let ctr = {}
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;
+            if (search) {
+                ctr.search = search;
+            }
+            dispatch(getAllRoom(ctr));
+            closeModalOnClick();
+        } else if (result && result.status) {
+            notification.error({
+                message: result.message,
+                placement: 'top'
+            });
+        } else {
+            notification.error({
+                message: 'Room Updated Failed.',
+                placement: 'top'
+            });
         }
-      
-      
-    };
+        setLoader(false);
+    }
 
     const searchOnChange = (search) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        if (tab === "active") {
-            dispatch(getAllRoom(ctr));
-        } else {
-            dispatch(getInactiveRoom(ctr));
-        }
+        dispatch(getAllRoom(ctr));
         setSearch(search);
         setCurrentPage(1);
     }
@@ -260,36 +211,22 @@ const Home = (props) => {
     const pageSizeChange = async (page, pageSize) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSize;
         if (search) ctr.search = search;
-
-        if (tab === "active") {
-            dispatch(getAllRoom(ctr));
-        } else {
-            dispatch(getInactiveRoom(ctr));
-        }
+        dispatch(getAllRoom(ctr));
         setCurrentPage(page);
         setPageSizeTotal(pageSize);
     }
 
-    const onChangeHandler = (setIdentifierState, event) => {
-        let errorObj = { ...errors }
-        errorObj[event.target.name] = ''
-        setIdentifierState(event.target.value);
-        setErrors(errorObj);
-    };
-
     const changeTab = (tab) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = 0;
         ctr.limit = 10;
-        if (tab === "active") {
-            dispatch(getAllRoom(ctr));
-        } else if (tab === "inactive") {
-            dispatch(getInactiveRoom(ctr));
-        }
+        dispatch(getAllRoom(ctr));
         setCurrentPage(1);
         setPageSizeTotal(10);
         setSelectedCatIds([]);
@@ -302,11 +239,7 @@ const Home = (props) => {
     const onSelectAll = (value) => {
         let array = [];
         if (value) {
-            if (tab === 'active') {
-                array = allRoom.map(h => h._id);
-            } else {
-                array = inactiveRoom.map(h => h._id);
-            }
+            array = allRoom.map(h => h._id);
         }
         setSelectedCatIds(array);
         setSelectAll(value);
@@ -314,7 +247,7 @@ const Home = (props) => {
 
     const onSelectOne = (id) => {
         let array = [...selectedCatIds];
-        let array1 = tab === 'active' ? [...allRoom] : [...inactiveRoom];
+        let array1 = [...allRoom];
         let index = array.indexOf(id);
         if (index >= 0) {
             array.splice(index, 1);
@@ -333,32 +266,6 @@ const Home = (props) => {
         setAction(action);
     }
 
-    const unitOnChange = async (id) => {
-        let ctr = {};
-        ctr._start = 0;
-        ctr._limit = 100;
-        ctr.unitId = id
-        let errorObj = { ...errors };
-        let Stage = await StageRepository.getStage(ctr);
-        if (Stage && Stage.data && Stage.data && Stage.data.rows.length > 0) {
-            setStageArray(Stage.data.rows);
-        }else{
-            setStageArray([]);
-        }
-        setUnitId(id);
-        setStageId('')
-        errorObj[''] = '';
-        setErrors(errorObj);
-    }
-
-    const stageonOnChange = async (id) => {
-        let errorObj = { ...errors };
-        setStageId(id);
-        errorObj['stageId'] = '';
-        setErrors(errorObj);
-    }
-
-
     const goOnClick = async () => {
         let selectedHomeCatIdsArr = [...selectedCatIds];
         let obj = {
@@ -368,45 +275,36 @@ const Home = (props) => {
             setLoader(true);
             if (action === "active") {
                 obj['status'] = 'Y';
-                await LocationRepository.updateStatus(obj);
+                await RoomRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Rooms Updated Successfully.',
                     placement: 'top'
                 });
             }
             if (action === "inactive") {
                 obj['status'] = 'N';
-                await LocationRepository.updateStatus(obj);
+                await RoomRepository.updateStatus(obj);
                 notification.success({
-                    message: 'Location Updated Successfully.',
+                    message: 'Rooms Updated Successfully.',
                     placement: 'top'
                 });
             }
             if (action === "delete") {
-                obj['status'] = 'D';
-                await LocationRepository.updateStatus(obj);
+                await RoomRepository.delete(obj);
                 notification.success({
-                    message: 'Location Deleted Successfully.',
-                    placement: 'top'
-                });
-            } if (action === "position") {
-                let array = [...posotionChangeCategorys];
-                array = array.filter(a => selectedHomeCatIdsArr.indexOf(a.unrst_jid) >= 0);
-                await LocationRepository.changePosition({ positionArray: array });
-                notification.success({
-                    message: 'Int job Updated Successfully.',
+                    message: 'Rooms Deleted Successfully.',
                     placement: 'top'
                 });
             }
             setSelectedCatIds([]);
             let ctr = {};
+            ctr.status = tab === "active" ? "Y" : "N";
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;
             if (search) {
                 ctr.search = search;
             }
             dispatch(getAllRoom(ctr));
-            dispatch(getInactiveRoom(ctr));
         } else {
             if (!action) {
                 Modal.error({
@@ -414,7 +312,7 @@ const Home = (props) => {
                 });
             } else if (!selectedHomeCatIdsArr.length) {
                 Modal.error({
-                    title: 'Please Select One Location'
+                    title: 'Please Select One Room'
                 });
             }
         }
@@ -426,7 +324,7 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar page={'Room'} />
+                        <Sidebar page={'room'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
@@ -434,9 +332,9 @@ const Home = (props) => {
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
                         <h3 className={'page_header'}>Room</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
-                            <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
+                            <TabPane tab={<p className="active-green">Active {activeCount}</p>} key="active">
                             </TabPane>
-                            <TabPane tab={<p className="inactive-red">Inactive {inactiveTotalCount}</p>} key="inactive">
+                            <TabPane tab={<p className="inactive-red">Inactive {inactiveCount}</p>} key="inactive">
                             </TabPane>
                         </Tabs>
                         <div className='row px-2'>
@@ -451,7 +349,6 @@ const Home = (props) => {
                                     >
                                         {tab === 'active' && <Option value="inactive">Inactive</Option>}
                                         {tab === 'inactive' && <Option value="active">Active</Option>}
-                                        {tab === 'active' && <Option value="position">Position</Option>}
                                         <Option value="delete">Delete</Option>
                                     </Select>
                                     <button onClick={goOnClick} style={{ backgroundColor: '#7063D8', width: '17%', height: 38, color: '#fff', border: 'none', marginLeft: 7 }}>
@@ -482,13 +379,11 @@ const Home = (props) => {
                         </div>
                         <div className='px-2'>
                             <TableRoom
-                                category={tab === "active" ? allRoom : inactiveRoom}
+                                category={allRoom}
                                 editModalOnClick={editModalOnClick}
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
                                 selectAll={selectAll}
-                                mainPositionOnChange={mainPositionOnChange}
-                                posotionChangeCategorys={posotionChangeCategorys}
                                 selectedCatIds={selectedCatIds}
                                 currentPage={currentPage}
                                 pageSizeTotal={pageSizeTotal}
@@ -496,7 +391,7 @@ const Home = (props) => {
                         </div>
                         <div style={{ margin: '10px auto', textAlign: 'right' }}>
                             <Pagination
-                                total={tab === "active" ? activeTotalCount : inactiveTotalCount}
+                                total={tab === "active" ? activeCount : inactiveCount}
                                 defaultCurrent={1}
                                 current={currentPage}
                                 defaultPageSize={10}
@@ -519,14 +414,12 @@ const Home = (props) => {
                 >
                     <Spin spinning={loader} tip={'Loading...'}>
                         <div className='row'>
-
-
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label> Phase <span style={{ color: 'red' }}>*</span></label>
                                     <Select
                                         onChange={unitOnChange}
-                                        placeholder="Select UnitId"
+                                        placeholder="Select Phase"
                                         className="ps-ant-dropdown"
                                         style={{ width: '100%' }}
                                         value={unitId ? unitId : null}
@@ -535,17 +428,14 @@ const Home = (props) => {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="">--Unit--</Option>
-                                        {unitArray.filter(c => c.unit_id !== 100 && c.unit_id !== 0)
-                                            .map(m => {
-
-                                                return (
-                                                    <Option value={m.unit_id}>{`${m.unit_name} - ${m.unit_code}`}</Option>
-                                                )
-                                            })}
+                                        {unitArray.map(m => {
+                                            return (
+                                                <Option value={m._id} key={m._id}>{`${m.name}`}</Option>
+                                            )
+                                        })}
                                     </Select>
-                                    {errors['UnitId'] &&
-                                        <span style={{ color: 'red' }}>{errors['UnitId']}</span>
+                                    {errors['unitId'] &&
+                                        <span style={{ color: 'red' }}>{errors['unitId']}</span>
                                     }
                                 </div>
                             </div>

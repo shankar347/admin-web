@@ -7,45 +7,47 @@ import Sidebar from '../../components/sections/sidebar';
 import TableAdminfaculty from '../../components/tables/TableOperator';
 
 import { getCurrentUser } from '../../helper/auth';
-import { getAllOperator, getInactiveOperator } from '../../store/operator/action';
-import AdminfacultyRepository from '../../repositories/OperatorRepository';
-import AdminMenuRepository from '../../repositories/AdminMenuRepository';
+import { getAllOperator } from '../../store/operator/action';
+import AuthRepository from '~/repositories/AuthRepository';
 
 const Home = (props) => {
+
     const { TabPane } = Tabs;
     const { Option } = Select;
     const dispatch = useDispatch();
     const { auth } = useSelector(({ auth }) => auth);
     const {
-        allOperator, activeTotalCount,
-        inactiveOperator, inactiveTotalCount,
-        totalinactiveOperator, totalActiveOperator
+        allOperator,
+        activeCount,
+        inactiveCount,
     } = useSelector(({ operator }) => operator);
 
+    const [viewmodal, setViewModal] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [loader, setLoader] = useState(false);
+
+    const [isActive, setActive] = useState(false);
+    const [tab, setTab] = useState('active');
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSizeTotal, setPageSizeTotal] = useState(10);
-    const [tab, setTab] = useState('active');
+
     const [selectAll, setSelectAll] = useState(false);
     const [action, setAction] = useState(null);
     const [search, setsearch] = useState('');
-    const [viewmodal, setViewModal] = useState(false);
+
     const [selectedHomeCatId, setSelectedHomeCatId] = useState('');
     const [selectedHomeCatIds, setSelectedHomeCatIds] = useState([]);
 
-    const [name, setname] = useState('');
-    const [Username, setUsername] = useState('');
-    const [password, setpassword] = useState('');
-    const [Status, setstatus] = useState('');
-    const [optype, settype] = useState('');
+    const [name, setName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [status, setStaus] = useState('');
+    const [type, setType] = useState('');
+    const [selectedMenu, setSelectedMenu] = useState([]);
 
-    const [selectedmenu, setSelectedmenu] = useState([]);
-
-    const [adminmenuitems, setAdminmenuItems] = useState([]);
+    const [adminMenuItems, setAdminMenuItems] = useState([]);
     const [user, setUser] = useState({});
-    const [isActive, setActive] = useState(false);
 
     useEffect(() => {
         let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
@@ -60,203 +62,204 @@ const Home = (props) => {
         let user = getCurrentUser();
         setUser(user);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-        ctr.type = user.userType;
         dispatch(getAllOperator(ctr));
-        dispatch(getInactiveOperator(ctr));
-        (async () => {
-            let adminMenu = await AdminMenuRepository.adminMenu();
-
-            if (adminMenu && adminMenu.data.data.length > 0) {
-                setAdminmenuItems(adminMenu.data.data);
-            }
-        })()
+        getAllMenus()
     }, []);
 
     useEffect(() => {
         setLoader(false);
-    }, [allOperator, inactiveOperator]);
+    }, [allOperator]);
+
+    const toggleClass = () => {
+        setActive(!isActive);
+    };
+
+    const getAllMenus = async () => {
+        let result = await AuthRepository.getMenu();
+        if (result && result.data) {
+            setAdminMenuItems(result.data)
+        } else {
+            setAdminMenuItems([])
+        }
+    };
 
     const addModalOnClick = async () => {
         setLoader(true);
-
         setSelectedHomeCatId('');
-        setname('');
-        setUsername('');
-        setstatus('');
-        setpassword('');
-        settype('');
-        setSelectedmenu([]);
-
+        setName('');
+        setUserName('');
+        setStaus('');
+        setPassword('');
+        setType('');
+        setSelectedMenu([]);
         setLoader(false);
         setShowModal(true);
     }
 
     const editModalOnClick = async (data) => {
-
         setLoader(true);
-        setSelectedHomeCatId(data.op_id);
-        setname(data.op_name)
-        setUsername(data.op_uname)
-        setstatus(data.op_status)
-        setpassword(new Buffer.from(data.op_password, 'base64').toString());
-        settype(data.op_type);
-        setSelectedmenu(data.feat_id);
+        setSelectedHomeCatId(data._id);
+        setName(data.name)
+        setUserName(data.userName)
+        setStaus(data.status)
+        setType(data.type);
+        setSelectedMenu(data.menu_ids);
         setLoader(false);
         setShowModal(true);
     }
 
     const openview = (open) => {
         setLoader(true);
-        setpassword(new Buffer.from(open.op_password, 'base64').toString())
-        setname(open.op_name)
-        setUsername(open.op_uname)
-        setstatus(open.op_status)
-        setSelectedmenu(open.feat_id.split(',').map(Number));
-
+        setName(open.name)
+        setUserName(open.userName)
+        setStaus(open.status)
+        setType(open.type);
+        setSelectedMenu(open.menu_ids);
         setLoader(false);
         setViewModal(open);
     }
 
     const closeModalOnClick = () => {
         setSelectedHomeCatId('');
-        setname('');
-        setUsername('');
-        setstatus('');
-        setpassword('');
-        settype('');
-        setSelectedmenu([]);
-
+        setName('');
+        setUserName('');
+        setStaus('');
+        setPassword('');
+        setType('');
+        setSelectedMenu([]);
         setErrors({});
         setShowModal(false);
     }
 
     const closeViewOnClick = () => {
         setSelectedHomeCatId('');
-        setname('');
-        setUsername('');
-        setstatus('');
-        setpassword('');
-        settype('');
+        setName('');
+        setUserName('');
+        setStaus('');
+        setPassword('');
+        setType('');
         setViewModal(false);
     }
 
     const nameOnChange = (name) => {
         let errorObj = { ...errors };
         errorObj['name'] = '';
-        setname(name);
+        setName(name);
         setErrors(errorObj);
     }
 
-    const userNameOnChange = (username) => {
+    const userNameOnChange = (userName) => {
         let errorObj = { ...errors };
-        errorObj['username'] = '';
-        setUsername(username);
+        errorObj['userName'] = '';
+        setUserName(userName);
         setErrors(errorObj);
     }
 
     const passwordOnChange = (password) => {
         let errorObj = { ...errors };
         errorObj['password'] = '';
-        setpassword(password);
+        setPassword(password);
         setErrors(errorObj);
     }
 
     const typeOnChange = async (type) => {
-        settype(type.target.value);
-        setSelectedmenu([]);
+        setType(type.target.value);
+        setSelectedMenu([]);
         setErrors({});
     }
 
     const featuresOnChange = async (value) => {
         let errorObj = { ...errors };
-        setSelectedmenu(value);
-        errorObj['features'] = '';
+        setSelectedMenu(value);
+        errorObj['menuIds'] = '';
         setErrors(errorObj);
     }
 
     const saveOnClick = () => {
-        saveData(selectedHomeCatId);
-    }
-
-    const saveData = async (selectedHomeCatId) => {
-        if (
-            name && Username && password && optype && selectedmenu.length) {
+        let isPassword = !selectedHomeCatId ? password : true;
+        if (name && userName && isPassword && type && selectedMenu.length) {
             setLoader(true);
-
-            let selectedMenu = selectedmenu && selectedmenu.length ? selectedmenu : [];
-            const password1 =new Buffer.from(password).toString("base64");
-            let obj = {
-                "op_name": name,
-                "op_uname": Username,
-                "op_password": password1,
-                "op_type": optype,
-                "feat_id": String(selectedMenu)
+            let paylaod = { 
+                name, 
+                userName, 
+                type,
+                menu_ids: selectedMenu 
             }
-            try {
-                if (selectedHomeCatId) {
-                    let response = await AdminfacultyRepository.editOperator(selectedHomeCatId, obj);
-                    if (response && response.status === 201) {
-                        notification.success({
-                            message: 'Admin & Faculty Added Successfully.',
-                            placement: 'top'
-                        });
-                    }
-                } else {
-                    let response = await AdminfacultyRepository.saveOperator(obj);
-                    if (response && response.status === 201) {
-                        notification.success({
-                            message: 'Admin & Faculty Added Successfully.',
-                            placement: 'top'
-                        });
-                    } else {
-                        Modal.error({
-                            title: response.message
-                        });
-                    }
-                }
-                let ctr = {};
-                ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
-                ctr.limit = pageSizeTotal;;
-                ctr.search = search;
-                ctr.type = user.userType;
-                closeViewOnClick()
-                dispatch(getAllOperator(ctr));
-                dispatch(getInactiveOperator(ctr));
-                closeModalOnClick();
-                setLoader(false);
-            } catch (e) {
-                console.log(e, "xjcbncvbkxc")
-                notification.error({
-                    message: 'Admin & Faculty Added Failed.',
-                    placement: 'top'
-                });
+            if(!selectedHomeCatId) paylaod['password'] = password;
+            if (selectedHomeCatId) {
+                update(paylaod)
+            } else {
+                add(paylaod)
             }
         } else {
             let errorObj = { ...errors };
             if (!name) errorObj['name'] = "Please Enter Name";
-            if (!Username) errorObj['username'] = "Please Enter User Name";
-            if (!password) errorObj['password'] = "Please Enter password";
-            if (!optype) errorObj['type'] = "Please Select Type";
-            if (!selectedmenu.length) errorObj['features'] = "Please Select Features";
+            if (!userName) errorObj['userName'] = "Please Enter User Name";
+            if (!password) errorObj['password'] = "Please Enter Password";
+            if (!type) errorObj['type'] = "Please Select Type";
+            if (!type && selectedMenu.length) errorObj['menuIds'] = "Please Select Features";
             setErrors(errorObj);
         }
     }
 
+    const add = async (paylaod) => {
+        let result = await AuthRepository.createAdmin(paylaod);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Admin & Faculty Added Successfully.',
+            });
+            let ctr = {};
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;;
+            ctr.search = search;
+            dispatch(getAllOperator(ctr));
+            closeViewOnClick()
+            closeModalOnClick();
+            setLoader(false);
+        } else {
+            notification.error({
+                message: result.message,
+            });
+        }
+        setLoader(false);
+    }
+
+    const update = async (paylaod) => {
+        console.log( paylaod, 'dcdcd')
+        let result = await AuthRepository.updateAdmin(selectedHomeCatId, paylaod);
+        if (result && result.status === 200) {
+            notification.success({
+                message: 'Admin & Faculty Updated Successfully.',
+            });
+            let ctr = {};
+            ctr.status = tab === "active" ? "Y" : "N";
+            ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
+            ctr.limit = pageSizeTotal;;
+            ctr.search = search;
+            dispatch(getAllOperator(ctr));
+            closeViewOnClick()
+            closeModalOnClick();
+            setLoader(false);
+        } else {
+            notification.error({
+                message: result.message,
+            });
+        }
+        setLoader(false);
+    }
 
     const searchOnChange = (search) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = 0;
         ctr.limit = pageSizeTotal;
         ctr.search = search;
-        ctr.type = user.userType;
-        if (tab === 'active') {
-            dispatch(getAllOperator(ctr));
-        } else {
-            dispatch(getInactiveOperator(ctr));
-        }
+        dispatch(getAllOperator(ctr));
         setsearch(search);
         setCurrentPage(1);
     }
@@ -264,17 +267,11 @@ const Home = (props) => {
     const pageSizeChange = async (page, pageSize) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = page === 1 ? 0 : ((page - 1) * pageSize);
         ctr.limit = pageSizeTotal;;
-        ctr.type = user.userType;
-        if (search) {
-            ctr.search = search;
-        }
-        if (tab === "active") {
-            dispatch(getAllOperator(ctr));
-        } else {
-            dispatch(getInactiveOperator(ctr));
-        }
+        if (search) ctr.search = search;
+        dispatch(getAllOperator(ctr));
         setCurrentPage(page);
         setPageSizeTotal(pageSize);
     }
@@ -282,15 +279,10 @@ const Home = (props) => {
     const changeTab = async (tab) => {
         setLoader(true);
         let ctr = {};
+        ctr.status = tab === "active" ? "Y" : "N";
         ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
         ctr.limit = pageSizeTotal;
-        ctr.type = user.userType;
-        if (tab === "active") {
-            dispatch(getAllOperator(ctr));
-        } else if (tab === "inactive") {
-            dispatch(getInactiveOperator(ctr));
-        }
-
+        dispatch(getAllOperator(ctr));
         setCurrentPage(1);
         setPageSizeTotal(10);
         setSelectedHomeCatIds([]);
@@ -303,11 +295,7 @@ const Home = (props) => {
     const onSelectAll = (value) => {
         let array = [];
         if (value) {
-            if (tab === 'active') {
-                array = allOperator.map(h => h.op_id);
-            } else {
-                array = inactiveOperator.map(h => h.op_id);
-            }
+            array = allOperator.map(h => h._id);
         }
         setSelectedHomeCatIds(array);
         setSelectAll(value);
@@ -315,7 +303,7 @@ const Home = (props) => {
 
     const onSelectOne = (id) => {
         let array = [...selectedHomeCatIds];
-        let array1 = tab === 'active' ? [...allOperator] : [...inactiveOperator];
+        let array1 = [...allOperator];
         let index = array.indexOf(id);
         if (index >= 0) {
             array.splice(index, 1);
@@ -343,39 +331,32 @@ const Home = (props) => {
             setLoader(true);
             if (action === "active") {
                 obj['status'] = 'Y';
-                await AdminfacultyRepository.updateStatus(obj);
+                await AuthRepository.updateStatusAdmin(obj);
                 notification.success({
                     message: 'Admin & Faculty  Updated Successfully.',
-                    placement: 'top'
                 });
             }
             if (action === "inactive") {
                 obj['status'] = 'N';
-                await AdminfacultyRepository.updateStatus(obj);
+                await AuthRepository.updateStatusAdmin(obj);
                 notification.success({
                     message: 'Admin & Faculty  Updated Successfully.',
-                    placement: 'top'
                 });
             }
             if (action === "delete") {
                 obj['status'] = 'D';
-                await AdminfacultyRepository.updateStatus(obj);
+                await AuthRepository.updateStatusAdmin(obj);
                 notification.success({
                     message: 'Admin & Faculty  Deleted Successfully.',
-                    placement: 'top'
                 });
             }
-
             setSelectedHomeCatIds([]);
             let ctr = {};
+            ctr.status = tab === "active" ? "Y" : "N";
             ctr.start = currentPage === 1 ? 0 : ((currentPage - 1) * pageSizeTotal);
             ctr.limit = pageSizeTotal;;
-            ctr.type = user.userType;
-            if (search) {
-                ctr.search = search;
-            }
+            if (search) ctr.search = search;
             dispatch(getAllOperator(ctr));
-            dispatch(getInactiveOperator(ctr));
         } else {
             if (!action) {
                 Modal.error({
@@ -383,14 +364,16 @@ const Home = (props) => {
                 });
             } else if (!selectedHomeCatIdsArr.length) {
                 Modal.error({
-                    title: 'Please Select One Category'
+                    title: 'Please Select One'
                 });
             }
         }
     }
-    const toggleClass = () => {
-        setActive(!isActive);
-    };
+
+    let filteredMenu = [...adminMenuItems];
+    if (type === "O") {
+        filteredMenu = filteredMenu.filter(m => m.menu_id !== 6)
+    }
 
     return (
         <div>
@@ -398,7 +381,7 @@ const Home = (props) => {
                 <HeaderDashboard />
                 <div className="dashboard-container mt-5 pt-2">
                     <div id="sidebar" className={isActive ? 'slide-show' : null}>
-                        <Sidebar active={isActive} page={'Operator'} />
+                        <Sidebar active={isActive} page={'operator'} />
                         <div className="slide-toggle" onClick={toggleClass}>
                             <span className={auth.logintype === "I" ? "school-arrow" : "qc-arrow"}><i className="fas fa-angle-double-left"></i></span>
                         </div>
@@ -406,9 +389,9 @@ const Home = (props) => {
                     <div className="content content-width mt-3" id={auth.logintype === 'I' ? 'style-3' : 'style-2'}>
                         <h3 className={'page_header'}>Operator</h3>
                         <Tabs defaultActiveKey={tab} onChange={changeTab}>
-                            <TabPane tab={<p className="active-green">Active {activeTotalCount}</p>} key="active">
+                            <TabPane tab={<p className="active-green">Active {activeCount}</p>} key="active">
                             </TabPane>
-                            <TabPane tab={<p className="inactive-red">Inactive {inactiveTotalCount}</p>} key="inactive">
+                            <TabPane tab={<p className="inactive-red">Inactive {inactiveCount}</p>} key="inactive">
                             </TabPane>
 
                         </Tabs>
@@ -448,25 +431,24 @@ const Home = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div style={activeTotalCount > 0 ? { margin: '10px auto', textAlign: 'right' } : { display: 'none' }}>
+                        <div style={activeCount > 0 ? { margin: '10px auto', textAlign: 'right' } : { display: 'none' }}>
                         </div>
                         <div className='px-2'>
                             <TableAdminfaculty
-                                allOperator={tab === "active" ? allOperator : inactiveOperator}
+                                allOperator={allOperator}
                                 editModalOnClick={editModalOnClick}
                                 openview={openview}
                                 onSelectAll={onSelectAll}
                                 onSelectOne={onSelectOne}
                                 selectAll={selectAll}
                                 selectedHomeCatIds={selectedHomeCatIds}
-                                auth={user}
                                 currentPage={currentPage}
                                 pageSizeTotal={pageSizeTotal}
                             />
                         </div>
-                        <div style={activeTotalCount > 0 ? { margin: '10px auto', textAlign: 'right' } : { display: 'none' }}>
+                        <div style={activeCount > 0 ? { margin: '10px auto', textAlign: 'right' } : { display: 'none' }}>
                             <Pagination
-                                total={tab === "active" ? activeTotalCount : tab === 'inactive' ? inactiveTotalCount : activeTotalCount + inactiveTotalCount}
+                                total={tab === "active" ? activeCount : inactiveCount}
                                 defaultCurrent={1}
                                 current={currentPage}
                                 defaultPageSize={10}
@@ -508,45 +490,45 @@ const Home = (props) => {
                                     <input
                                         className="form-control"
                                         type="text"
-                                        value={Username}
+                                        value={userName}
                                         placeholder=""
                                         onChange={(e) => userNameOnChange(e.target.value)}
                                     />
-                                    {errors['username'] &&
-                                        <span style={{ color: 'red' }}>{errors['username']}</span>
+                                    {errors['userName'] &&
+                                        <span style={{ color: 'red' }}>{errors['userName']}</span>
                                     }
                                 </div>
+                                {!selectedHomeCatId &&
+                                    <div className="form-group">
+                                        <label>Password<span style={{ color: 'red' }}>*</span></label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={password}
+                                            placeholder=""
+                                            onChange={(e) => passwordOnChange(e.target.value)}
+                                        />
+                                        {errors['password'] &&
+                                            <span style={{ color: 'red' }}>{errors['password']}</span>
+                                        }
+                                    </div>
+                                }
                                 <div className="form-group">
-                                    <label>Password<span style={{ color: 'red' }}>*</span></label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={password}
-                                        placeholder=""
-                                        onChange={(e) => passwordOnChange(e.target.value)}
-                                    />
-                                    {errors['password'] &&
-                                        <span style={{ color: 'red' }}>{errors['password']}</span>
-                                    }
-                                </div>
-                                <div className="form-group">
-                                    <Radio.Group onChange={typeOnChange} value={optype}>
-
-                                        {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"A"}>Admin</Radio>}
-                                        {user && (user.userType === "SA" || user.userType === "A") && <Radio value={"O"}> Executive</Radio>}
+                                    <Radio.Group onChange={typeOnChange} value={type}>
+                                        {user && user.type === "SA" && <Radio value={"A"}>Admin</Radio>}
+                                        {user && (user.type === "SA" || user.type === "A") && <Radio value={"O"}> Executive</Radio>}
                                     </Radio.Group>
                                     {errors['type'] &&
                                         <span style={{ color: 'red' }}>{errors['type']}</span>
                                     }
                                 </div>
-                                {optype &&
+                                {type &&
                                     <div className="form-group">
                                         <label>Features<span style={{ color: 'red' }}>*</span></label>
-                                        <Checkbox.Group style={{ width: '100%' }} onChange={featuresOnChange} value={selectedmenu}>
+                                        <Checkbox.Group style={{ width: '100%' }} onChange={featuresOnChange} value={selectedMenu}>
                                             <Row>
-                                                {adminmenuitems
+                                                {filteredMenu
                                                     .map((m, index) => {
-
                                                         return (
                                                             <Col span={8} key={index} style={{ padding: 5 }}>
                                                                 <Checkbox value={m.menu_id}>{m.menu_title}</Checkbox>
@@ -557,8 +539,8 @@ const Home = (props) => {
                                         </Checkbox.Group>
                                     </div>
                                 }
-                                {errors['features'] &&
-                                    <span style={{ color: 'red' }}>{errors['features']}</span>
+                                {errors['menuIds'] &&
+                                    <span style={{ color: 'red' }}>{errors['menuIds']}</span>
                                 }
                             </div>
                         </div>
@@ -579,21 +561,20 @@ const Home = (props) => {
                                     <input className="form-control" type="text" value={name} />
                                 </div>
                                 <div className="form-group">
-                                    <label>Username</label>
-                                    <input className="form-control" type="text" value={Username} />
+                                    <label>User Name</label>
+                                    <input className="form-control" type="text" value={userName} />
                                 </div>
                                 <div className="form-group">
-                                    <label>Password </label>
-                                    <input className="form-control" type="text" value={password} />
+                                    <label>Type</label>
+                                    <input className="form-control" type="text" value={type === "A" ? " Admin" : "Executive"} />
                                 </div>
                                 <div className="form-group">
                                     <label>Status</label>
-                                    <input className="form-control" type="text" value={Status == 'Y' ? "Active" : "Incctive"} />
+                                    <input className="form-control" type="text" value={status == 'Y' ? "Active" : "Incctive"} />
                                 </div>
                             </div>
                         </div>
                     </Spin>
-
                 </Modal>
             </Spin>
         </div>

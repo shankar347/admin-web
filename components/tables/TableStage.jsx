@@ -1,6 +1,5 @@
 import React from 'react';
 import { Checkbox, Table } from 'antd';
-import Link from 'next/link';
 
 const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
   let columns = [
@@ -9,15 +8,23 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       dataIndex: 'sno',
     },
     {
-      title: 'Phase',
+      title: 'Stage',
       dataIndex: 'title',
+    },
+    {
+      title: 'Code',
+      dataIndex: 'code',
+    },
+    {
+      title: 'Position',
+      dataIndex: 'position',
+      align: 'center'
     },
     {
       title: 'Edit',
       dataIndex: 'edit',
       align: 'center'
     },
-   
     {
       title: <Checkbox checked={selectAll} onClick={(e) => onSelectAll(e.target.checked)}></Checkbox>,
       dataIndex: 'check'
@@ -25,13 +32,13 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-   
     let obj = {
       key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
-      title: a.stage_name,
+      title: a.name,
+      code: a.code,
+      position: a.position,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
-     
       check: (
         <Checkbox
           onClick={() => onSelectOne(a._id)}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Checkbox, Table } from 'antd';
-import Link from 'next/link';
 
 const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOne, selectAll, selectedCatIds, currentPage, pageSizeTotal }) => {
   let columns = [
@@ -8,7 +7,6 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       title: 'S No',
       dataIndex: 'sno',
     },
-
     {
       title: 'Phase Name',
       dataIndex: 'main',
@@ -18,14 +16,11 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       title: 'Room Name',
       dataIndex: 'title',
     },
-
-
     {
       title: 'Edit',
       dataIndex: 'edit',
       align: 'center'
     },
-
     {
       title: <Checkbox checked={selectAll} onClick={(e) => onSelectAll(e.target.checked)}></Checkbox>,
       dataIndex: 'check'
@@ -33,18 +28,16 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
   ];
 
   let data = category.map((a, index) => {
-   
     let obj = {
-      key: a.room_id,
+      key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
-      title: a.room_name,
-      main: a.unit_name,
+      main: a.phase.name,
+      title: a.name,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
-
       check: (
         <Checkbox
-          onClick={() => onSelectOne(a.room_id)}
-          checked={selectedCatIds.indexOf(a.room_id) >= 0}
+          onClick={() => onSelectOne(a._id)}
+          checked={selectedCatIds.indexOf(a._id) >= 0}
         />
       )
     }
