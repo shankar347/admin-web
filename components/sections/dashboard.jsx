@@ -117,10 +117,9 @@ const Dashboard = () => {
                         })}
                     </div>
                 }
-
                 {productionData && productionData.length > 0 &&
-                    <div className="row mt-5">
-                        {productionData.map(p => {
+                    <div className="row mt-5"  style={{overflowX:'scroll'}}>
+                        {productionData?.map(p => {
                             return (
                                 <table className="table">
                                     {Object.keys(p).map((d, index) => {
@@ -137,6 +136,7 @@ const Dashboard = () => {
                                                 </thead>
                                                 <tbody>
                                                     <tr>
+                                           
                                                         {p[d].map(a => {
                                                             return (
                                                                 <td

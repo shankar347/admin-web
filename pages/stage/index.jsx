@@ -30,6 +30,7 @@ const Home = (props) => {
     const [code, setCode] = useState('');
     const [minDays, setMinDays] = useState('');
     const [maxDays, setMaxDays] = useState('');
+     const [splMaxDays, setSplMaxDays] = useState('');
     const [position, setPosition] = useState('');
 
     const [selectedCatId, setSelectedCatId] = useState('');
@@ -72,6 +73,7 @@ const Home = (props) => {
         setCode('');
         setMinDays('')
         setMaxDays('')
+        setSplMaxDays("")
         setPosition('');
         setSelectedCatId('');
         setShowModal(true);
@@ -80,8 +82,9 @@ const Home = (props) => {
     const editModalOnClick = async (data) => {
         setName(data.name);
         setCode(data.code);
-        setMinDays(data.minDays)
+        setMinDays(String(data.minDays))
         setMaxDays(data.maxDays)
+        setSplMaxDays(data.splMaxDays)
         setPosition(data.position);
         setSelectedCatId(data._id);
         setShowModal(true);
@@ -92,6 +95,7 @@ const Home = (props) => {
         setCode('');
         setMinDays('')
         setMaxDays('')
+        setSplMaxDays("")
         setSelectedCatId('');
         setPosition('');
         setErrors({});
@@ -131,6 +135,15 @@ const Home = (props) => {
             setErrors(errorObj);
         }
     }
+       const splMaxDaysOnChange = (days) => {
+        const re = /^[0-9\b]+$/; //rules
+        if (days === "" || re.test(days)) {
+            let errorObj = { ...errors };
+            errorObj['splMaxDays'] = '';
+            setSplMaxDays(days);
+            setErrors(errorObj);
+        }
+    }
 
     const positionOnChange  = (position) => {
         const re = /^[0-9\b]+$/; //rules
@@ -146,7 +159,7 @@ const Home = (props) => {
         if (name && code && minDays && maxDays && position) {
             setLoader(true);
             let saveObj = {
-                name, code, minDays, maxDays, position
+                name, code, minDays, maxDays, position ,splMaxDays : splMaxDays? splMaxDays : null
             };
             if (selectedCatId) {
                 update(saveObj);
@@ -480,6 +493,7 @@ const Home = (props) => {
                                 <div className="form-group">
                                     <label>Min Days<span style={{ color: 'red' }}>*</span></label>
                                     <div className="form-group">
+                                       
                                         <input
                                             className="form-control"
                                             type="text"
@@ -510,6 +524,24 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             </div>
+                                <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Special-Case Max Days</label>
+                                    <div className="form-group">
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={splMaxDays}
+                                            placeholder=""
+                                            onChange={(e) => splMaxDaysOnChange(e.target.value)}
+                                        />
+                                        {errors['splMaxDays'] &&
+                                            <span style={{ color: 'red' }}>{errors['splMaxDays']}</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Position <span style={{ color: 'red' }}>*</span></label>

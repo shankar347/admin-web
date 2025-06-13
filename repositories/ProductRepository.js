@@ -29,6 +29,18 @@ class MaterialRepository {
     return reponse;
   }
 
+    async getProFlow(id) {
+    let url = `${apiUrl}/production/proFlow/${id}`;
+    const reponse = await Repository.get(url)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
   async saveProduct(formdata) {
     let url = `${apiUrl}/production/`;
     const reponse = await Repository.post(url, formdata)

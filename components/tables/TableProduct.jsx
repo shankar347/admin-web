@@ -12,6 +12,18 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       title: 'Name',
       dataIndex: 'title',
     },
+      {
+      title: 'Phase',
+      dataIndex: 'phase',
+    },
+          {
+      title: 'Room',
+      dataIndex: 'room',
+    },
+        {
+      title: 'Stage',
+      dataIndex: 'stage',
+    },
     {
       title: 'Start Date',
       dataIndex: 'start',
@@ -43,10 +55,13 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.name,
+      phase : a.phase?.name ,
+      room: a?.room?.name,
+      stage:a?.stage?.name,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
       start: Moment(a.startDate).format("DD-MM-YYYY"),
       end: Moment(a.endDate).format("DD-MM-YYYY"),
-      flow: a.details && a.details.length ? a.details[0].flow : <p className='text-success'>Comleted</p>,
+      flow: a.details && a.details.length ? a.details[0].flow : <p className='text-success'>Completed</p>,
       check: (
         <Checkbox
           onClick={() => onSelectOne(a._id)}
