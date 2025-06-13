@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Spin, notification, Pagination, Tabs, Select } from 'antd';
+import { Modal, Spin, notification, Pagination, Tabs, Select,Radio } from 'antd';
 import Moment from "moment"
 
 import HeaderDashboard from '../../components/header/HeaderDashboard';
@@ -36,7 +36,7 @@ const Home = (props) => {
     const [roomArray, setRoomArray] = useState([]);
     const [flowArray, setFlowArray] = useState([]);
     const [currentFlowArray, setCurrentFlowArray] = useState([]);
-
+    const [splCase, setSplCase] = useState('')
     const [name, setName] = useState('');
     const [date, setDate] = useState('')
     const [roomId, setRoomId] = useState('');
@@ -48,9 +48,9 @@ const Home = (props) => {
     const [selectedCatId, setSelectedCatId] = useState('');
     const [selectedCatIds, setSelectedCatIds] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+    const [currentflowdisbale, setCurrentflowdisbale] = useState(true);
     const [action, setAction] = useState(null);
     const [search, setSearch] = useState('');
-
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [loader, setLoader] = useState(false);
@@ -158,6 +158,7 @@ const Home = (props) => {
         setSelectedCatId('');
         setErrors({});
         setShowModal(false);
+        setSplCase("")
     }
 
     const nameOnChange = (name) => {
@@ -235,11 +236,49 @@ const Home = (props) => {
                 phaseId: unitId,
                 roomId,
                 stageId,
-                flow: selectFlow
+                flow:  selectFlow
             }
             if (selectedCatId) {
                 let isCurrentFlowChange = currentFlowArray.length ? currentFlowArray[0].flow !== currentFlow : false;
+            if(isCurrentFlowChange){
+
+                if(currentFlowArray[0].flow ==="CR0"){
+  
+                    if(currentFlow.startsWith("SR")){
+                       saveData['sMaxDays'] =  Number((currentFlow.match(/\d+/)[0]))+1
+                    }
+                     if(currentFlow.startsWith("V")){
+                       saveData['cMaxDays'] =  Number((currentFlowArray[0].flow.match(/\d+/)[0]))
+                    }
+  
+                }
+                else if (currentFlowArray[0].flow.startsWith("SR")){
+                   if(currentFlow==="CR0"){
+                       saveData['sMaxDays'] =  Number((currentFlowArray[0].flow.match(/\d+/)[0]))
+                    }
+  
+                }
+                    else if (currentFlowArray[0].flow.startsWith("CR")){
+                   if(currentFlow==="V1"){
+                       saveData['cMaxDays'] =  Number((currentFlowArray[0].flow.match(/\d+/)[0]))
+                    }
+  
+                }
+                   else if (currentFlowArray[0].flow.startsWith("V")){
+                   if(currentFlow.startsWith("CR")){
+                       saveData['cMaxDays'] =  Number((currentFlow.match(/\d+/)[0]))+1
+                    }
+  
+                }
+                else{
+  
+                }
+            }
+               
                 saveData['isCurrentFlowChange'] = isCurrentFlowChange;
+                saveData['newflow'] = currentFlow
+                 
+
                 update(saveData)
             } else {
                 add(saveData)
@@ -432,6 +471,15 @@ const Home = (props) => {
         }
     }
 
+const handleSplcaseOnChange = (e) => {
+    const value = e.target.value;
+    console.log("value", value);
+    setSplCase(value);
+    if(value){
+        setCurrentflowdisbale(false)
+    }
+  
+};
     return (
         <div>
             <Spin spinning={loader} tip={'Loading...'}>
@@ -673,6 +721,7 @@ const Home = (props) => {
                                                 placeholder="Select flow Name"
                                                 className="ps-ant-dropdown"
                                                 style={{ width: '100%' }}
+                                                disabled={currentflowdisbale}
                                                 value={currentFlow ? currentFlow : null}
                                             >
                                                 {currentFlowArray.map(c => {
@@ -688,6 +737,17 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             }
+
+                               {selectedCatId && <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Special Case</label><br />
+                                    <Radio.Group onChange={handleSplcaseOnChange} value={splCase}>
+                                        <Radio value={true}>{"Yes"}</Radio>
+                                        <Radio value={false}>{"No"}</Radio>
+                                    </Radio.Group>
+                                </div>
+                            </div>}
+
                         </div>
                         {selectedCatId && !currentFlowArray.length &&
                             <div className="text-center">
