@@ -116,7 +116,7 @@ const TableOverAllReport = ({ headers, reports, totolCount, stage }) => {
                                                 obj[h]?.length
                                                     ? obj[h].map((room, ridx) => (
                                                         <React.Fragment key={ridx}>
-                                                            <i className="fal fa-home"></i>
+                                                            <i className="fas fa-home" style={{ color: 'green'}}></i>
                                                             <p>{room.replace(/Room/g, "")}</p>
                                                             {ridx !== obj[h].length - 1 && <hr />}
                                                         </React.Fragment>
