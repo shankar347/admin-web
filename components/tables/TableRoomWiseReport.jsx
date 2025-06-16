@@ -23,7 +23,12 @@ const TableRoomWiseReport = ({ reports }) => {
         let obj = {
             key: index,
             no: (index + 1),
-            room: a.roomName,
+            room:  (
+  <span>
+    <i className="fas fa-home" style={{ color: 'green', marginRight: '5px' }}></i>
+    {a.roomName}
+  </span>
+),
             flow: a.stage
         }
         return (obj);
