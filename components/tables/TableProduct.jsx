@@ -56,7 +56,14 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       title: a.name,
       phase : a.phase?.name ,
-      room: a?.room?.name,
+      room: (
+  <span>
+    <i className="fas fa-home" style={{ color: 'green', marginRight: '5px' }}></i>
+    {a?.room?.name}
+  </span>
+),
+
+
       stage:a?.stage?.name,
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
       start: Moment(a.startDate).format("DD-MM-YYYY"),

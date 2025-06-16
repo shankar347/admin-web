@@ -442,7 +442,7 @@ const Home = (props) => {
 
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label>Room No <span style={{ color: 'red' }}>*</span></label>
+                                    <label>   <i className="fas fa-home" style={{ color: 'green', marginRight: '5px' }}></i>Room No <span style={{ color: 'red' }}>*</span></label>
                                     <input
                                         className="form-control"
                                         type="text"

@@ -15,6 +15,7 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
     {
       title: 'Room Name',
       dataIndex: 'title',
+      align:"center"
     },
     {
       title: 'Edit',
@@ -32,7 +33,13 @@ const TableHomeCategory = ({ category, editModalOnClick, onSelectAll, onSelectOn
       key: a._id,
       sno: `${currentPage > 1 ? ((currentPage - 1) * pageSizeTotal) + index + 1 : index + 1}`,
       main: a.phase.name,
-      title: a.name,
+      title: 
+       (
+  <span>
+    <i className="fas fa-home" style={{ color: 'green', marginRight: '5px' }}></i>
+    {a.name}
+  </span>
+),
       edit: (<i className="fas fa-pen" onClick={() => editModalOnClick(a)} style={{ cursor: 'pointer' }}></i>),
       check: (
         <Checkbox

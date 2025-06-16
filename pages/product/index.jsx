@@ -651,7 +651,12 @@ const handleSplcaseOnChange = (e) => {
                                     >
                                         {roomArray.map(m => {
                                             return (
-                                                <Option value={m._id} key={m._id}>{m.name}</Option>
+                                               <Option value={m._id} key={m._id}>
+  <span>
+    <i className="fas fa-home" style={{ color: 'green', marginRight: '5px' }}></i>
+    {m.name}
+  </span>
+</Option>
                                             )
                                         })}
                                     </Select>
