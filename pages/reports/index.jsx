@@ -151,6 +151,34 @@ const Home = (props) => {
         fileDownload(result, `${stageObj.name}_report.xlsx`)
         setLoader(false);
     }
+        const downloadRoomwise = async () => {
+         setLoader(true);
+        setRoomWiseData([]);
+        let obj = {
+            stageId: selectedStageId,
+            date: selectedStartDate,
+            isDownload :true
+        };
+        let res = await ReportRespository.getRoomreportsexcel(obj);
+        if (res && res.data && res.data.length > 0) {
+            setRoomWiseData(res.data);
+        } else {
+            setRoomWiseData([]);
+        }
+        console.log(stageArray,'sdasdafh')
+        console.log(selectedStageId,'sadfshadg')
+        let stageObj = stageArray?.find( s => s._id === selectedStageId);
+        console.log(stageObj,'sasdafh')
+        if(stageObj){
+
+            fileDownload(res, `${stageObj?.name}_room_wise_report.xlsx`)
+        }
+        else{
+            
+            fileDownload(res, `All_stage_room_wise_report.xlsx`)
+        }
+        setLoader(false);
+    }
 
     let stageArray = [...stage];
     stageArray.sort((a, b) => a.position - b.position)
@@ -190,8 +218,9 @@ const Home = (props) => {
                                                 placeholder="Select Report Type"
                                                 className="ps-ant-dropdown"
                                                 style={{ width: '100%' }}
-                                                value={selectedStageId ? selectedStageId : null}
+                                                value={selectedStageId }
                                             >
+                                                 <Option value={""} >All Stages</Option>
                                                 {stageArray.map(d => {
                                                     return (
                                                         <Option value={d._id} key={d._id}>{d.name}</Option>
@@ -217,7 +246,11 @@ const Home = (props) => {
                                             <button onClick={clearOnClick} style={{ backgroundColor: '#2196f3', width: 100, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
                                                 <i className="fas fa-setting" /> Clear
                                             </button>
+                                               <button onClick={downloadRoomwise} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 {roomWiseData && roomWiseData.length > 0 &&

@@ -26,6 +26,23 @@ class RoomRepository {
       });
     return reponse;
   }
+    async getRoomreportsexcel(payload) {
+    let url = `${apiUrl}/reports/roomWise`;
+    const reponse = await axios({
+      method: "POST",
+      url: url,
+      responseType: "blob",
+      data: payload,
+      headers: customHeaders,
+    })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error;
+      });
+    return reponse;
+  }
 
   async getStageReport(formdata) {
     let url = `${apiUrl}/reports/stageWise`;
@@ -47,6 +64,23 @@ class RoomRepository {
       })
       .catch((error) => {
         return error.response.data;
+      });
+    return reponse;
+  }
+      async getDashboardsexcel(payload) {
+    let url = `${apiUrl}/reports/dashboard`;
+    const reponse = await axios({
+      method: "POST",
+      url: url,
+      responseType: "blob",
+      data: payload,
+      headers: customHeaders,
+    })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error;
       });
     return reponse;
   }

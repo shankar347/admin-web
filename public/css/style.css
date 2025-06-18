@@ -1258,7 +1258,7 @@ label {
 
 .row-4-stage-card {
   position: relative;
-  background-color: #ffc107;
+  background-color: #ff0777;
   border-radius: 6px;
   padding: 20px;
   box-shadow: 4px 4px 11px 1px rgba(0, 0, 0, 0.15);
@@ -2051,7 +2051,7 @@ nav {
 }
 
 .accordion .card .btn-warning {
-  color: #ffc107;
+  color: #ff0777;
   background-color: transparent;
   border-color: transparent;
   font-weight: 700;
@@ -2124,9 +2124,9 @@ nav {
 }
 
 .phase .btn-warning {
-  color: #ffc107;
+  color: #ff0777;
   background-color: transparent;
-  border-color: #ffc107;
+  border-color: #ff0777;
   font-weight: 700;
   padding: 5px 10px;
   border-radius: 12px;

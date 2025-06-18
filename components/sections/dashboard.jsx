@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import Moment from "moment";
-
+const fileDownload = require('js-file-download');
 import { getAllUnit } from '../../store/Unit/action';
 import { getAllRoom } from '../../store/Room/action';
 import ReportRespository from '../../repositories/ReportRespository';
@@ -11,7 +11,7 @@ let colors = [
     "#dc3545",
     "#1e7e34",
     "#0062cc",
-    "#ffc107",
+    "#ff0777",
     "#f35a00",
     "#343a40",
     "#340e81",
@@ -51,8 +51,20 @@ const Dashboard = () => {
         setColorId(id)
         setSelectedRoom(array)
         setSelectedPhase(value);
+        setSelectedRoomId('')
+          setProductionData([])
     }
-
+       const downloadRoomwise = async () => {
+         setLoader(true);
+        let obj = {
+            roomId: selectedRoomId ,
+            isDownload :true
+        };
+        let res = await ReportRespository.getDashboardsexcel(obj);
+            fileDownload(res, `room_report.xlsx`)
+       
+        setLoader(false);
+    }
     const roomOnChange = async (id) => {
         setLoader(true);
         let result = await ReportRespository.getDashboard({ roomId: id });
@@ -118,6 +130,16 @@ const Dashboard = () => {
                     </div>
                 }
                 {productionData && productionData.length > 0 &&
+                <>
+                    <div className="col-lg-4">
+                                        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                                         
+                                               <button onClick={downloadRoomwise} style={{ backgroundColor: '#80bc00', width: 150, height: 35, color: '#fff', border: 'none', marginRight: 20 }}>
+                                                <i className="fas fa-file-pdf" /> Download
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
                     <div className="row mt-5"  style={{overflowX:'scroll'}}>
                         {productionData?.map(p => {
                             return (
@@ -156,6 +178,7 @@ const Dashboard = () => {
                             )
                         })}
                     </div>
+                </>
                 }
             </Spin>
         </div>
