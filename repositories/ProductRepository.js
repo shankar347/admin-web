@@ -88,6 +88,31 @@ class MaterialRepository {
       });
     return reponse;
   }
+  
+  async saveflow(data) {
+    let url = `${apiUrl}/production/saveflow`;
+    const reponse = await Repository.post(url,data)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+    async getsavedflow() {
+    let url = `${apiUrl}/production/fetchsaveflow`;
+    const reponse = await Repository.get(url)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
 }
+
 
 export default new MaterialRepository();

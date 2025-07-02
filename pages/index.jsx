@@ -57,7 +57,7 @@ const SignIn = (props) => {
         notification.success({
           message: "Welcome Back!"
         });
-        window.location.href = "/home";
+        window.location.href = "/dashboard";
       } else if (result && result.status) {
         notification.error({
           message: result.message
@@ -79,7 +79,7 @@ const SignIn = (props) => {
     let local = JSON.parse(localStorage.getItem('persist:MushroomAdmin'));
     let localAuth = local && local.auth ? JSON.parse(local.auth) : {};
     if (localAuth && localAuth.isLoggedIn) {
-      window.location.href = "/home";
+      window.location.href = "/dashboard";
     }
   }, [auth, token, dispatch]);
 

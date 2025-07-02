@@ -11,6 +11,8 @@ import TableStageWiseReport from '~/components/tables/TableStageWiseReport';
 
 import StageRepository from '../../repositories/StageRepository';
 import ReportRespository from '../../repositories/ReportRespository';
+import StageWiseCombinedChart from '~/components/charts/stagewisechart';
+import StageRoomStackedBarChart from '~/components/charts/roomwisechart';
 
 const colors = ['#0e0606', '#f39521', '#f32121', '#2196f3', '#3d1ecd'];
 
@@ -258,6 +260,12 @@ const Home = (props) => {
                                         <TableRoomWiseReport reports={roomWiseData} />
                                     </div>
                                 }
+                                 {
+                                roomWiseData && roomWiseData.length > 0 &&
+                                <div> 
+                                    <StageRoomStackedBarChart data={roomWiseData} selectedDate={selectedStartDate} />
+                                </div>
+                                }
                             </div>
                         }
                         {tab !== "all" &&
@@ -303,6 +311,14 @@ const Home = (props) => {
                                             totolCount={totolCount}
                                             stage={stageObj}
                                         />
+                                    </div>
+                                }
+                                
+                                {
+                                    stageWiseData && Object.keys(stageWiseData).length > 0 &&
+                                    <div>
+                                        <StageWiseCombinedChart stageWiseData={stageWiseData} startDate={selectedStartDate}
+                                        endDate={selectedEndDate} />
                                     </div>
                                 }
                             </div>
