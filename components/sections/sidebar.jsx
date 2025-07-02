@@ -44,6 +44,16 @@ const Sidebar = (props) => {
         <div>
             <div className="side-menu text-center" id={"style-2"}>
                 <ul className='text-left'>
+                        <li className={props.page === "dashboard" ? "menu-active" : ''} 
+                      ref={el => itemsRef.current['home'] = el} >
+                        <Link href="/dashboard">
+                            <a>
+                                <span className='menu-icon'>
+                                    <i className="fas fa-columns"></i></span>
+                                <span className='menu-text'>Dashboard</span>
+                            </a>
+                        </Link>
+                    </li>
                     <li className={props.page === "home" ? "menu-active" : ''} ref={el => itemsRef.current['home'] = el} >
                         <Link href="/home">
                             <a>

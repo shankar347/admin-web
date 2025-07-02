@@ -280,6 +280,12 @@ const Home = (props) => {
                  
 
                 update(saveData)
+                    let payload={
+                     roomname: name,
+                     flow: selectFlow,
+                    currentflow:currentFlow
+                }
+                 ProductRepository.saveflow(payload)
             } else {
                 add(saveData)
             }

@@ -6,6 +6,7 @@ const fileDownload = require('js-file-download');
 import { getAllUnit } from '../../store/Unit/action';
 import { getAllRoom } from '../../store/Room/action';
 import ReportRespository from '../../repositories/ReportRespository';
+import FlowTrackBar from './flowtrackbar';
 
 let colors = [
     "#dc3545",
@@ -141,6 +142,7 @@ const Dashboard = () => {
                                         
                                     </div>
                     <div className="row mt-5"  style={{overflowX:'scroll'}}>
+                         <FlowTrackBar productionData={productionData} />
                         {productionData?.map(p => {
                             return (
                                 <table className="table">
