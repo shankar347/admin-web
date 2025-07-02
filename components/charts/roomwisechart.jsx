@@ -170,7 +170,7 @@ console.log('total',totalRooms)
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <ResponsiveContainer width="100%" 
-        height={ window.innerWidth < 640 ? 450  : Math.min(520 + pieChartData.length * 5, 2000) }
+        height={ window.innerWidth < 640 ? 450  : Math.min(520 + pieChartData.length * 27, 2000) }
         >
           <PieChart>
             <Pie

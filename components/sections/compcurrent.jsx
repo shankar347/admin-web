@@ -131,7 +131,7 @@ const Compcurrent = ({srcount,crcount,hcount,vcount,
                     paddingTop:'10px',
                     // paddingBottom:'10px'
                    }}>
-                    Early processes
+                    Early process
                    </div>
                    <div style={{
                       display:'flex',
@@ -180,7 +180,7 @@ No flow is changed
                     fontWeight:'600',
                     paddingTop:'10px'
                    }}>
-                    Delayed Processes
+                    Delayed Process
                    </div>   
                     
                     <div style={{

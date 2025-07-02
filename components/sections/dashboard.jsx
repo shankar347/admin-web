@@ -142,9 +142,11 @@ const Dashboard = () => {
                                         
                                     </div>
                     <div className="row mt-5"  style={{overflowX:'scroll'}}>
-                         <FlowTrackBar productionData={productionData} />
+               
                         {productionData?.map(p => {
                             return (
+                                <>
+                                      <FlowTrackBar productionData={p} />
                                 <table className="table">
                                     {Object.keys(p).map((d, index) => {
                                         return (
@@ -177,6 +179,8 @@ const Dashboard = () => {
                                         )
                                     })}
                                 </table>
+                                    
+                                </>
                             )
                         })}
                     </div>

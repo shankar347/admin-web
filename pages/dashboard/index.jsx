@@ -387,12 +387,12 @@ const Dashboard = () => {
                             paddingTop:'70px',
                             paddingBottom:'20px'
                           }}>
-                    <Lastcompdash heading={'Early changes'}
+                    <Lastcompdash heading={'Early Process'}
                      data={earstage} 
                        ismobile={isMobile ? '100%' : '36%'}
                      
                      />
-                        <Lastcompdash heading={'Late changes'}
+                        <Lastcompdash heading={'Late Process'}
                      data={latestage} 
                        ismobile={isMobile ? '100%' : '36%'}
                      />

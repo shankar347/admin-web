@@ -3,7 +3,7 @@ import Moment from 'moment';
 
 const FlowTrackBar = ({ productionData }) => {
   const today = Moment().format('DD-MM-YYYY');
-  const flowDataObject = productionData && productionData.length > 0 ? productionData[0] : null;
+  const flowDataObject = productionData ;
 
   if (!flowDataObject) return <div>No data available</div>;
 
