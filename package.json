@@ -2,9 +2,13 @@
     "name": "mushroom_admin_wab",
     "version": "1.0.0",
     "private": true,
+    "engines": {
+        "node": "16.x"
+    },
     "scripts": {
-        "dev": "set NODE_OPTIONS=--openssl-legacy-provider && next dev",
-        "build": "next build && next export",
+        "local": "set NODE_OPTIONS=--openssl-legacy-provider && next dev",
+        "dev": "next dev",
+        "build": "next build",
         "start": "next start"
     },
     "dependencies": {
