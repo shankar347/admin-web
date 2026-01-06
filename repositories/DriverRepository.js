@@ -7,6 +7,7 @@ class DriverRepository {
 
   async createRoute(payload) {
     let url = `${apiUrl}/driver/addroutebyadmin`;
+
     const reponse = await Repository.post(url, payload)
       .then((response) => {
         return response.data;
