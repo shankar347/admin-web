@@ -6,7 +6,6 @@ import { Spin, Upload, message, Table, Button, notification, Drawer, Grid } from
 
 import * as XLSX from "xlsx";
 import { Bot, InboxIcon, Menu, X, Smartphone, Monitor } from "lucide-react";
-import { MAP_API_KEY, OPEN_API_KEY } from "~/helper/auth";
 import { getAllbranch } from "~/store/branches/action";
 import { getAllridersRequest } from "~/store/drivers/action";
 import DriverRepository from "~/repositories/DriverRepository";
@@ -141,7 +140,7 @@ Return JSON only:
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${OPEN_API_KEY}`,
+                    "Authorization": `Bearer ${process.env.OPEN_API_KEY}`,
                 },
                 body: JSON.stringify({
                     model: "gpt-4.1-mini",
@@ -160,7 +159,7 @@ Return JSON only:
     };
 
     async function geocodeAddress(address) {
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${MAP_API_KEY}`;
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.MAP_API_KEY}`;
 
         const res = await fetch(url);
         const data = await res.json();
