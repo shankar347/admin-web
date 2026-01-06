@@ -17,6 +17,19 @@ class AuthRepository {
     return reponse;
   }
 
+  async Register(payload) {
+    let url = `${apiUrl}/auth/register`;
+    const reponse = await Repository.post(url, payload)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response.data;
+      });
+    return reponse;
+  }
+
+
   async changePassword(payload) {
     let url = `${apiUrl}/auth/changePassword`;
     const reponse = await Repository.post(url, payload)
@@ -29,17 +42,7 @@ class AuthRepository {
     return reponse;
   }
 
-  async getAdmins(params) {
-    let url = `${apiUrl}/auth/`;
-    const reponse = await Repository.get(url, { params })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        return error.response.data;
-      });
-    return reponse;
-  }
+
 
   async createAdmin(payload) {
     let url = `${apiUrl}/auth/`;
@@ -65,7 +68,7 @@ class AuthRepository {
     return reponse;
   }
 
-  async updateStatusAdmin( payload) {
+  async updateStatusAdmin(payload) {
     let url = `${apiUrl}/auth/status`;
     const reponse = await Repository.post(url, payload)
       .then((response) => {
@@ -77,16 +80,6 @@ class AuthRepository {
     return reponse;
   }
 
-  async getMenu() {
-    const reponse = await Repository.get(`${apiUrl}/auth/menus`)
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        return error.response.data;
-      });
-    return reponse;
-  }
 }
 
 export default new AuthRepository();

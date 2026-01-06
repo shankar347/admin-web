@@ -23,7 +23,7 @@
   --text-color: #0c0c0c;
   --placeholder-color: #aaacaf;
   --jl-gray: #f5f5f5;
-  --jl-primary: #018f3d;
+  --jl-primary: #bfb719;
   --jl-secondary: #46494c;
 }
 
@@ -457,13 +457,22 @@ a:not([href]):hover {
   padding: 40px;
   width: 100%;
   height: 100vh;
-  /* background: url('../img/blue_abstract_background.jpg') no-repeat; */
-  background-image: -webkit-repeating-linear-gradient(135deg, transparent, #29146e54 12%, #e5131385 33%, transparent 65%, transparent 50%), -webkit-repeating-radial-gradient(#616161, #222222);
-  background-image: repeating-linear-gradient(-45deg, transparent, #29146e54 12%, #e5131385 33%, transparent 65%, transparent 50%);
+  background-image:
+    repeating-linear-gradient(-45deg,
+      transparent,
+      rgba(255, 230, 0, 0.35) 25%,
+      rgba(138, 43, 226, 0.4) 52%,
+      transparent 65%,
+      transparent 50%),
+    repeating-radial-gradient(rgba(120, 0, 255, 0.2),
+      rgba(255, 255, 0, 0.05));
   background-size: 6px 6px;
-  background-color: #444;
+  background-color: #3a2a4a;
   background-position: center;
   background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -482,7 +491,7 @@ label {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 390px;
-  margin: 0px auto;
+  margin: auto;
   background: url(../img/login-svg.svg) no-repeat;
   background-position: top;
   background-size: inherit;
@@ -490,6 +499,32 @@ label {
   overflow: hidden;
   background-color: #ffffff36;
   box-shadow: 1px 1px 20px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* For screens 400px and smaller */
+@media (max-width: 400px) {
+  .login-card {
+    width: 320px;
+    margin: 20px auto;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 360px) {
+  .login-card {
+    width: 340px;
+  }
+}
+
+/* For tablets and medium screens */
+@media (min-width: 401px) and (max-width: 768px) {
+  .login-card {
+    width: 350px;
+  }
 }
 
 .login-card .login-logo {
@@ -933,7 +968,7 @@ label {
 }
 
 .form-control {
-  border-radius: 0 !important
+  border-radius: 50px !important
 }
 
 .active-waiting {
@@ -2483,25 +2518,33 @@ body {
 .dashmaincomp {
   background-color: #ffffff;
   border-radius: 16px;
-  border: 1px solid rgba(64, 184, 108, 0.4); /* subtle green border */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* stronger shadow */
+  border: 1px solid rgba(64, 184, 108, 0.4);
+  /* subtle green border */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  /* stronger shadow */
   padding: 20px;
   margin-bottom: 24px;
-  height: auto;                /* allows height to grow with content */
-  width: 100%;                 /* full width of parent */
-  box-sizing: border-box;   
+  height: auto;
+  /* allows height to grow with content */
+  width: 100%;
+  /* full width of parent */
+  box-sizing: border-box;
   transition: transform 0.25s, box-shadow 0.25s;
 }
 
 .dashmaincomp:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2); /* deeper hover shadow */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  /* deeper hover shadow */
 }
+
 .dashboardcomp1 {
   background-color: #ffffff;
   border-radius: 16px;
-  border: 1px solid rgba(64, 184, 108, 0.4); /* subtle green border */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* stronger shadow */
+  border: 1px solid rgba(64, 184, 108, 0.4);
+  /* subtle green border */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  /* stronger shadow */
   padding: 15px 20px;
   /* margin-bottom: 24px; */
   /* height: 215px; */
@@ -2510,14 +2553,17 @@ body {
 
 .dashboardcomp1:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2); /* deeper hover shadow */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  /* deeper hover shadow */
 }
 
 .dashboardcomp2 {
   background-color: #ffffff;
   border-radius: 16px;
-  border: 1px solid rgba(64, 184, 108, 0.4); /* subtle green border */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* stronger shadow */
+  border: 1px solid rgba(64, 184, 108, 0.4);
+  /* subtle green border */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  /* stronger shadow */
   padding: 20px;
   margin-bottom: 24px;
   height: 500px;
@@ -2526,7 +2572,8 @@ body {
 
 .dashboardcomp2:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2); /* deeper hover shadow */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  /* deeper hover shadow */
 }
 
 
@@ -2578,7 +2625,8 @@ body {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
-  white-space: nowrap; /* prevent breaking */
+  white-space: nowrap;
+  /* prevent breaking */
 }
 
 /* .markdown-body th,th {
@@ -2594,7 +2642,8 @@ body {
 
 
 .custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #22c55e; /* Tailwind green-500 */
+  background-color: #22c55e;
+  /* Tailwind green-500 */
   border-radius: 8px;
 }
 
@@ -2614,6 +2663,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -2621,7 +2671,8 @@ body {
 
 
 .custom-scroll1::-webkit-scrollbar-thumb {
-  background-color: #04a33e; /* Tailwsind green-500 */
+  background-color: #04a33e;
+  /* Tailwsind green-500 */
   border-radius: 8px;
 }
 
@@ -2631,7 +2682,41 @@ body {
   background-color: transparent;
 }
 
-.sidebarchat{
-   background-color: var(--jl-primary);  
-   
+
+
+.custom-scroll1::-webkit-scrollbar-thumb {
+  background-color: #e7e7e7;
+  /* Tailwsind green-500 */
+  border-radius: 8px;
+}
+
+
+
+.custom-scroll1::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.sidebarchat {
+  background-color: var(--jl-primary);
+
+}
+
+.topinfocard {
+  background-color: white;
+  width: 250px;
+  height: 150px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.topinfocard:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
