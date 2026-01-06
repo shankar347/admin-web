@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { getAllRoutes } from '~/store/orders/action';
 import { getAllbranch } from '~/store/branches/action';
-import { MAP_API_KEY } from '~/helper/auth';
 import RouteMap from '~/components/sections/driverroutemap';
 import { StopAddressCell } from '../agentroutes/[id]';
 import { toggleSidebar } from '~/store/auth/action';
@@ -1539,7 +1538,7 @@ const RouteDashboard = () => {
         }
       >
         <div style={isMobile ? { height: '100%', width: '100%' } : {}}>
-          <RouteMap stops={activeStop} apiKey={MAP_API_KEY} />
+          <RouteMap stops={activeStop} apiKey={process.env.MAP_API_KEY} />
         </div>
       </Modal>
 

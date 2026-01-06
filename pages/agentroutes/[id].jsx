@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { getUserAllRoutes } from '~/store/orders/action';
-import { MAP_API_KEY } from '~/helper/auth';
 import { getuserrequest } from '~/store/drivers/action';
 import moment from 'moment';
 const RouteDashboard = () => {
@@ -804,7 +803,7 @@ export const StopAddressCell = ({ latLng }) => {
   async function getAddressFromCoordinates(latLng) {
     try {
 
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng}&key=${MAP_API_KEY}`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latLng}&key=${process.env.MAP_API_KEY}`;
 
       const response = await fetch(url);
       const data = await response.json();
