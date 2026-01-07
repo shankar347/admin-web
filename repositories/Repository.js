@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const baseurl = "http://192.168.1.148:5000";
+// export const baseurl = "http://192.168.1.148:5000";
 
-// export const baseurl = "https://courierapi.vercel.app";
+export const baseurl = "https://courierapi.vercel.app";
 
 export const apiUrl = `${baseurl}/api/v1`;
 
