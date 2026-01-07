@@ -20,6 +20,7 @@ import DriverRepository from "~/repositories/DriverRepository";
 
 import moment from "moment";
 import { FancyLoader } from "~/pages/assignroutes/airoutesassign";
+import { MAP_API_KEY } from "~/repositories/Repository";
 
 const stopFields = [
   { key: "name", label: "Stop Name" },
@@ -332,7 +333,7 @@ const SpreadsheetImportModal = ({
 
     try {
       const formatted = encodeURIComponent(address);
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${formatted}&key=${process.env.MAP_API_KEY}`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${formatted}&key=${MAP_API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
       if (data.status === "OK") {

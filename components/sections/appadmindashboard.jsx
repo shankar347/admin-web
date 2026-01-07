@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import SuperadminRepositery from '~/repositories/SuperadminRepositery';
 import { Edit, Trash, Trash2 } from 'lucide-react';
 import { columnsCommon } from './adminTablecolumns';
+import { apiUrl, baseurl } from '~/repositories/Repository';
 
 const AppadminDashboard = () => {
     const [loader, setLoader] = useState(false);
@@ -273,8 +274,12 @@ const AppadminDashboard = () => {
             align: "center",
             render: (img) => (
                 <img
-                    src={`http://192.168.1.148:5000/${img?.replace(/\\/g, "/")}`}
-                    alt="admin"
+                    src={
+
+                        `${baseurl}/${img.replace(/\\/g, "/")}`
+                        // : "/profres.png"
+                    }
+                    // alt="admin"
                     style={{
                         width: 50,
                         height: 50,
@@ -282,9 +287,13 @@ const AppadminDashboard = () => {
                         objectFit: "cover",
                         border: "2px solid #e2e2e2",
                     }}
+                    onError={(e) => {
+                        e.target.src = "/profres.png";
+                    }}
                 />
             ),
         },
+
         {
             title: "User_id",
             dataIndex: "user_id",

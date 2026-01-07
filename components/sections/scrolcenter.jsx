@@ -1,8 +1,8 @@
 {/* Active Rider Details Panel with Continuous Left-to-Right Animation */ }
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, Route, Users, X, Package, User, Phone } from 'lucide-react';
-import { googleApi } from '~/repositories/Repository';
 import NoActiveRiders from './noactiverider';
+import { MAP_API_KEY } from '~/repositories/Repository';
 
 const HorizontalRidersScroll = ({ pending, riderLocations }) => {
   const [activeId, setActiveId] = useState(null);
@@ -15,7 +15,7 @@ const HorizontalRidersScroll = ({ pending, riderLocations }) => {
   const getLocationInfo = async (lat, lng) => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${window.googleApiKey || googleApi}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${window.googleApiKey || MAP_API_KEY}`
       );
       const data = await response.json();
       console.log(data, 'geocoding response');

@@ -10,6 +10,7 @@ import { getAllbranch } from "~/store/branches/action";
 import { getAllridersRequest } from "~/store/drivers/action";
 import DriverRepository from "~/repositories/DriverRepository";
 import { toggleSidebar } from "~/store/auth/action";
+import { MAP_API_KEY, OPEN_API_KEY } from "~/repositories/Repository";
 
 const { useBreakpoint } = Grid;
 
@@ -140,7 +141,7 @@ Return JSON only:
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.OPEN_API_KEY}`,
+                    "Authorization": `Bearer ${OPEN_API_KEY}`,
                 },
                 body: JSON.stringify({
                     model: "gpt-4.1-mini",
@@ -159,7 +160,7 @@ Return JSON only:
     };
 
     async function geocodeAddress(address) {
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.MAP_API_KEY}`;
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${MAP_API_KEY}`;
 
         const res = await fetch(url);
         const data = await res.json();

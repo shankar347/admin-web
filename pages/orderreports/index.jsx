@@ -10,6 +10,7 @@ import { getAllbranch } from '~/store/branches/action';
 import RouteMap from '~/components/sections/driverroutemap';
 import { StopAddressCell } from '../agentroutes/[id]';
 import { toggleSidebar } from '~/store/auth/action';
+import { MAP_API_KEY } from '~/repositories/Repository';
 
 const RouteDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -1538,7 +1539,7 @@ const RouteDashboard = () => {
         }
       >
         <div style={isMobile ? { height: '100%', width: '100%' } : {}}>
-          <RouteMap stops={activeStop} apiKey={process.env.MAP_API_KEY} />
+          <RouteMap stops={activeStop} apiKey={MAP_API_KEY} />
         </div>
       </Modal>
 
