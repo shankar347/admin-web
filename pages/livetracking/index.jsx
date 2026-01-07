@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import HeaderDashboard from '../../components/header/HeaderDashboard'
 import Sidebar from '~/components/sections/sidebar';
 import AdminLiveMap from '~/components/sections/adminlivemap';
-import { apiUrl, googleApi } from '~/repositories/Repository';
+import { apiUrl, MAP_API_KEY } from '~/repositories/Repository';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '~/store/auth/action';
@@ -264,7 +264,7 @@ const Index = () => {
       scrollbar-color: ${auth.color} #f1f1f1;
     }
   `}</style>
-            <AdminLiveMap apiKey={googleApi}
+            <AdminLiveMap apiKey={MAP_API_KEY}
               // auth={au}
               riderLocations={riderLocations} />
           </div>

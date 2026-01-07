@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import HeaderDashboard from '../../components/header/HeaderDashboard'
 import Sidebar from '~/components/sections/sidebar';
 import { io } from 'socket.io-client';
-import { apiUrl, googleApi } from '~/repositories/Repository';
+import { apiUrl } from '~/repositories/Repository';
 import HorizontalRidersScroll from '~/components/sections/scrolcenter';
 import Chatcompdash from '~/components/charts/ridersbarchart';
 import Piebranchroutes from '~/components/charts/branchpiechart';
